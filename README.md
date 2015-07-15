@@ -7,18 +7,18 @@ having to manually or programatically update 100+ `.travis.yml` files.
 
 ## Adding to Travis CI Configs
 
-You will need to add this script to the `before_install` step of your
+You will need to source the script in the `before_install` step of your
 `.travis.yml` file.
 
 ```
-curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh | bash
+source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 ```
 
 **Example `.travis.yml`:**
 ```
 language: c
 before_install:
-  - curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh | bash
+  - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 install:
   - arduino --install-library "Adafruit SleepyDog Library,Adafruit FONA Library"
 script:
