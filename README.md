@@ -17,6 +17,7 @@ source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/
 **Example `.travis.yml`:**
 ```
 language: c
+sudo: false
 before_install:
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 install:
