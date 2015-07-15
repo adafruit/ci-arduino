@@ -11,3 +11,4 @@ export PATH="$HOME/arduino_ide:$PATH"
 arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/package_esp8266com_index.json" --save-prefs
 arduino --install-boards arduino:sam > /dev/null
 arduino --install-boards esp8266:esp8266 > /dev/null
+arduino --install-library USBHost
