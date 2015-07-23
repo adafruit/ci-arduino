@@ -8,7 +8,7 @@ tar xf arduino-1.6.5-linux64.tar.xz
 mv arduino-1.6.5 $HOME/arduino_ide
 ln -s $PWD $HOME/arduino_ide/libraries/Adafruit_Test_Library
 export PATH="$HOME/arduino_ide:$PATH"
-arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/staging/package_esp8266com_index.json" --save-prefs
+arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs
 arduino --install-boards arduino:sam > /dev/null
 arduino --install-boards esp8266:esp8266 > /dev/null
 arduino --install-library USBHost
