@@ -7,10 +7,10 @@ if [ "${BASH_VERSION%%[^0-9]*}" -lt "4" ]; then
 fi
 
 # associative array for platforms that will be verified in build_main_platforms()
-declare -x -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [esp8266]="esp8266:esp8266:huzzah" [leonardo]="arduino:avr:leonardo" )
+export main_p='declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [esp8266]="esp8266:esp8266:huzzah" [leonardo]="arduino:avr:leonardo" )'
 
 # associative array for other platforms that can be called explicitly in .travis.yml configs
-declare -x -A aux_platforms=( [trinket]="adafruit:avr:trinket5" [gemma]="arduino:avr:gemma" )
+export aux_p='declare -A aux_platforms=( [trinket]="adafruit:avr:trinket5" [gemma]="arduino:avr:gemma" )'
 
 # make display available for arduino CLI
 /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
@@ -41,6 +41,10 @@ arduino --install-library USBHost
 # build all of the examples for the passed platform
 function build_examples()
 {
+
+  # arrays can't be exported, so we have to eval
+  eval $main_p
+  eval $aux_p
 
   # expects argument 1 to be the platform key
   local platform_key=$1
@@ -117,6 +121,10 @@ function build_examples()
 # build all examples for every platform in $main_platforms
 function build_main_platforms()
 {
+
+  # arrays can't be exported, so we have to eval
+  eval $main_p
+  eval $aux_p
 
   for p_key in "${!main_platforms[@]}"; do
 
