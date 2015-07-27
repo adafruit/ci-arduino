@@ -52,9 +52,9 @@ function build_examples()
   local examples=$(find $PWD -name "*.pde" -o -name "*.ino")
 
   # grab the platform info from array or bail if invalid
-  if [ ${main_platforms[$platform_key]+_} ]; then
+  if [ ${main_platforms["$platform_key"]+_} ]; then
     platform=${main_platforms[$platform_key]}
-  elif [ ${aux_platforms[$platform_key]+_} ]; then
+  elif [ ${aux_platforms["$platform_key"]+_} ]; then
     platform=${aux_platforms[$platform_key]}
   else
     echo "INVALID PLATFORM KEY: $platform_key" >&2
@@ -62,8 +62,8 @@ function build_examples()
   fi
 
   # switch to the requested board
-  echo -e "\n\n ------------ PLAFORM: ${platform_key} ------------ \n\n";
-  arduino --board ${platform} --save-prefs
+  echo -e "\n\n ------------ PLATFORM: ${platform_key} ------------ \n\n";
+  arduino --board $platform --save-prefs
 
   # grab the exit status of the arduino board change
   local platform_switch=$?
@@ -112,10 +112,10 @@ function build_examples()
 function build_main_platforms()
 {
 
-  for platform_key in "${!main_platforms[@]}"; do
+  for p_key in "${!main_platforms[@]}"; do
 
     # build all examples for this platform
-    build_examples $platform_key
+    build_examples $p_key
 
     # grab the exit status of the builds
     local result=$?
