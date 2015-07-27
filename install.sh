@@ -41,7 +41,7 @@ arduino --install-boards adafruit:avr > /dev/null
 arduino --install-library USBHost
 
 # build all of the examples for the passed platform
-function build_examples()
+function build_platform()
 {
 
   # arrays can't be exported, so we have to eval
@@ -126,7 +126,7 @@ function build_main_platforms()
   for p_key in "${!main_platforms[@]}"; do
 
     # build all examples for this platform
-    build_examples $p_key
+    build_platform $p_key
 
     # grab the exit status of the builds
     local result=$?

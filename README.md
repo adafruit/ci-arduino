@@ -32,11 +32,13 @@ notifications:
 
 ## Automated Example Verification Bash Functions
 
-`build_examples` will build all `.ino` examples in the repo using the passed platform. The platforms are defined in the `MAIN_PLATFORMS` and `AUX_PLATFORMS` associative arrays at the top of the script.
+`build_platform` will build all `.ino` examples in the repo using the passed platform. The platforms
+are defined in the `MAIN_PLATFORMS` and `AUX_PLATFORMS` associative arrays at the top of the script.
 
-All of the examples will be built with the platforms in `MAIN_PLATFORMS` if you call `build_main_platforms`, and `AUX_PLATFORMS` can be used to define other platforms that don't need to be verified for every repo.
+All of the examples will be built with the platforms in `MAIN_PLATFORMS` if you call `build_main_platforms`,
+and `AUX_PLATFORMS` can be used to define other platforms that don't need to be verified for every repo.
 
-Build the examples using the main platforms:
+Build the examples using the platforms in the MAIN_PLATFORMS array:
 ```
 script:
   - build_main_platforms
@@ -45,7 +47,7 @@ script:
 Build the examples only using the trinket:
 ```
 script:
-  - build_examples trinket
+  - build_platform trinket
 ```
 
 ### Skipping Platforms
