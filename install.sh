@@ -57,7 +57,6 @@ function build_platform()
   # grab all pde and ino example sketches
   local examples=$(find $PWD -name "*.pde" -o -name "*.ino")
 
-
   # grab the platform info from array or bail if invalid
   if [[ ${main_platforms[$platform_key]} ]]; then
     platform=${main_platforms[$platform_key]}

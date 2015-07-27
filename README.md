@@ -66,3 +66,34 @@ $ git add -A
 $ git commit -a
 $ git push
 ```
+
+If you need an easy way to skip a platform, you can also add something like this to your `~/.bash_profile`:
+
+```
+function travis_skip()
+{
+
+  local platform_key=$1
+
+  # grab all pde and ino example sketches
+  local examples=$(find $PWD -name "*.pde" -o -name "*.ino")
+
+  # loop through example sketches
+  for example in $examples; do
+
+    # store the full path to the example's sketch directory
+    local example_dir=$(dirname $example)
+
+    touch ${example_dir}/.${platform_key}.test.skip
+
+  done
+
+}
+```
+
+You will then be able to skip a platform for all examples by running the `travis_skip` function from your library repo.
+It will automatically add the `.YOUR_PLATFORM_HERE.test.skip` files to the examples.
+
+```
+$ travis_skip esp8266
+```
