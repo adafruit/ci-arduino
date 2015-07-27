@@ -7,14 +7,10 @@ if [ "${BASH_VERSION%%[^0-9]*}" -lt "4" ]; then
 fi
 
 # associative array for platforms that will be verified in build_main_platforms()
-declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [esp8266]="esp8266:esp8266:huzzah" [leonardo]="arduino:avr:leonardo" )
+declare -x -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [esp8266]="esp8266:esp8266:huzzah" [leonardo]="arduino:avr:leonardo" )
 
 # associative array for other platforms that can be called explicitly in .travis.yml configs
-declare -A aux_platforms=( [trinket]="adafruit:avr:trinket5" [gemma]="arduino:avr:gemma" )
-
-# export platform vars
-export main_platforms
-export aux_platforms
+declare -x -A aux_platforms=( [trinket]="adafruit:avr:trinket5" [gemma]="arduino:avr:gemma" )
 
 # make display available for arduino CLI
 /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
