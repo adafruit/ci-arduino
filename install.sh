@@ -6,7 +6,7 @@ if [ "${BASH_VERSION%%[^0-9]*}" -lt "4" ]; then
   exit 1
 fi
 
-# associative array for platforms that will be verified in build_all_platforms()
+# associative array for platforms that will be verified in build_main_platforms()
 declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [esp8266]="esp8266:esp8266:huzzah" [leonardo]="arduino:avr:leonardo" )
 
 # associative array for other platforms that can be called explicitly in .travis.yml configs
@@ -108,8 +108,8 @@ function build_examples()
 
 }
 
-# build all examples for every platform in $test_platforms
-function build_all_platforms()
+# build all examples for every platform in $main_platforms
+function build_main_platforms()
 {
 
   for platform_key in "${!main_platforms[@]}"; do
