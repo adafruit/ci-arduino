@@ -12,6 +12,10 @@ declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_d
 # associative array for other platforms that can be called explicitly in .travis.yml configs
 declare -A aux_platforms=( [trinket]="adafruit:avr:trinket5" [gemma]="arduino:avr:gemma" )
 
+# export platform vars
+export main_platforms
+export aux_platforms
+
 # make display available for arduino CLI
 /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
 sleep 3
@@ -52,9 +56,9 @@ function build_examples()
   local examples=$(find $PWD -name "*.pde" -o -name "*.ino")
 
   # grab the platform info from array or bail if invalid
-  if [ ${main_platforms["$platform_key"]+_} ]; then
+  if [ ${main_platforms[$platform_key]+_} ]; then
     platform=${main_platforms[$platform_key]}
-  elif [ ${aux_platforms["$platform_key"]+_} ]; then
+  elif [ ${aux_platforms[$platform_key]+_} ]; then
     platform=${aux_platforms[$platform_key]}
   else
     echo "INVALID PLATFORM KEY: $platform_key" >&2
