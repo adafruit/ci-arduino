@@ -6,11 +6,13 @@ if [ "${BASH_VERSION%%[^0-9]*}" -lt "4" ]; then
   exit 1
 fi
 
-# associative array for platforms that will be verified in build_main_platforms()
-export main_p='declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [esp8266]="esp8266:esp8266:huzzah" [leonardo]="arduino:avr:leonardo" )'
+# associative array for the platforms that will be verified in build_main_platforms()
+# this will be eval'd in the functions below because arrays can't be exported
+export MAIN_PLATFORMS='declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [esp8266]="esp8266:esp8266:huzzah" [leonardo]="arduino:avr:leonardo" )'
 
 # associative array for other platforms that can be called explicitly in .travis.yml configs
-export aux_p='declare -A aux_platforms=( [trinket]="adafruit:avr:trinket5" [gemma]="arduino:avr:gemma" )'
+# this will be eval'd in the functions below because arrays can't be exported
+export AUX_PLATFORMS='declare -A aux_platforms=( [trinket]="adafruit:avr:trinket5" [gemma]="arduino:avr:gemma" )'
 
 # make display available for arduino CLI
 /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
@@ -43,8 +45,8 @@ function build_examples()
 {
 
   # arrays can't be exported, so we have to eval
-  eval $main_p
-  eval $aux_p
+  eval $MAIN_PLATFORMS
+  eval $AUX_PLATFORMS
 
   # expects argument 1 to be the platform key
   local platform_key=$1
@@ -55,11 +57,6 @@ function build_examples()
   # grab all pde and ino example sketches
   local examples=$(find $PWD -name "*.pde" -o -name "*.ino")
 
-  echo "---- DEBUG ----"
-  echo $platform_key
-  echo ${main_platforms[$platform_key]}
-  echo ${aux_platforms[$platform_key]}
-  echo "---- DEBUG ----"
 
   # grab the platform info from array or bail if invalid
   if [[ ${main_platforms[$platform_key]} ]]; then
@@ -123,8 +120,8 @@ function build_main_platforms()
 {
 
   # arrays can't be exported, so we have to eval
-  eval $main_p
-  eval $aux_p
+  eval $MAIN_PLATFORMS
+  eval $AUX_PLATFORMS
 
   for p_key in "${!main_platforms[@]}"; do
 
