@@ -56,12 +56,12 @@ function build_examples()
   local examples=$(find $PWD -name "*.pde" -o -name "*.ino")
 
   # grab the platform info from array or bail if invalid
-  if [ ${main_platforms[$platform_key]+_} ]; then
+  if [[ ${main_platforms[$platform_key]} ]]; then
     platform=${main_platforms[$platform_key]}
-  elif [ ${aux_platforms[$platform_key]+_} ]; then
+  elif [[ ${aux_platforms[$platform_key]} ]]; then
     platform=${aux_platforms[$platform_key]}
   else
-    echo "INVALID PLATFORM KEY: $platform_key" >&2
+    echo "INVALID PLATFORM KEY: $platform_key"
     return 1
   fi
 
@@ -74,7 +74,7 @@ function build_examples()
 
   # bail if the platform switch failed
   if [ $platform_switch -ne 0 ]; then
-    echo "SWITCHING PLATFORM FAILED: ${platform}" >&2
+    echo "SWITCHING PLATFORM FAILED: ${platform}"
     return $platform_switch
   fi
 
@@ -104,7 +104,7 @@ function build_examples()
 
     # bail if the build failed
     if [ $build_result -ne 0 ]; then
-      echo "BUILD FAILED" >&2
+      echo "BUILD FAILED"
       return $build_result
     fi
 
