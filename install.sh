@@ -132,7 +132,7 @@ function build_platform()
       echo -e "\xe2\x9c\x96"
 
       # add json
-      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch $example_file 0 $last_example)"
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch \"$example_file\" 0 $last_example)"
 
       # increment fails
       FAIL_COUNT=$((FAIL_COUNT + 1))
@@ -151,7 +151,7 @@ function build_platform()
       echo -e "\xe2\x9e\x9e"
 
       # add json
-      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch $example_file -1 $last_example)"
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch \"$example_file\" -1 $last_example)"
 
       # increment skips
       SKIP_COUNT=$((SKIP_COUNT + 1))
@@ -167,7 +167,7 @@ function build_platform()
       echo -e "\xe2\x9e\x9e"
 
       # add json
-      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch $example_file -1 $last_example)"
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch \"$example_file\" -1 $last_example)"
 
       # increment skips
       SKIP_COUNT=$((SKIP_COUNT + 1))
@@ -186,7 +186,7 @@ function build_platform()
       echo -e "\n------------------------------------------------------------------\n"
 
       # add json
-      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch $example_file 0 $last_example)"
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch \"$example_file\" 0 $last_example)"
 
       # increment fails
       FAIL_COUNT=$((FAIL_COUNT + 1))
@@ -214,7 +214,7 @@ function build_platform()
       echo -e "\n------------------------------------------------------------------\n"
 
       # add json
-      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch $example_file 0 $last_example)"
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch \"$example_file\" 0 $last_example)"
 
       # increment fails
       FAIL_COUNT=$((FAIL_COUNT + 1))
@@ -228,7 +228,7 @@ function build_platform()
       echo -e "\xe2\x9c\x93"
 
       # add json
-      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch $example_file 1 $last_example)"
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch \"$example_file\" $last_example)"
 
       # increment passes
       PASS_COUNT=$((PASS_COUNT + 1))
@@ -274,19 +274,19 @@ function build_main_platforms()
 
     # build failed
     if [ "$result" -ne "0" ]; then
-      platforms_json="${platforms_json}$(json_platform $p_key 0 $PLATFORM_JSON $last_platform)"
+      platforms_json="${platforms_json}$(json_platform $p_key 0 \"$PLATFORM_JSON\" $last_platform)"
       exit_code=1
     else
-      platforms_json="${platforms_json}$(json_platform $p_key 1 $PLATFORM_JSON $last_platform)"
+      platforms_json="${platforms_json}$(json_platform $p_key 1 \"$PLATFORM_JSON\" $last_platform)"
     fi
 
   done
 
   # exit code is opposite of json build status
   if [ "$exit_code" -eq "0" ]; then
-    json_main_platforms 1 $platforms_json
+    json_main_platforms 1 "$platforms_json"
   else
-    json_main_platforms 0 $platforms_json
+    json_main_platforms 0 "$platforms_json"
   fi
 
   return $exit_code
@@ -330,7 +330,7 @@ function json_platform()
   local sketch_json=$3
 
   # is this the last platform we are building? 0: no, 1: yes
-  local last_platform=$3
+  local last_platform=$4
 
   echo -n "\"$platform_key\": { \"status\": $status_number, \"builds\": $sketch_json }"
 
