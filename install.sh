@@ -167,8 +167,8 @@ function build_main_platforms()
 }
 
 
-# generate json string for a build
-function json_build()
+# generate json string for a sketch
+function json_sketch()
 {
 
   # the filename of the sketch
@@ -177,7 +177,7 @@ function json_build()
   # -1: skipped, 0: failed, 1: passed
   local status_number=$2
 
-  # is this the last sketch for this platform?
+  # is this the last sketch for this platform? 0: no, 1: yes
   local last_sketch=$3
 
   # echo out the json
@@ -189,3 +189,29 @@ function json_build()
   fi
 
 }
+
+# generate json string for a platform
+function json_platform()
+{
+
+  # the platform key from main platforms or aux platforms
+  local platform_key=$1
+
+  # 0: failed, 1: passed
+  local status_number=$2
+
+  # the json string for the verified sketches
+  local sketch_json=$3
+
+  # is this the last platform we are building? 0: no, 1: yes
+  local last_platform=$3
+
+  echo "\"$platform_key\": { \"status\": $status_number, \"builds\": $sketch_json }"
+
+  # echo a comma unless this is the last sketch for the platform
+  if [ "$last_platform" -ne "1" ]; then
+    echo ", "
+  fi
+
+}
+
