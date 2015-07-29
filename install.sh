@@ -132,7 +132,7 @@ function build_platform()
       echo -e "\xe2\x9c\x96"
 
       # add json
-      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch "$example_file" 0 $last_example)"
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch 0 "$example_file" $last_example)"
 
       # increment fails
       FAIL_COUNT=$((FAIL_COUNT + 1))
@@ -151,7 +151,7 @@ function build_platform()
       echo -e "\xe2\x9e\x9e"
 
       # add json
-      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch "$example_file" -1 $last_example)"
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch -1 "$example_file" $last_example)"
 
       # increment skips
       SKIP_COUNT=$((SKIP_COUNT + 1))
@@ -167,7 +167,7 @@ function build_platform()
       echo -e "\xe2\x9e\x9e"
 
       # add json
-      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch "$example_file" -1 $last_example)"
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch -1 "$example_file" $last_example)"
 
       # increment skips
       SKIP_COUNT=$((SKIP_COUNT + 1))
@@ -186,7 +186,7 @@ function build_platform()
       echo -e "\n------------------------------------------------------------------\n"
 
       # add json
-      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch "$example_file" 0 $last_example)"
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch 0 "$example_file" $last_example)"
 
       # increment fails
       FAIL_COUNT=$((FAIL_COUNT + 1))
@@ -214,7 +214,7 @@ function build_platform()
       echo -e "\n------------------------------------------------------------------\n"
 
       # add json
-      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch "$example_file" 0 $last_example)"
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch 0 "$example_file" $last_example)"
 
       # increment fails
       FAIL_COUNT=$((FAIL_COUNT + 1))
@@ -228,7 +228,7 @@ function build_platform()
       echo -e "\xe2\x9c\x93"
 
       # add json
-      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch "$example_file" $last_example)"
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch 1 "$example_file" $last_example)"
 
       # increment passes
       PASS_COUNT=$((PASS_COUNT + 1))
