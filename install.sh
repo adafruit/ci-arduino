@@ -70,7 +70,7 @@ function build_platform()
   local exit_code=0
 
   # grab all pde and ino example sketches
-  declare -A examples
+  declare -a examples
 
   # loop through results and add them to the array
   find $PWD -name "*.pde" -o -name "*.ino" | while read line; do
