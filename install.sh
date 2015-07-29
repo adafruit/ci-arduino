@@ -74,7 +74,7 @@ function build_platform()
   examples=$(find $PWD -name "*.pde" -o -name "*.ino")
 
   # get the last example in the array
-  local last="${examples[-1]}"
+  local last="${examples[${#examples[@]} - 1]}"
 
   # grab the platform info from array or bail if invalid
   if [[ ${main_platforms[$platform_key]} ]]; then
@@ -120,7 +120,6 @@ function build_platform()
 
     # is this the last example in the loop
     local last_example=0
-    echo $last
     if [ "$last" == "$example" ]; then
       last_example=1
     fi
@@ -263,7 +262,6 @@ function build_main_platforms()
 
     # is this the last platform in the loop
     local last_platform=0
-    echo $last
     if [ "$last" == "${main_platforms[$p_key]}" ]; then
       last_platform=1
     fi
