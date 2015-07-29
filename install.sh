@@ -99,12 +99,12 @@ function build_platform()
   # notify if the platform switch failed
   if [ $platform_switch -ne 0 ]; then
     # heavy X
-    echo "\xe2\x9c\x96"
+    echo -e "\xe2\x9c\x96"
     echo $platform_stdout
     exit_code=1
   else
     # heavy checkmark
-    echo "\xe2\x9c\x93"
+    echo -e "\xe2\x9c\x93"
   fi
 
   echo "########################################################################";
@@ -123,7 +123,7 @@ function build_platform()
     # continue to next example if platform switch failed
     if [ $platform_switch -ne 0 ]; then
       # heavy X
-      echo "\xe2\x9c\x96"
+      echo -e "\xe2\x9c\x96"
       exit_code=1
       continue
     fi
@@ -131,7 +131,7 @@ function build_platform()
     # ignore this example if there is a skip file preset for this platform
     if [[ -f "${example_dir}/.${platform_key}.test.skip" ]]; then
       # right arrow
-      echo "\xe2\x9c\x9e"
+      echo -e "\xe2\x9e\x9e"
       continue
     fi
 
@@ -139,7 +139,7 @@ function build_platform()
     if [[ $example =~ \.pde$ ]]; then
 
       # heavy X
-      echo "\xe2\x9c\x96"
+      echo -e "\xe2\x9c\x96"
 
       echo -e "-------------------------- DEBUG OUTPUT --------------------------\n"
       echo "PDE EXTENSION. PLEASE UPDATE TO INO"
@@ -152,7 +152,6 @@ function build_platform()
 
     fi
 
-    echo "BUILDING $example: ";
     local build_stdout=$(arduino --verify $example 2>&1)
 
     # grab the exit status of the arduino verify
@@ -162,7 +161,7 @@ function build_platform()
     if [ $build_result -ne 0 ]; then
 
       # heavy X
-      echo "\xe2\x9c\x96"
+      echo -e "\xe2\x9c\x96"
 
       echo -e "-------------------------- DEBUG OUTPUT --------------------------\n"
       echo $build_stdout
@@ -173,7 +172,7 @@ function build_platform()
 
     else
       # heavy checkmark
-      echo "\xe2\x9c\x93"
+      echo -e "\xe2\x9c\x93"
     fi
 
   done
