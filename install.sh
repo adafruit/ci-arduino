@@ -38,7 +38,7 @@ arduino --install-boards adafruit:avr > /dev/null
 
 # install random lib so the arduino IDE grabs a new library index
 # see: https://github.com/arduino/Arduino/issues/3535
-arduino --install-library USBHost
+arduino --install-library USBHost > /dev/null
 
 # init the json temp var for the current platform
 export PLATFORM_JSON=""
@@ -47,6 +47,7 @@ export PLATFORM_JSON=""
 export PASSED_COUNT=0
 export SKIPPED_COUNT=0
 export FAILED_COUNT=0
+export PDE_COUNT=0
 
 # build all of the examples for the passed platform
 function build_platform()
@@ -85,18 +86,28 @@ function build_platform()
     exit_code=1
   fi
 
+  echo -e "\n########################################################################";
+
+  echo -n "SWITCHING TO ${platform_key}: "
+
   # switch to the requested board
-  echo -e "\n############ BOARD: ${platform_key} ############\n";
-  arduino --board $platform --save-prefs
+  local platform_stdout=$(arduino --board $platform --save-prefs 2>&1)
 
   # grab the exit status of the arduino board change
   local platform_switch=$?
 
-  # bail if the platform switch failed
+  # notify if the platform switch failed
   if [ $platform_switch -ne 0 ]; then
-    echo "SWITCHING PLATFORM FAILED: ${platform}"
+    # heavy X
+    echo "\xe2\x9c\x96"
+    echo $platform_stdout
     exit_code=1
+  else
+    # heavy checkmark
+    echo "\xe2\x9c\x93"
   fi
+
+  echo "########################################################################";
 
   # loop through example sketches
   for example in $examples; do
@@ -104,28 +115,65 @@ function build_platform()
     # store the full path to the example's sketch directory
     local example_dir=$(dirname $example)
 
+    # store the filename for the example without the path
+    local example_file=$(basename $example)
+
+    echo -n "$example_file: "
+
+    # continue to next example if platform switch failed
+    if [ $platform_switch -ne 0 ]; then
+      # heavy X
+      echo "\xe2\x9c\x96"
+      exit_code=1
+      continue
+    fi
+
     # ignore this example if there is a skip file preset for this platform
     if [[ -f "${example_dir}/.${platform_key}.test.skip" ]]; then
-      echo -e "\n------------ SKIPPING: $example ------------\n";
+      # right arrow
+      echo "\xe2\x9c\x9e"
       continue
     fi
 
     # make sure that all examples are .ino files
     if [[ $example =~ \.pde$ ]]; then
-      echo "PDE EXAMPLE EXTENSION: $example" >&2
+
+      # heavy X
+      echo "\xe2\x9c\x96"
+
+      echo -e "-------------------------- DEBUG OUTPUT --------------------------\n"
+      echo "PDE EXTENSION. PLEASE UPDATE TO INO"
+      echo -e "\n------------------------------------------------------------------\n"
+
+      # mark as fail
       exit_code=1
+
+      continue
+
     fi
 
-    echo -e "\n------------ BUILDING: $example ------------\n";
-    arduino --verify $example;
+    echo "BUILDING $example: ";
+    local build_stdout=$(arduino --verify $example 2>&1)
 
     # grab the exit status of the arduino verify
     local build_result=$?
 
-    # bail if the build failed
+    # echo output if the build failed
     if [ $build_result -ne 0 ]; then
-      echo "BUILD FAILED"
+
+      # heavy X
+      echo "\xe2\x9c\x96"
+
+      echo -e "-------------------------- DEBUG OUTPUT --------------------------\n"
+      echo $build_stdout
+      echo -e "\n------------------------------------------------------------------\n"
+
+      # mark as fail
       exit_code=1
+
+    else
+      # heavy checkmark
+      echo "\xe2\x9c\x93"
     fi
 
   done
@@ -166,7 +214,6 @@ function build_main_platforms()
   return $exit_code
 
 }
-
 
 # generate json string for a sketch
 function json_sketch()
