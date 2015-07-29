@@ -40,9 +40,7 @@ arduino --install-boards adafruit:avr > /dev/null
 # see: https://github.com/arduino/Arduino/issues/3535
 arduino --install-library USBHost
 
-# init human readable status and json status vars
-export STATUS_OUTPUT=""
-export STATUS_JSON=""
+# init the json temp var for the current platform
 export PLATFORM_JSON=""
 
 # init test stats counters
@@ -57,6 +55,9 @@ function build_platform()
   # arrays can't be exported, so we have to eval
   eval $MAIN_PLATFORMS
   eval $AUX_PLATFORMS
+
+  # reset platform json var
+  PLATFORM_JSON=""
 
   # expects argument 1 to be the platform key
   local platform_key=$1
@@ -181,11 +182,11 @@ function json_sketch()
   local last_sketch=$3
 
   # echo out the json
-  echo "\"$sketch\": $status_number"
+  echo -n "\"$sketch\": $status_number"
 
   # echo a comma unless this is the last sketch for the platform
   if [ "$last_sketch" -ne "1" ]; then
-    echo ", "
+    echo -n ", "
   fi
 
 }
@@ -206,12 +207,37 @@ function json_platform()
   # is this the last platform we are building? 0: no, 1: yes
   local last_platform=$3
 
-  echo "\"$platform_key\": { \"status\": $status_number, \"builds\": $sketch_json }"
+  echo -n "\"$platform_key\": { \"status\": $status_number, \"builds\": $sketch_json }"
 
   # echo a comma unless this is the last sketch for the platform
   if [ "$last_platform" -ne "1" ]; then
-    echo ", "
+    echo -n ", "
   fi
+
+}
+
+# generate final json string
+function json_main_platforms()
+{
+
+  # 0: failed, 1: passed
+  local status_number=$2
+
+  # the json string for the main platforms
+  local platforms_json=$3
+
+  local repo=$(git config --get remote.origin.url)
+
+  echo "|||||||||||||||||||| JSON STATUS ||||||||||||||||||||"
+
+  echo -n "{ \"repo\": \"$repo\", "
+  echo -n "\"status\": $status_number, "
+  echo -n "\"passed\": $PASSED_COUNT, "
+  echo -n "\"skipped\": $SKIPPED_COUNT, "
+  echo -n "\"failed\": $FAILED_COUNT, "
+  echo "\"platforms\": $platforms_json }"
+
+  echo "|||||||||||||||||||| JSON STATUS ||||||||||||||||||||"
 
 }
 
