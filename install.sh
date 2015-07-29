@@ -299,17 +299,17 @@ function build_main_platforms()
 function json_sketch()
 {
 
-  # the filename of the sketch
-  local sketch=$1
-
   # -1: skipped, 0: failed, 1: passed
-  local status_number=$2
+  local status_number=$1
+
+  # the filename of the sketch
+  local sketch=$2
 
   # is this the last sketch for this platform? 0: no, 1: yes
   local last_sketch=$3
 
   # echo out the json
-  echo -n "\\\"$sketch\\\": $status_number"
+  echo -n "\"$sketch\": $status_number"
 
   # echo a comma unless this is the last sketch for the platform
   if [ $last_sketch -ne 1 ]; then
@@ -334,7 +334,7 @@ function json_platform()
   # is this the last platform we are building? 0: no, 1: yes
   local last_platform=$4
 
-  echo -n "\\\"$platform_key\\\": { \\\"status\\\": $status_number, \\\"builds\\\": { $sketch_json } }"
+  echo -n "\"$platform_key\": { \"status\": $status_number, \"builds\": { $sketch_json } }"
 
   # echo a comma unless this is the last sketch for the platform
   if [ $last_platform -ne 1 ]; then
