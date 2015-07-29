@@ -73,9 +73,7 @@ function build_platform()
   declare -a examples
 
   # loop through results and add them to the array
-  find $PWD -name "*.pde" -o -name "*.ino" | while read line; do
-    examples+=("$line")
-  done
+  examples=($(find $PWD -name "*.pde" -o -name "*.ino"))
 
   # get the last example in the array
   local last="${examples[@]:(-1)}"
