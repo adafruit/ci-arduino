@@ -71,10 +71,14 @@ function build_platform()
 
   # grab all pde and ino example sketches
   declare -A examples
-  examples=$(find $PWD -name "*.pde" -o -name "*.ino")
+
+  # loop through results and add them to the array
+  while IFS= read -r -d $'\0'; do
+    examples+=("$REPLY")
+  done < <(find $PWD -name "*.pde" -o -name "*.ino")
 
   # get the last example in the array
-  local last="${examples[${#examples[@]} - 1]}"
+  local last="${examples[@]:(-1)}"
 
   # grab the platform info from array or bail if invalid
   if [[ ${main_platforms[$platform_key]} ]]; then
@@ -110,7 +114,7 @@ function build_platform()
   echo "########################################################################";
 
   # loop through example sketches
-  for example in $examples; do
+  for example in "${examples[@]}"; do
 
     # store the full path to the example's sketch directory
     local example_dir=$(dirname $example)
@@ -273,7 +277,7 @@ function build_main_platforms()
     local result=$?
 
     # build failed
-    if [ $result -eq 0 ]; then
+    if [ $result -ne 0 ]; then
       platforms_json="${platforms_json}$(json_platform $p_key 0 "$PLATFORM_JSON" $last_platform)"
       exit_code=1
     else
