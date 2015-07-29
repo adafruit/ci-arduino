@@ -44,9 +44,9 @@ arduino --install-library USBHost > /dev/null
 export PLATFORM_JSON=""
 
 # init test stats counters
-export PASSED_COUNT=0
-export SKIPPED_COUNT=0
-export FAILED_COUNT=0
+export PASS_COUNT=0
+export SKIP_COUNT=0
+export FAIL_COUNT=0
 export PDE_COUNT=0
 
 # build all of the examples for the passed platform
@@ -118,20 +118,60 @@ function build_platform()
     # store the filename for the example without the path
     local example_file=$(basename $example)
 
+    # is this the last example in the loop
+    local last_example=0
+    if [ $last -eq $example ]; then
+      last_example=1
+    fi
+
     echo -n "$example_file: "
 
     # continue to next example if platform switch failed
     if [ $platform_switch -ne 0 ]; then
       # heavy X
       echo -e "\xe2\x9c\x96"
+
+      # add json
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch $example_file 0 $last_example)"
+
+      # increment fails
+      FAIL_COUNT=$((FAIL_COUNT + 1))
+
+      # mark fail
       exit_code=1
+
       continue
+
     fi
 
-    # ignore this example if there is a skip file preset for this platform
-    if [[ -f "${example_dir}/.${platform_key}.test.skip" ]]; then
+    # ignore this example if there is an all platform skip
+    if [[ -f "${example_dir}/.test.skip" ]]; then
+
       # right arrow
       echo -e "\xe2\x9e\x9e"
+
+      # add json
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch $example_file -1 $last_example)"
+
+      # increment skips
+      SKIP_COUNT=$((SKIP_COUNT + 1))
+
+      continue
+
+    fi
+
+    # ignore this example if there is a skip file preset for this specific platform
+    if [[ -f "${example_dir}/.${platform_key}.test.skip" ]]; then
+
+      # right arrow
+      echo -e "\xe2\x9e\x9e"
+
+      # add json
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch $example_file -1 $last_example)"
+
+      # increment skips
+      SKIP_COUNT=$((SKIP_COUNT + 1))
+
       continue
     fi
 
@@ -144,6 +184,12 @@ function build_platform()
       echo -e "-------------------------- DEBUG OUTPUT --------------------------\n"
       echo "PDE EXTENSION. PLEASE UPDATE TO INO"
       echo -e "\n------------------------------------------------------------------\n"
+
+      # add json
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch $example_file 0 $last_example)"
+
+      # increment fails
+      FAIL_COUNT=$((FAIL_COUNT + 1))
 
       # mark as fail
       exit_code=1
@@ -167,12 +213,26 @@ function build_platform()
       echo $build_stdout
       echo -e "\n------------------------------------------------------------------\n"
 
+      # add json
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch $example_file 0 $last_example)"
+
+      # increment fails
+      FAIL_COUNT=$((FAIL_COUNT + 1))
+
       # mark as fail
       exit_code=1
 
     else
+
       # heavy checkmark
       echo -e "\xe2\x9c\x93"
+
+      # add json
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch $example_file 1 $last_example)"
+
+      # increment passes
+      PASS_COUNT=$((PASS_COUNT + 1))
+
     fi
 
   done
@@ -191,11 +251,20 @@ function build_main_platforms()
   # track the build status all platforms
   local exit_code=0
 
+  # var to hold platforms
+  local $platforms_json=""
+
   # get the last element in the array
   local last="${main_platforms[@]: -1}"
 
   # loop through platforms in main platforms assoc array
   for p_key in "${!main_platforms[@]}"; do
+
+    # is this the last platform in the loop
+    local last_platform=0
+    if [ "$last" -eq "${main_platforms[$p_key]}" ]; then
+      last_platform=1
+    fi
 
     # build all examples for this platform
     build_platform $p_key
@@ -203,12 +272,22 @@ function build_main_platforms()
     # grab the exit status of the builds
     local result=$?
 
-    # note if the build failed
+    # build failed
     if [ "$result" -ne "0" ]; then
+      platforms_json="${platforms_json}$(json_platform $p_key 0 $PLATFORM_JSON $last_platform)"
       exit_code=1
+    else
+      platforms_json="${platforms_json}$(json_platform $p_key 1 $PLATFORM_JSON $last_platform)"
     fi
 
   done
+
+  # exit code is opposite of json build status
+  if [ "$exit_code" -eq "0" ]; then
+    json_main_platforms 1 $platforms_json
+  else
+    json_main_platforms 0 $platforms_json
+  fi
 
   return $exit_code
 
@@ -274,16 +353,16 @@ function json_main_platforms()
 
   local repo=$(git config --get remote.origin.url)
 
-  echo "|||||||||||||||||||| JSON STATUS ||||||||||||||||||||"
+  echo -e "\n\n|||||||||||||||||||| JSON STATUS ||||||||||||||||||||"
 
   echo -n "{ \"repo\": \"$repo\", "
   echo -n "\"status\": $status_number, "
-  echo -n "\"passed\": $PASSED_COUNT, "
-  echo -n "\"skipped\": $SKIPPED_COUNT, "
-  echo -n "\"failed\": $FAILED_COUNT, "
+  echo -n "\"passed\": $PASS_COUNT, "
+  echo -n "\"skipped\": $SKIP_COUNT, "
+  echo -n "\"failed\": $FAIL_COUNT, "
   echo "\"platforms\": $platforms_json }"
 
-  echo "|||||||||||||||||||| JSON STATUS ||||||||||||||||||||"
+  echo -e "|||||||||||||||||||| JSON STATUS ||||||||||||||||||||\n\n"
 
 }
 
