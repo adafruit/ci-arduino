@@ -166,3 +166,26 @@ function build_main_platforms()
 
 }
 
+
+# generate json string for a build
+function json_build()
+{
+
+  # the filename of the sketch
+  local sketch=$1
+
+  # -1: skipped, 0: failed, 1: passed
+  local status_number=$2
+
+  # is this the last sketch for this platform?
+  local last_sketch=$3
+
+  # echo out the json
+  echo "\"$sketch\": $status_number"
+
+  # echo a comma unless this is the last sketch for the platform
+  if [ "$last_sketch" -ne "1" ]; then
+    echo ", "
+  fi
+
+}
