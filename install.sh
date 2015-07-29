@@ -40,6 +40,16 @@ arduino --install-boards adafruit:avr > /dev/null
 # see: https://github.com/arduino/Arduino/issues/3535
 arduino --install-library USBHost
 
+# init human readable status and json status vars
+export STATUS_OUTPUT=""
+export STATUS_JSON=""
+export PLATFORM_JSON=""
+
+# init test stats counters
+export PASSED_COUNT=0
+export SKIPPED_COUNT=0
+export FAILED_COUNT=0
+
 # build all of the examples for the passed platform
 function build_platform()
 {
@@ -54,8 +64,15 @@ function build_platform()
   # placeholder for platform
   local platform=""
 
+  # track the exit code for this platform
+  local exit_code=0
+
   # grab all pde and ino example sketches
-  local examples=$(find $PWD -name "*.pde" -o -name "*.ino")
+  declare -A examples
+  examples=$(find $PWD -name "*.pde" -o -name "*.ino")
+
+  # get the last example in the array
+  local last="${examples[@]: -1}"
 
   # grab the platform info from array or bail if invalid
   if [[ ${main_platforms[$platform_key]} ]]; then
@@ -64,11 +81,11 @@ function build_platform()
     platform=${aux_platforms[$platform_key]}
   else
     echo "INVALID PLATFORM KEY: $platform_key"
-    return 1
+    exit_code=1
   fi
 
   # switch to the requested board
-  echo -e "\n\n ------------ PLATFORM: ${platform_key} ------------ \n\n";
+  echo -e "\n############ BOARD: ${platform_key} ############\n";
   arduino --board $platform --save-prefs
 
   # grab the exit status of the arduino board change
@@ -77,7 +94,7 @@ function build_platform()
   # bail if the platform switch failed
   if [ $platform_switch -ne 0 ]; then
     echo "SWITCHING PLATFORM FAILED: ${platform}"
-    return $platform_switch
+    exit_code=1
   fi
 
   # loop through example sketches
@@ -88,17 +105,17 @@ function build_platform()
 
     # ignore this example if there is a skip file preset for this platform
     if [[ -f "${example_dir}/.${platform_key}.test.skip" ]]; then
-      echo -e "\n\n ------------ SKIPPING $platform_key BUILD: $example ------------ \n\n";
+      echo -e "\n------------ SKIPPING: $example ------------\n";
       continue
     fi
 
     # make sure that all examples are .ino files
     if [[ $example =~ \.pde$ ]]; then
       echo "PDE EXAMPLE EXTENSION: $example" >&2
-      return 1
+      exit_code=1
     fi
 
-    echo -e "\n\n ------------ BUILDING: $example ------------ \n\n";
+    echo -e "\n------------ BUILDING: $example ------------\n";
     arduino --verify $example;
 
     # grab the exit status of the arduino verify
@@ -107,10 +124,12 @@ function build_platform()
     # bail if the build failed
     if [ $build_result -ne 0 ]; then
       echo "BUILD FAILED"
-      return $build_result
+      exit_code=1
     fi
 
   done
+
+  return $exit_code
 
 }
 
@@ -120,8 +139,14 @@ function build_main_platforms()
 
   # arrays can't be exported, so we have to eval
   eval $MAIN_PLATFORMS
-  eval $AUX_PLATFORMS
 
+  # track the build status all platforms
+  local exit_code=0
+
+  # get the last element in the array
+  local last="${main_platforms[@]: -1}"
+
+  # loop through platforms in main platforms assoc array
   for p_key in "${!main_platforms[@]}"; do
 
     # build all examples for this platform
@@ -130,12 +155,14 @@ function build_main_platforms()
     # grab the exit status of the builds
     local result=$?
 
-    # bail if the build failed
-    if [ $result -ne 0 ]; then
-      return $result
+    # note if the build failed
+    if [ "$result" -ne "0" ]; then
+      exit_code=1
     fi
 
   done
+
+  return $exit_code
 
 }
 
