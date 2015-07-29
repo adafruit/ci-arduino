@@ -346,10 +346,10 @@ function json_main_platforms()
 {
 
   # 0: failed, 1: passed
-  local status_number=$2
+  local status_number=$1
 
   # the json string for the main platforms
-  local platforms_json=$3
+  local platforms_json=$2
 
   local repo=$(git config --get remote.origin.url)
 
