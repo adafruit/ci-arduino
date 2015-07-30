@@ -234,7 +234,7 @@ function build_platform()
       echo -e "\xe2\x9c\x96"
 
       echo -e "----------------------------- DEBUG OUTPUT -----------------------------\n"
-      echo $build_stdout
+      echo "$build_stdout"
       echo -e "\n------------------------------------------------------------------------\n"
 
       # add json
