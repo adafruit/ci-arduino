@@ -207,6 +207,10 @@ function build_platform()
 
     echo "BUILD EXIT DEBUG: $build_result"
 
+    echo -e "-------------------------- DEBUG OUTPUT --------------------------\n"
+    echo $build_stdout
+    echo -e "\n------------------------------------------------------------------\n"
+
     # echo output if the build failed
     if [ $build_result -ne 0 ]; then
 
