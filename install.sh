@@ -30,15 +30,33 @@ ln -s $PWD $HOME/arduino_ide/libraries/Adafruit_Test_Library
 # add the arduino CLI to our PATH
 export PATH="$HOME/arduino_ide:$PATH"
 
+echo -e "\n########################################################################";
+echo "INSTALLING DEPENDENCIES"
+echo "########################################################################";
+
+
 # install the due, esp8266, and adafruit board packages
-arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs
-arduino --install-boards arduino:sam > /dev/null
-arduino --install-boards esp8266:esp8266 > /dev/null
-arduino --install-boards adafruit:avr > /dev/null
+echo -n "ADD PACKAGE INDEX: "
+DEPENDENCY_OUTPUT=$(arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs 2>&1)
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
+
+echo -n "DUE: "
+DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
+
+echo -n "ESP8266: "
+DEPENDENCY_OUTPUT=$(arduino --install-boards esp8266:esp8266 2>&1)
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
+
+echo -n "ADAFRUIT AVR: "
+DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:avr 2>&1)
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
 # install random lib so the arduino IDE grabs a new library index
 # see: https://github.com/arduino/Arduino/issues/3535
-arduino --install-library USBHost > /dev/null
+echo -n "UPDATE LIBRARY INDEX: "
+DEPENDENCY_OUTPUT=$(arduino --install-library USBHost > /dev/null 2>&1)
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
 # init the json temp var for the current platform
 export PLATFORM_JSON=""
@@ -209,18 +227,15 @@ function build_platform()
     local build_stdout
     build_stdout=$(arduino --verify $example 2>&1)
 
-    # grab the exit status of the arduino verify
-    local build_result=$?
-
     # echo output if the build failed
-    if [ $build_result -ne 0 ]; then
+    if [ $? -ne 0 ]; then
 
       # heavy X
       echo -e "\xe2\x9c\x96"
 
-      echo -e "-------------------------- DEBUG OUTPUT --------------------------\n"
+      echo -e "----------------------------- DEBUG OUTPUT -----------------------------\n"
       echo $build_stdout
-      echo -e "\n------------------------------------------------------------------\n"
+      echo -e "\n------------------------------------------------------------------------\n"
 
       # add json
       PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch 0 $example_file $last_example)"
@@ -278,11 +293,8 @@ function build_main_platforms()
     # build all examples for this platform
     build_platform $p_key
 
-    # grab the exit status of the builds
-    local result=$?
-
-    # build failed
-    if [ $result -ne 0 ]; then
+    # check if build failed
+    if [ $? -ne 0 ]; then
       platforms_json="${platforms_json}$(json_platform $p_key 0 "$PLATFORM_JSON" $last_platform)"
       exit_code=1
     else
@@ -362,7 +374,7 @@ function json_main_platforms()
 
   local repo=$(git config --get remote.origin.url)
 
-  echo -e "\n\n|||||||||||||||||||| JSON STATUS ||||||||||||||||||||"
+  echo -e "\n||||||||||||||||||||||||||||| JSON STATUS ||||||||||||||||||||||||||||||"
 
   echo -n "{ \"repo\": \"$repo\", "
   echo -n "\"status\": $status_number, "
@@ -371,7 +383,7 @@ function json_main_platforms()
   echo -n "\"failed\": $FAIL_COUNT, "
   echo "\"platforms\": { $platforms_json } }"
 
-  echo -e "|||||||||||||||||||| JSON STATUS ||||||||||||||||||||\n\n"
+  echo -e "||||||||||||||||||||||||||||| JSON STATUS ||||||||||||||||||||||||||||||\n"
 
 }
 
