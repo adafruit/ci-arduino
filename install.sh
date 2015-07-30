@@ -92,8 +92,11 @@ function build_platform()
 
   echo -n "SWITCHING TO ${platform_key}: "
 
-  # switch to the requested board
-  local platform_stdout=$(arduino --board $platform --save-prefs 2>&1)
+  # switch to the requested board.
+  # we have to avoid reading the exit code of local:
+  # "when declaring a local variable in a function, the local acts as a command in its own right"
+  local platform_stdout
+  platform_stdout=$(arduino --board $platform --save-prefs 2>&1)
 
   # grab the exit status of the arduino board change
   local platform_switch=$?
@@ -200,16 +203,14 @@ function build_platform()
 
     fi
 
-    local build_stdout=$(arduino --verify $example 2>&1)
+    # verify the example, and save stdout & stderr to a variable
+    # we have to avoid reading the exit code of local:
+    # "when declaring a local variable in a function, the local acts as a command in its own right"
+    local build_stdout
+    build_stdout=$(arduino --verify $example 2>&1)
 
     # grab the exit status of the arduino verify
     local build_result=$?
-
-    echo "BUILD EXIT DEBUG: $build_result"
-
-    echo -e "-------------------------- DEBUG OUTPUT --------------------------\n"
-    echo $build_stdout
-    echo -e "\n------------------------------------------------------------------\n"
 
     # echo output if the build failed
     if [ $build_result -ne 0 ]; then
