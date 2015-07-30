@@ -205,6 +205,8 @@ function build_platform()
     # grab the exit status of the arduino verify
     local build_result=$?
 
+    echo "BUILD EXIT DEBUG: $build_result"
+
     # echo output if the build failed
     if [ $build_result -ne 0 ]; then
 
