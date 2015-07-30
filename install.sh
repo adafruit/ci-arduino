@@ -38,7 +38,16 @@ arduino --install-boards adafruit:avr > /dev/null
 
 # install random lib so the arduino IDE grabs a new library index
 # see: https://github.com/arduino/Arduino/issues/3535
-arduino --install-library USBHost
+arduino --install-library USBHost > /dev/null
+
+# init the json temp var for the current platform
+export PLATFORM_JSON=""
+
+# init test stats counters
+export PASS_COUNT=0
+export SKIP_COUNT=0
+export FAIL_COUNT=0
+export PDE_COUNT=0
 
 # build all of the examples for the passed platform
 function build_platform()
@@ -48,14 +57,26 @@ function build_platform()
   eval $MAIN_PLATFORMS
   eval $AUX_PLATFORMS
 
+  # reset platform json var
+  PLATFORM_JSON=""
+
   # expects argument 1 to be the platform key
   local platform_key=$1
 
   # placeholder for platform
   local platform=""
 
+  # track the exit code for this platform
+  local exit_code=0
+
   # grab all pde and ino example sketches
-  local examples=$(find $PWD -name "*.pde" -o -name "*.ino")
+  declare -a examples
+
+  # loop through results and add them to the array
+  examples=($(find $PWD -name "*.pde" -o -name "*.ino"))
+
+  # get the last example in the array
+  local last="${examples[@]:(-1)}"
 
   # grab the platform info from array or bail if invalid
   if [[ ${main_platforms[$platform_key]} ]]; then
@@ -64,53 +85,161 @@ function build_platform()
     platform=${aux_platforms[$platform_key]}
   else
     echo "INVALID PLATFORM KEY: $platform_key"
-    return 1
+    exit_code=1
   fi
 
+  echo -e "\n########################################################################";
+
+  echo -n "SWITCHING TO ${platform_key}: "
+
   # switch to the requested board
-  echo -e "\n\n ------------ PLATFORM: ${platform_key} ------------ \n\n";
-  arduino --board $platform --save-prefs
+  local platform_stdout=$(arduino --board $platform --save-prefs 2>&1)
 
   # grab the exit status of the arduino board change
   local platform_switch=$?
 
-  # bail if the platform switch failed
+  # notify if the platform switch failed
   if [ $platform_switch -ne 0 ]; then
-    echo "SWITCHING PLATFORM FAILED: ${platform}"
-    return $platform_switch
+    # heavy X
+    echo -e "\xe2\x9c\x96"
+    echo $platform_stdout
+    exit_code=1
+  else
+    # heavy checkmark
+    echo -e "\xe2\x9c\x93"
   fi
 
+  echo "########################################################################";
+
   # loop through example sketches
-  for example in $examples; do
+  for example in "${examples[@]}"; do
 
     # store the full path to the example's sketch directory
     local example_dir=$(dirname $example)
 
-    # ignore this example if there is a skip file preset for this platform
+    # store the filename for the example without the path
+    local example_file=$(basename $example)
+
+    # is this the last example in the loop
+    local last_example=0
+    if [ "$last" == "$example" ]; then
+      last_example=1
+    fi
+
+    echo -n "$example_file: "
+
+    # continue to next example if platform switch failed
+    if [ $platform_switch -ne 0 ]; then
+      # heavy X
+      echo -e "\xe2\x9c\x96"
+
+      # add json
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch 0 $example_file $last_example)"
+
+      # increment fails
+      FAIL_COUNT=$((FAIL_COUNT + 1))
+
+      # mark fail
+      exit_code=1
+
+      continue
+
+    fi
+
+    # ignore this example if there is an all platform skip
+    if [[ -f "${example_dir}/.test.skip" ]]; then
+
+      # right arrow
+      echo -e "\xe2\x9e\x9e"
+
+      # add json
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch -1 $example_file $last_example)"
+
+      # increment skips
+      SKIP_COUNT=$((SKIP_COUNT + 1))
+
+      continue
+
+    fi
+
+    # ignore this example if there is a skip file preset for this specific platform
     if [[ -f "${example_dir}/.${platform_key}.test.skip" ]]; then
-      echo -e "\n\n ------------ SKIPPING $platform_key BUILD: $example ------------ \n\n";
+
+      # right arrow
+      echo -e "\xe2\x9e\x9e"
+
+      # add json
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch -1 $example_file $last_example)"
+
+      # increment skips
+      SKIP_COUNT=$((SKIP_COUNT + 1))
+
       continue
     fi
 
     # make sure that all examples are .ino files
     if [[ $example =~ \.pde$ ]]; then
-      echo "PDE EXAMPLE EXTENSION: $example" >&2
-      return 1
+
+      # heavy X
+      echo -e "\xe2\x9c\x96"
+
+      echo -e "-------------------------- DEBUG OUTPUT --------------------------\n"
+      echo "PDE EXTENSION. PLEASE UPDATE TO INO"
+      echo -e "\n------------------------------------------------------------------\n"
+
+      # add json
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch 0 $example_file $last_example)"
+
+      # increment fails
+      FAIL_COUNT=$((FAIL_COUNT + 1))
+
+      # mark as fail
+      exit_code=1
+
+      continue
+
     fi
 
-    echo -e "\n\n ------------ BUILDING: $example ------------ \n\n";
-    arduino --verify $example;
+    local build_stdout=$(arduino --verify $example 2>&1)
 
     # grab the exit status of the arduino verify
     local build_result=$?
 
-    # bail if the build failed
+    # echo output if the build failed
     if [ $build_result -ne 0 ]; then
-      echo "BUILD FAILED"
-      return $build_result
+
+      # heavy X
+      echo -e "\xe2\x9c\x96"
+
+      echo -e "-------------------------- DEBUG OUTPUT --------------------------\n"
+      echo $build_stdout
+      echo -e "\n------------------------------------------------------------------\n"
+
+      # add json
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch 0 $example_file $last_example)"
+
+      # increment fails
+      FAIL_COUNT=$((FAIL_COUNT + 1))
+
+      # mark as fail
+      exit_code=1
+
+    else
+
+      # heavy checkmark
+      echo -e "\xe2\x9c\x93"
+
+      # add json
+      PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch 1 "$example_file" $last_example)"
+
+      # increment passes
+      PASS_COUNT=$((PASS_COUNT + 1))
+
     fi
 
   done
+
+  return $exit_code
 
 }
 
@@ -120,9 +249,24 @@ function build_main_platforms()
 
   # arrays can't be exported, so we have to eval
   eval $MAIN_PLATFORMS
-  eval $AUX_PLATFORMS
 
+  # track the build status all platforms
+  local exit_code=0
+
+  # var to hold platforms
+  local platforms_json=""
+
+  # get the last element in the array
+  local last="${main_platforms[@]:(-1)}"
+
+  # loop through platforms in main platforms assoc array
   for p_key in "${!main_platforms[@]}"; do
+
+    # is this the last platform in the loop
+    local last_platform=0
+    if [ "$last" == "${main_platforms[$p_key]}" ]; then
+      last_platform=1
+    fi
 
     # build all examples for this platform
     build_platform $p_key
@@ -130,12 +274,97 @@ function build_main_platforms()
     # grab the exit status of the builds
     local result=$?
 
-    # bail if the build failed
+    # build failed
     if [ $result -ne 0 ]; then
-      return $result
+      platforms_json="${platforms_json}$(json_platform $p_key 0 "$PLATFORM_JSON" $last_platform)"
+      exit_code=1
+    else
+      platforms_json="${platforms_json}$(json_platform $p_key 1 "$PLATFORM_JSON" $last_platform)"
     fi
 
   done
+
+  # exit code is opposite of json build status
+  if [ $exit_code -eq 0 ]; then
+    json_main_platforms 1 "$platforms_json"
+  else
+    json_main_platforms 0 "$platforms_json"
+  fi
+
+  return $exit_code
+
+}
+
+# generate json string for a sketch
+function json_sketch()
+{
+
+  # -1: skipped, 0: failed, 1: passed
+  local status_number=$1
+
+  # the filename of the sketch
+  local sketch=$2
+
+  # is this the last sketch for this platform? 0: no, 1: yes
+  local last_sketch=$3
+
+  # echo out the json
+  echo -n "\"$sketch\": $status_number"
+
+  # echo a comma unless this is the last sketch for the platform
+  if [ $last_sketch -ne 1 ]; then
+    echo -n ", "
+  fi
+
+}
+
+# generate json string for a platform
+function json_platform()
+{
+
+  # the platform key from main platforms or aux platforms
+  local platform_key=$1
+
+  # 0: failed, 1: passed
+  local status_number=$2
+
+  # the json string for the verified sketches
+  local sketch_json=$3
+
+  # is this the last platform we are building? 0: no, 1: yes
+  local last_platform=$4
+
+  echo -n "\"$platform_key\": { \"status\": $status_number, \"builds\": { $sketch_json } }"
+
+  # echo a comma unless this is the last sketch for the platform
+  if [ $last_platform -ne 1 ]; then
+    echo -n ", "
+  fi
+
+}
+
+# generate final json string
+function json_main_platforms()
+{
+
+  # 0: failed, 1: passed
+  local status_number=$1
+
+  # the json string for the main platforms
+  local platforms_json=$2
+
+  local repo=$(git config --get remote.origin.url)
+
+  echo -e "\n\n|||||||||||||||||||| JSON STATUS ||||||||||||||||||||"
+
+  echo -n "{ \"repo\": \"$repo\", "
+  echo -n "\"status\": $status_number, "
+  echo -n "\"passed\": $PASS_COUNT, "
+  echo -n "\"skipped\": $SKIP_COUNT, "
+  echo -n "\"failed\": $FAIL_COUNT, "
+  echo "\"platforms\": { $platforms_json } }"
+
+  echo -e "|||||||||||||||||||| JSON STATUS ||||||||||||||||||||\n\n"
 
 }
 
