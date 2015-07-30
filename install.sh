@@ -58,6 +58,11 @@ echo -n "UPDATE LIBRARY INDEX: "
 DEPENDENCY_OUTPUT=$(arduino --install-library USBHost > /dev/null 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
+# set the maximal compiler warning level
+echo -n "SET BUILD PREFERENCES: "
+DEPENDENCY_OUTPUT=$(arduino --pref "compiler.warning_level=all" --save-prefs 2>&1)
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
+
 # init the json temp var for the current platform
 export PLATFORM_JSON=""
 
@@ -234,7 +239,7 @@ function build_platform()
       echo -e "\xe2\x9c\x96"
 
       echo -e "----------------------------- DEBUG OUTPUT -----------------------------\n"
-      echo $build_stdout
+      echo "$build_stdout"
       echo -e "\n------------------------------------------------------------------------\n"
 
       # add json
