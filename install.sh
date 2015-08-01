@@ -107,8 +107,8 @@ function build_platform()
   elif [[ ${aux_platforms[$platform_key]} ]]; then
     platform=${aux_platforms[$platform_key]}
   else
-    echo "INVALID PLATFORM KEY: $platform_key"
-    exit_code=1
+    echo "NON-STANDARD PLATFORM KEY: $platform_key"
+    platform=$platform_key
   fi
 
   echo -e "\n########################################################################";
