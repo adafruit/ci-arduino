@@ -20,7 +20,7 @@ sleep 3
 export DISPLAY=:1.0
 
 # download and install arduino 1.6.5
-wget http://downloads.arduino.cc/arduino-1.6.5-linux64.tar.xz
+wget https://downloads.arduino.cc/arduino-1.6.5-linux64.tar.xz
 tar xf arduino-1.6.5-linux64.tar.xz
 mv arduino-1.6.5 $HOME/arduino_ide
 
@@ -111,8 +111,8 @@ function build_platform()
   elif [[ ${aux_platforms[$platform_key]} ]]; then
     platform=${aux_platforms[$platform_key]}
   else
-    echo "INVALID PLATFORM KEY: $platform_key"
-    exit_code=1
+    echo "NON-STANDARD PLATFORM KEY: $platform_key"
+    platform=$platform_key
   fi
 
   echo -e "\n########################################################################";
