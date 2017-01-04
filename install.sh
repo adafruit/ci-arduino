@@ -8,7 +8,7 @@ fi
 
 # associative array for the platforms that will be verified in build_main_platforms()
 # this will be eval'd in the functions below because arrays can't be exported
-export MAIN_PLATFORMS='declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [zero]="arduino:samd:zero" [esp8266]="esp8266:esp8266:huzzah" [leonardo]="arduino:avr:leonardo" circuitplay32u4="arduino:avr:circuitplay32u4" )'
+export MAIN_PLATFORMS='declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [zero]="arduino:samd:zero" [esp8266]="esp8266:esp8266:huzzah" [leonardo]="arduino:avr:leonardo" [circuitplay32u4]="arduino:avr:circuitplay32u4" )'
 
 # associative array for other platforms that can be called explicitly in .travis.yml configs
 # this will be eval'd in the functions below because arrays can't be exported
