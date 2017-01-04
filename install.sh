@@ -20,9 +20,13 @@ sleep 3
 export DISPLAY=:1.0
 
 # download and install arduino 1.8.0
-wget https://downloads.arduino.cc/arduino-1.8.0-linux64.tar.xz
-tar xf arduino-1.8.0-linux64.tar.xz
-mv arduino-1.8.0 $HOME/arduino_ide
+#wget https://downloads.arduino.cc/arduino-1.8.0-linux64.tar.xz
+#tar xf arduino-1.8.0-linux64.tar.xz
+#mv arduino-1.8.0 $HOME/arduino_ide
+# Test hourly
+wget https://downloads.arduino.cc/arduino-nightly-linux64.tar.xz
+tar xf arduino-nightly-linux64.tar.xz
+mv arduino-nightly $HOME/arduino_ide
 
 # move this library to the arduino libraries folder
 ln -s $PWD $HOME/arduino_ide/libraries/Adafruit_Test_Library
