@@ -4,7 +4,7 @@ before_install:
 script:
   - build_platform uno
   - build_platform leonardo
-  #- build_platform zero
+  - build_platform zero
   #- build_platform esp8266
   - build_platform circuitplay32u4cat
 notifications:
