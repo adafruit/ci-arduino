@@ -6,7 +6,7 @@ script:
   - build_platform leonardo
   #- build_platform zero
   #- build_platform esp8266
-  - build_platform circuitplay32u4
+  - build_platform circuitplay32u4cat
 notifications:
   email:
     on_success: change
