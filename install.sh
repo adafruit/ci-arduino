@@ -23,7 +23,17 @@ export DISPLAY=:1.0
 wget https://downloads.arduino.cc/arduino-1.8.0-linux64.tar.xz
 tar xf arduino-1.8.0-linux64.tar.xz
 mv arduino-1.8.0 $HOME/arduino_ide
-
+cat < EOF > $HOME/arduino_ide/arduino-headless.sh
+#!/bin/bash
+killall -9 Xvfb
+sleep 3s
+Xvfb :1 -nolisten tcp -screen :1 1280x800x24 &
+xvfb="$!"
+sleep 3s
+DISPLAY=:1 arduino "$@"
+kill -9 $xvfb
+EOF
+chmod a+x $HOME/arduino_id/arduino-headless.sh
 # move this library to the arduino libraries folder
 ln -s $PWD $HOME/arduino_ide/libraries/Adafruit_Test_Library
 
@@ -37,34 +47,34 @@ echo "########################################################################";
 
 # install the due, esp8266, and adafruit board packages
 echo -n "ADD PACKAGE INDEX: "
-DEPENDENCY_OUTPUT=$(arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs 2>&1)
+DEPENDENCY_OUTPUT=$(arduino-headless.sh --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
 echo -n "DUE: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
+DEPENDENCY_OUTPUT=$(arduino-headless.sh --install-boards arduino:sam 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
 echo -n "ZERO: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:samd 2>&1)
+DEPENDENCY_OUTPUT=$(arduino-headless.sh --install-boards arduino:samd 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
 echo -n "ESP8266: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards esp8266:esp8266 2>&1)
+DEPENDENCY_OUTPUT=$(arduino-headless.sh --install-boards esp8266:esp8266 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
 echo -n "ADAFRUIT AVR: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:avr 2>&1)
+DEPENDENCY_OUTPUT=$(arduino-headless.sh --install-boards adafruit:avr 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
 # install random lib so the arduino IDE grabs a new library index
 # see: https://github.com/arduino/Arduino/issues/3535
 echo -n "UPDATE LIBRARY INDEX: "
-DEPENDENCY_OUTPUT=$(arduino --install-library USBHost > /dev/null 2>&1)
+DEPENDENCY_OUTPUT=$(arduino-headless.sh --install-library USBHost > /dev/null 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
 # set the maximal compiler warning level
 echo -n "SET BUILD PREFERENCES: "
-DEPENDENCY_OUTPUT=$(arduino --pref "compiler.warning_level=all" --save-prefs 2>&1)
+DEPENDENCY_OUTPUT=$(arduino-headless.sh --pref "compiler.warning_level=all" --save-prefs 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
 # init the json temp var for the current platform
@@ -123,7 +133,7 @@ function build_platform()
   # we have to avoid reading the exit code of local:
   # "when declaring a local variable in a function, the local acts as a command in its own right"
   local platform_stdout
-  platform_stdout=$(arduino --board $platform --save-prefs 2>&1)
+  platform_stdout=$(arduino-headless.sh --board $platform --save-prefs 2>&1)
 
   # grab the exit status of the arduino board change
   local platform_switch=$?
@@ -234,7 +244,7 @@ function build_platform()
     # we have to avoid reading the exit code of local:
     # "when declaring a local variable in a function, the local acts as a command in its own right"
     local build_stdout
-    build_stdout=$(arduino --verify $example 2>&1)
+    build_stdout=$(arduino-headless.sh --verify $example 2>&1)
 
     # echo output if the build failed
     if [ $? -ne 0 ]; then
