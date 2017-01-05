@@ -23,7 +23,7 @@ export DISPLAY=:1.0
 wget https://downloads.arduino.cc/arduino-1.8.0-linux64.tar.xz
 tar xf arduino-1.8.0-linux64.tar.xz
 mv arduino-1.8.0 $HOME/arduino_ide
-cat < EOF > $HOME/arduino_ide/arduino-headless.sh
+cat << EOF > $HOME/arduino_ide/arduino-headless.sh
 #!/bin/bash
 killall -9 Xvfb
 sleep 3s
