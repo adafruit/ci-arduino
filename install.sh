@@ -24,6 +24,7 @@ wget https://downloads.arduino.cc/arduino-1.8.0-linux64.tar.xz
 tar xf arduino-1.8.0-linux64.tar.xz
 mv arduino-1.8.0 $HOME/arduino_ide
 wget https://raw.githubusercontent.com/fede2cr/travis-ci-arduino/master/arduino-headless.sh -O $HOME/arduino_ide/arduino-headless.sh
+chmod +x $HOME/arduino_ide/arduino-headless.sh
 # move this library to the arduino libraries folder
 ln -s $PWD $HOME/arduino_ide/libraries/Adafruit_Test_Library
 
