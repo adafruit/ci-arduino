@@ -23,17 +23,7 @@ export DISPLAY=:1.0
 wget https://downloads.arduino.cc/arduino-1.8.0-linux64.tar.xz
 tar xf arduino-1.8.0-linux64.tar.xz
 mv arduino-1.8.0 $HOME/arduino_ide
-cat << EOF > $HOME/arduino_ide/arduino-headless.sh
-#!/bin/bash
-killall -9 Xvfb
-sleep 3s
-Xvfb :1 -nolisten tcp -screen :1 1280x800x24 &
-xvfb="$!"
-sleep 3s
-DISPLAY=:1 arduino "$@"
-kill -9 $xvfb
-EOF
-chmod a+x $HOME/arduino_id/arduino-headless.sh
+wget https://raw.githubusercontent.com/fede2cr/travis-ci-arduino/master/arduino-headless.sh -O $HOME/arduino_ide/arduino-headless.sh
 # move this library to the arduino libraries folder
 ln -s $PWD $HOME/arduino_ide/libraries/Adafruit_Test_Library
 
