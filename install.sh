@@ -20,9 +20,9 @@ sleep 3
 export DISPLAY=:1.0
 
 # download and install arduino 1.8.0
-wget https://downloads.arduino.cc/arduino-1.8.0-linux64.tar.xz
-tar xf arduino-1.8.0-linux64.tar.xz
-mv arduino-1.8.0 $HOME/arduino_ide
+wget https://downloads.arduino.cc/arduino-1.8.1-linux64.tar.xz
+tar xf arduino-1.8.1-linux64.tar.xz
+mv arduino-1.8.1 $HOME/arduino_ide
 wget https://raw.githubusercontent.com/fede2cr/travis-ci-arduino/master/arduino-headless.sh -O $HOME/arduino_ide/arduino-headless.sh
 chmod +x $HOME/arduino_ide/arduino-headless.sh
 # move this library to the arduino libraries folder
