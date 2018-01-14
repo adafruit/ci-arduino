@@ -21,7 +21,7 @@ sudo: false
 before_install:
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 install:
-  - arduino --install-library "Adafruit SleepyDog Library,Adafruit FONA Library"
+  - arduino --install-library "Adafruit SleepyDog Library","Adafruit FONA Library"
 script:
   - build_main_platforms
 notifications:
