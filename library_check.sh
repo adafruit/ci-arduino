@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # empty for now, add QA checkin' later!
-
-exit 0
