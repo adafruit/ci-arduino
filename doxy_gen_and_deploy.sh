@@ -98,15 +98,13 @@ if [ ! -f ${DOXYFILE} ]; then
     fi
 fi
 
-echo -e "\e[31m-------------------------------------------"
-
 # Print out doxygen warnings in red
 ${TRAVIS_BUILD_DIR}/doxygen $DOXYFILE 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
 
 # if any warnings, bail!
 if [ -s foo.txt ]; then exit 1 ; fi
 
-echo -e "\e[32m-------------------------------------------"
+rm foo.txt
 
 ################################################################################
 ##### Upload the documentation to the gh-pages branch of the repository.   #####
