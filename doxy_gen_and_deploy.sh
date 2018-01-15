@@ -90,7 +90,7 @@ if [ -z "$DOXYFILE" ]; then
 fi
 if [ ! -f ${DOXYFILE} ]; then
     curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/Doxyfile.default > ${DOXYFILE}
-    sed -i "s/^INPUT.*/INPUT = ../.."/"  ${DOXYFILE}
+    sed -i "s/^INPUT .*/INPUT = ..\/../"  ${DOXYFILE}
 
     # If we can, fix up the name
     if [ -z "$PRETTYNAME" ]; then
@@ -99,7 +99,13 @@ if [ ! -f ${DOXYFILE} ]; then
 fi
 
 echo -e "\e[31m-------------------------------------------"
-${TRAVIS_BUILD_DIR}/doxygen $DOXYFILE 2> >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
+
+# Print out doxygen warnings in red
+${TRAVIS_BUILD_DIR}/doxygen $DOXYFILE 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
+
+# if any warnings, bail!
+if [ -s foo.txt ]; then exit 1 ; fi
+
 echo -e "\e[32m-------------------------------------------"
 
 ################################################################################
