@@ -20,7 +20,7 @@ sleep 3
 export DISPLAY=:1.0
 
 # download and install arduino 1.8.5
-wget --quiet --show-progress https://downloads.arduino.cc/arduino-1.8.5-linux64.tar.xz
+wget --quiet https://downloads.arduino.cc/arduino-1.8.5-linux64.tar.xz
 tar xf arduino-1.8.5-linux64.tar.xz
 mv arduino-1.8.5 $HOME/arduino_ide
 
