@@ -95,14 +95,11 @@ if [ ! -f ${DOXYFILE} ]; then
     sed -i "s/^INPUT .*/INPUT = ..\/../"  ${DOXYFILE}
 
     # If we can, fix up the name
-    echo $PRETTYNAME
-    if [ -z "$PRETTYNAME" ]; then
+    if [ ! -z "$PRETTYNAME" ]; then
 	echo "s/^PROJECT_NAME.*/PROJECT_NAME = \"${PRETTYNAME}\"/"
 	sed -i "s/^PROJECT_NAME.*/PROJECT_NAME = \"${PRETTYNAME}\"/"  ${DOXYFILE}
     fi
 fi
-
-cat $DOXYFILE
 
 # Print out doxygen warnings in red
 ${TRAVIS_BUILD_DIR}/doxygen $DOXYFILE 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
