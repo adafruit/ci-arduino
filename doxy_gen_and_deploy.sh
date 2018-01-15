@@ -93,6 +93,7 @@ if [ ! -f ${DOXYFILE} ]; then
     sed -i "s/^INPUT .*/INPUT = ..\/../"  ${DOXYFILE}
 
     # If we can, fix up the name
+    echo $PRETTYNAME
     if [ -z "$PRETTYNAME" ]; then
 	sed -i "s/^PROJECT_NAME.*/PROJECT_NAME = \"${PRETTYNAME}\"/"  ${DOXYFILE}
     fi
