@@ -69,9 +69,11 @@ git config user.email "travis@travis-ci.org"
 # documentation.
 # If there's no index.html (forwarding stub) grab our default one
 shopt -s extglob 
-rm -r -- !(index.html)
 if [ ! -f index.html ]; then
+    rm -rf *
     curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_index.html > index.html
+else
+    rm -r -- !(index.html)
 fi
 
 # Need to create a .nojekyll file to allow filenames starting with an underscore
