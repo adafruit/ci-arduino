@@ -123,6 +123,13 @@ if [ -d "html" ] && [ -f "html/index.html" ]; then
     echo 'Adding all files'
     git add --all
 
+    if [ -n "$(git status --porcelain)" ]; then 
+	echo "Changes to commit"
+    else
+	echo "No changes to commit"
+	exit 0
+    fi
+
     # Commit the added files with a title and description containing the Travis CI
     # build number and the GitHub commit reference that issued this build.
     echo 'Git committing'
