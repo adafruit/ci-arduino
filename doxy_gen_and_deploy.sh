@@ -120,15 +120,18 @@ if [ -d "html" ] && [ -f "html/index.html" ]; then
     # gh-pages branch.
     # GitHub is smart enough to know which files have changed and which files have
     # stayed the same and will only update the changed files.
+    echo 'Adding all files'
     git add --all
 
     # Commit the added files with a title and description containing the Travis CI
     # build number and the GitHub commit reference that issued this build.
+    echo 'Git committing'
     git commit -m "Deploy code docs to GitHub Pages Travis build: ${TRAVIS_BUILD_NUMBER}" -m "Commit: ${TRAVIS_COMMIT}"
 
     # Force push to the remote gh-pages branch.
     # The ouput is redirected to /dev/null to hide any sensitive credential data
     # that might otherwise be exposed.
+    echo 'Git pushing'
     git push --force "https://${GH_REPO_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git" > /dev/null 2>&1
 else
     echo '' >&2
