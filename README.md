@@ -5,6 +5,8 @@ install script for all Adafruit Arduino Library Travis CI configs.
 This will allow us to easily update the install steps without
 having to manually or programatically update 100+ `.travis.yml` files.
 
+We have a guide that you can use to follow along to install both TravisCI and Doxygen generation here https://learn.adafruit.com/the-well-automated-arduino-library/
+
 ## Adding to Travis CI Configs
 
 You will need to source the script in the `before_install` step of your
