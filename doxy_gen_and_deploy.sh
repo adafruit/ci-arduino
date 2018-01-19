@@ -87,18 +87,20 @@ echo "" > .nojekyll
 echo 'Generating Doxygen code documentation...'
 # Redirect both stderr and stdout to the log file AND the console.
 
-if [ -z "$DOXYFILE" ]; then
+if [ ! -f "$DOXYFILE" ]; then
     export DOXYFILE=${TRAVIS_BUILD_DIR}/Doxyfile
-fi
-if [ ! -f ${DOXYFILE} ]; then
+
     curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/Doxyfile.default > ${DOXYFILE}
-    sed -i "s/^INPUT .*/INPUT = ..\/../"  ${DOXYFILE}
+    #sed -i "s/^INPUT .*/INPUT = ..\/../"  ${DOXYFILE}
 
     # If we can, fix up the name
     if [ ! -z "$PRETTYNAME" ]; then
-	sed -i "s/^PROJECT_NAME.*/PROJECT_NAME = \"${PRETTYNAME}\"/"  ${DOXYFILE}
+    sed -i "s/^PROJECT_NAME.*/PROJECT_NAME = \"${PRETTYNAME}\"/"  ${DOXYFILE}
     fi
 fi
+
+sed -i "s;^HTML_OUTPUT .*;HTML_OUTPUT = code_docs/${TRAVIS_REPO_NAME}/html;"  ${DOXYFILE}
+cd $TRAVIS_BUILD_DIR
 
 # Print out doxygen warnings in red
 ${TRAVIS_BUILD_DIR}/doxygen $DOXYFILE 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
@@ -107,6 +109,8 @@ ${TRAVIS_BUILD_DIR}/doxygen $DOXYFILE 2>&1 | tee foo.txt > >(while read line; do
 if [ -s foo.txt ]; then exit 1 ; fi
 
 rm foo.txt
+
+cd code_docs/${TRAVIS_REPO_NAME}
 
 ################################################################################
 ##### Upload the documentation to the gh-pages branch of the repository.   #####
@@ -124,10 +128,10 @@ if [ -d "html" ] && [ -f "html/index.html" ]; then
     git add --all
 
     if [ -n "$(git status --porcelain)" ]; then 
-	echo "Changes to commit"
+    echo "Changes to commit"
     else
-	echo "No changes to commit"
-	exit 0
+    echo "No changes to commit"
+    exit 0
     fi
 
     # Commit the added files with a title and description containing the Travis CI
