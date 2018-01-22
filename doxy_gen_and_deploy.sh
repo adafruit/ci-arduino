@@ -87,7 +87,8 @@ echo "" > .nojekyll
 echo 'Generating Doxygen code documentation...'
 # Redirect both stderr and stdout to the log file AND the console.
 
-if [ ! -f "$DOXYFILE" ]; then
+if [ ! -f ${DOXYFILE} ]; then
+    echo "Grabbing default Doxyfile"
     export DOXYFILE=${TRAVIS_BUILD_DIR}/Doxyfile
 
     curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/Doxyfile.default > ${DOXYFILE}
