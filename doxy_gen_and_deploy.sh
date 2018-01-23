@@ -73,7 +73,8 @@ if [ ! -f index.html ]; then
     rm -rf *
     curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_index.html > index.html
 else
-    rm -r -- !(index.html)
+    # Don't fail if there's no files in the directory, just keep going!
+    true || rm -r -- !(index.html)
 fi
 
 # Need to create a .nojekyll file to allow filenames starting with an underscore
