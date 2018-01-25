@@ -113,7 +113,12 @@ if [ -s foo.txt ]; then exit 1 ; fi
 rm foo.txt
 
 # If we're a pull request, don't push docs to github!
-if [[ $TRAVIS_PULL_REQUEST == 'true' ]]; then exit 0; fi
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then 
+    echo "This is a Pull Request, we're done!"
+    exit 0
+else
+    echo "This is a Commit, Uploading documentation..."
+fi
 
 cd code_docs/${TRAVIS_REPO_NAME}
 
