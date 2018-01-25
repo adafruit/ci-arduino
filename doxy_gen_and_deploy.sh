@@ -112,6 +112,9 @@ if [ -s foo.txt ]; then exit 1 ; fi
 
 rm foo.txt
 
+# If we're a pull request, don't push docs to github!
+if [[ $TRAVIS_PULL_REQUEST == 'true' ]]; then exit 0; fi
+
 cd code_docs/${TRAVIS_REPO_NAME}
 
 ################################################################################
