@@ -58,6 +58,10 @@ echo -n "ADAFRUIT AVR: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:avr 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
+echo -n "ADAFRUIT SAMD: "
+DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:samd 2>&1)
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
+
 # install random lib so the arduino IDE grabs a new library index
 # see: https://github.com/arduino/Arduino/issues/3535
 echo -n "UPDATE LIBRARY INDEX: "
