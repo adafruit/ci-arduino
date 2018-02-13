@@ -16,7 +16,7 @@ export AUX_PLATFORMS='declare -A aux_platforms=( [trinket]="adafruit:avr:trinket
 
 export CPLAY_PLATFORMS='declare -A cplay_platforms=( [cplayClassic]="arduino:avr:circuitplay32u4cat" [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0" ) '
 
-export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_zero_native" )'
+export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_zero_native", [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0" )'
 
 # make display available for arduino CLI
 /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
