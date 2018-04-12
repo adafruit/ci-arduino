@@ -16,7 +16,9 @@ export AUX_PLATFORMS='declare -A aux_platforms=( [trinket]="adafruit:avr:trinket
 
 export CPLAY_PLATFORMS='declare -A cplay_platforms=( [cplayClassic]="arduino:avr:circuitplay32u4cat" [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0" ) '
 
-export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_zero_native", [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0" )'
+export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_zero_native", [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0", [m4]="adafruit:samd:adafruit_metro_m4" )'
+
+export M4_PLATFORMS='declare -A m4_platforms=( [m4]="adafruit:samd:adafruit_metro_m4" )'
 
 # make display available for arduino CLI
 /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
@@ -92,6 +94,7 @@ function build_platform()
   eval $MAIN_PLATFORMS
   eval $AUX_PLATFORMS
   eval $CPLAY_PLATFORMS
+  eval $M4_PLATFORMS
 
   # reset platform json var
   PLATFORM_JSON=""
@@ -121,6 +124,8 @@ function build_platform()
     platform=${aux_platforms[$platform_key]}
   elif [[ ${cplay_platforms[$platform_key]} ]]; then
     platform=${cplay_platforms[$platform_key]}
+  elif [[ ${m4_platforms[$platform_key]} ]]; then
+    platform=${m4_platforms[$platform_key]}
   else
     echo "NON-STANDARD PLATFORM KEY: $platform_key"
     platform=$platform_key
@@ -403,6 +408,54 @@ function build_samd_platforms()
     # is this the last platform in the loop
     local last_platform=0
     if [ "$last" == "${samd_platforms[$p_key]}" ]; then
+      last_platform=1
+    fi
+
+    # build all examples for this platform
+    build_platform $p_key
+
+    # check if build failed
+    if [ $? -ne 0 ]; then
+      platforms_json="${platforms_json}$(json_platform $p_key 0 "$PLATFORM_JSON" $last_platform)"
+      exit_code=1
+    else
+      platforms_json="${platforms_json}$(json_platform $p_key 1 "$PLATFORM_JSON" $last_platform)"
+    fi
+
+  done
+
+  # exit code is opposite of json build status
+  if [ $exit_code -eq 0 ]; then
+    json_main_platforms 1 "$platforms_json"
+  else
+    json_main_platforms 0 "$platforms_json"
+  fi
+
+  return $exit_code
+
+}
+
+function build_m4_platforms()
+{
+
+  # arrays can't be exported, so we have to eval
+  eval $M4_PLATFORMS
+
+  # track the build status all platforms
+  local exit_code=0
+
+  # var to hold platforms
+  local platforms_json=""
+
+  # get the last element in the array
+  local last="${m4_platforms[@]:(-1)}"
+
+  # loop through platforms in main platforms assoc array
+  for p_key in "${!m4_platforms[@]}"; do
+
+    # is this the last platform in the loop
+    local last_platform=0
+    if [ "$last" == "${m4_platforms[$p_key]}" ]; then
       last_platform=1
     fi
 
