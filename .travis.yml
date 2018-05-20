@@ -7,6 +7,7 @@ script:
   - build_platform leonardo
   - build_platform zero
   - build_platform esp8266
+  - build_platform esp32
 notifications:
   email:
     on_success: change
