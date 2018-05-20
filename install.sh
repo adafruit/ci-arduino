@@ -48,16 +48,13 @@ DEPENDENCY_OUTPUT=$(arduino --pref "boardsmanager.additional.urls=https://adafru
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
 echo -n "ESP32: "
-mkdir -p $HOME/Arduino/hardware/espressif
-cd $HOME/Arduino/hardware/espressif
-git clone https://github.com/espressif/arduino-esp32.git esp32
-cd esp32/tools/
-DEPENDENCY_OUTPUT=$(python get.py)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
-cd $TRAVIS_BUILD_DIR
-
-
-DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
+DEPENDENCY_OUTPUT=$(mkdir -p $HOME/Arduino/hardware/espressif &&
+    cd $HOME/Arduino/hardware/espressif &&
+    git clone https://github.com/espressif/arduino-esp32.git esp32 &&
+    cd esp32/tools/ &&
+    python get.py &&
+    cd $TRAVIS_BUILD_DIR
+)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96"; else echo -e "\xe2\x9c\x93"; fi
 
 echo -n "DUE: "
