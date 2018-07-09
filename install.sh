@@ -44,6 +44,7 @@ if [ ! -f $HOME/arduino_ide/arduino ]; then
 echo "DOWNLOADING ARDUINO IDE..."
 wget --quiet https://downloads.arduino.cc/arduino-$ARDUINO_IDE_VERSION-linux64.tar.xz
 echo "UNPACKING ARDUINO IDE..."
+mkdir $HOME/arduino_ide
 tar xf arduino-$ARDUINO_IDE_VERSION-linux64.tar.xz -C $HOME/arduino_ide/ --strip-components=1
 touch $HOME/arduino_ide/$ARDUINO_IDE_VERSION
 fi
