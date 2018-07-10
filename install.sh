@@ -29,7 +29,7 @@ sleep 3
 export DISPLAY=:1.0
 
 # define colors
-DARKGRAY='\033[1;30'; RED='\033[0;31'; LRED='\033[1;31'; GREEN='\033[0;32'; LGREEN='\033[1;32'; ORANGE='\033[0;33'; YELLOW='\033[1;33'; BLUE='\033[0;34'; LBLUE='\033[1;34'; PURPLE='\033[0;35'; LPURPLE='\033[1;35'; CYAN='\033[0;36'; LCYAN='\033[1;36'; LGRAY='\033[0;37'; WHITE='\033[1;37'; 
+GRAY='\033[1;30'; RED='\033[0;31'; LRED='\033[1;31'; GREEN='\033[0;32'; LGREEN='\033[1;32'; ORANGE='\033[0;33'; YELLOW='\033[1;33'; BLUE='\033[0;34'; LBLUE='\033[1;34'; PURPLE='\033[0;35'; LPURPLE='\033[1;35'; CYAN='\033[0;36'; LCYAN='\033[1;36'; LGRAY='\033[0;37'; WHITE='\033[1;37'; 
 
 # if .travis.yml does not set version
 if [ -z $ARDUINO_IDE_VERSION ]; then export ARDUINO_IDE_VERSION="1.8.5"; fi
@@ -59,7 +59,7 @@ ln -s $PWD $HOME/arduino_ide/libraries/Adafruit_Test_Library
 export PATH="$HOME/arduino_ide:$PATH"
 
 echo -e "\n########################################################################";
-echo "INSTALLING DEPENDENCIES"
+echo -e """$YELLOW""INSTALLING DEPENDENCIES"
 echo "########################################################################";
 
 
@@ -179,7 +179,7 @@ function build_platform()
 
   echo -e "\n########################################################################";
 
-  echo -n "SWITCHING TO ${platform_key}: "
+  echo -n """$YELLOW""SWITCHING TO ${platform_key}: "
 
   # switch to the requested board.
   # we have to avoid reading the exit code of local:
