@@ -31,6 +31,10 @@ export DISPLAY=:1.0
 # define colors
 GRAY='\033[1;30'; RED='\033[0;31'; LRED='\033[1;31'; GREEN='\033[0;32'; LGREEN='\033[1;32'; ORANGE='\033[0;33'; YELLOW='\033[1;33'; BLUE='\033[0;34'; LBLUE='\033[1;34'; PURPLE='\033[0;35'; LPURPLE='\033[1;35'; CYAN='\033[0;36'; LCYAN='\033[1;36'; LGRAY='\033[0;37'; WHITE='\033[1;37'; 
 
+echo -e "\n########################################################################";
+echo -e "${YELLOW}INSTALLING ARDUINO IDE"
+echo "########################################################################";
+
 # if .travis.yml does not set version
 if [ -z $ARDUINO_IDE_VERSION ]; then export ARDUINO_IDE_VERSION="1.8.5"; fi
 
@@ -44,11 +48,13 @@ fi
 
 # if not already cached, download and install arduino 1.8.5
 if [ ! -f $HOME/arduino_ide/arduino ]; then
-echo "DOWNLOADING ARDUINO IDE..."
+echo "DOWNLOADING ARDUINO IDE: "
 wget --quiet https://downloads.arduino.cc/arduino-$ARDUINO_IDE_VERSION-linux64.tar.xz
-echo "UNPACKING ARDUINO IDE..."
+if [ $? -ne 0 ]; then echo -e """$RED""m\xe2\x9c\x96"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
+echo "UNPACKING ARDUINO IDE: "
 mkdir $HOME/arduino_ide
 tar xf arduino-$ARDUINO_IDE_VERSION-linux64.tar.xz -C $HOME/arduino_ide/ --strip-components=1
+if [ $? -ne 0 ]; then echo -e """$RED""m\xe2\x9c\x96"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
 touch $HOME/arduino_ide/$ARDUINO_IDE_VERSION
 fi
 
@@ -179,7 +185,7 @@ function build_platform()
 
   echo -e "\n########################################################################";
 
-  echo -e -n """$YELLOW""SWITCHING TO ${platform_key}: "
+  echo -e -n "${YELLOW}SWITCHING TO ${platform_key}: "
 
   # switch to the requested board.
   # we have to avoid reading the exit code of local:
