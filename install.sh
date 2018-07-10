@@ -59,7 +59,7 @@ ln -s $PWD $HOME/arduino_ide/libraries/Adafruit_Test_Library
 export PATH="$HOME/arduino_ide:$PATH"
 
 echo -e "\n########################################################################";
-echo -e """$YELLOW""INSTALLING DEPENDENCIES"
+echo -e "${YELLOW}INSTALLING DEPENDENCIES"
 echo "########################################################################";
 
 
@@ -179,7 +179,7 @@ function build_platform()
 
   echo -e "\n########################################################################";
 
-  echo -n """$YELLOW""SWITCHING TO ${platform_key}: "
+  echo -e -n """$YELLOW""SWITCHING TO ${platform_key}: "
 
   # switch to the requested board.
   # we have to avoid reading the exit code of local:
