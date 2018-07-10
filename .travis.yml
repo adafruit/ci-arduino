@@ -13,7 +13,7 @@ env:
   global:
      - ARDUINO_IDE_VERSION="1.8.5"
 before_install:
-  - source <(curl -SLs https://raw.githubusercontent.com/${TRAVIS_REPO_SLUG}/${TRAVIS_BRANCH}/install.sh)
+  - bash $TRAVIS_BUILD_DIR/install.sh
 script:
   - build_platform esp32
   - build_platform uno
