@@ -36,30 +36,37 @@ echo -e "${YELLOW}INSTALLING ARDUINO IDE"
 echo "########################################################################";
 
 # if .travis.yml does not set version
-if [ -z $ARDUINO_IDE_VERSION ]; then export ARDUINO_IDE_VERSION="1.8.5"; fi
+if [ -z $ARDUINO_IDE_VERSION ]; then
+export ARDUINO_IDE_VERSION="1.8.5"
+echo "NOTE: YOUR .TRAVIS.YML DOES NOT SPECIFY ARDUINO IDE VERSION, USING $ARDUINO_IDE_VERSION"
+fi
 
 # if newer version is requested
 if [ ! -f $HOME/arduino_ide/$ARDUINO_IDE_VERSION ] && [ -f $HOME/arduino_ide/arduino ]; then
+echo -n "DIFFERENT VERSION OF ARDUINO IDE REQUESTED: "
 shopt -s extglob
 rm -r -f !(esp32)
+if [ $? -ne 0 ]; then echo -e """$RED""m\xe2\x9c\x96"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
 cd $OLDPWD
-echo "DIFFERENT VERSION OF ARDUINO IDE REQUESTED!"
 fi
 
 # if not already cached, download and install arduino 1.8.5
+echo -n "ARDUINO IDE STATUS: "
 if [ ! -f $HOME/arduino_ide/arduino ]; then
-echo "DOWNLOADING ARDUINO IDE: "
+echo -n "DOWNLOADING: "
 wget --quiet https://downloads.arduino.cc/arduino-$ARDUINO_IDE_VERSION-linux64.tar.xz
 if [ $? -ne 0 ]; then echo -e """$RED""m\xe2\x9c\x96"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
-echo "UNPACKING ARDUINO IDE: "
+echo -n "UNPACKING ARDUINO IDE: "
 mkdir $HOME/arduino_ide
 tar xf arduino-$ARDUINO_IDE_VERSION-linux64.tar.xz -C $HOME/arduino_ide/ --strip-components=1
 if [ $? -ne 0 ]; then echo -e """$RED""m\xe2\x9c\x96"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
 touch $HOME/arduino_ide/$ARDUINO_IDE_VERSION
+else
+echo "CACHED"
 fi
 
 # move this library to the arduino libraries folder
-ln -s $PWD $HOME/arduino_ide/libraries/Adafruit_Test_Library
+ln -s $TRAVIS_BUILD_DIR $HOME/arduino_ide/libraries/Adafruit_Test_Library
 
 # add the arduino CLI to our PATH
 export PATH="$HOME/arduino_ide:$PATH"
