@@ -50,7 +50,7 @@ if [ $? -ne 0 ]; then echo -e """$RED""m\xe2\x9c\x96"; else echo -e """$GREEN""m
 cd $OLDPWD
 fi
 
-# if not already cached, download and install arduino 1.8.5
+# if not already cached, download and install arduino IDE
 echo -n "ARDUINO IDE STATUS: "
 if [ ! -f $HOME/arduino_ide/arduino ]; then
 echo -n "DOWNLOADING: "
@@ -62,10 +62,11 @@ tar xf arduino-$ARDUINO_IDE_VERSION-linux64.tar.xz -C $HOME/arduino_ide/ --strip
 if [ $? -ne 0 ]; then echo -e """$RED""m\xe2\x9c\x96"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
 touch $HOME/arduino_ide/$ARDUINO_IDE_VERSION
 else
-echo "CACHED"
+echo -n "CACHED: "
+echo -e """$GREEN""m\xe2\x9c\x93"
 fi
 
-# move this library to the arduino libraries folder
+# link test library folder to the arduino libraries folder
 ln -s $TRAVIS_BUILD_DIR $HOME/arduino_ide/libraries/Adafruit_Test_Library
 
 # add the arduino CLI to our PATH
@@ -86,13 +87,15 @@ echo -n "ESP32: "
 if [ ! -d $HOME/Arduino/hardware/espressif ]; then
 DEPENDENCY_OUTPUT=$(mkdir -p $HOME/Arduino/hardware/espressif &&
     cd $HOME/Arduino/hardware/espressif &&
-    git clone https://github.com/espressif/arduino-esp32.git esp32 &&
+    echo -n "DOWNLOADING: " &&
+    git -q clone https://github.com/espressif/arduino-esp32.git esp32 &&
     cd esp32/tools/ &&
     python get.py &&
     cd $TRAVIS_BUILD_DIR
 )
 else
 DEPENDENCY_OUTPUT=$(cd $HOME/Arduino/hardware/espressif &&
+    echo -n "UPDATING: " &&
     git -q pull origin master &&
     cd esp32/tools/ &&
     python get.py &&
@@ -662,4 +665,3 @@ function json_main_platforms()
   echo -e "||||||||||||||||||||||||||||| JSON STATUS ||||||||||||||||||||||||||||||\n"
 
 }
-
