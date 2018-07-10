@@ -93,7 +93,7 @@ DEPENDENCY_OUTPUT=$(mkdir -p $HOME/Arduino/hardware/espressif &&
 )
 else
 DEPENDENCY_OUTPUT=$(cd $HOME/Arduino/hardware/espressif &&
-    git pull origin master &&
+    git -q pull origin master &&
     cd esp32/tools/ &&
     python get.py &&
     cd $TRAVIS_BUILD_DIR
