@@ -104,23 +104,23 @@ if [ $? -ne 0 ]; then echo -e """$RED""m\xe2\x9c\x96"; else echo -e """$GREEN""m
 
 echo -n "DUE: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 or cached"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
 
 echo -n "ZERO: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:samd 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 or cached"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
 
 echo -n "ESP8266: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards esp8266:esp8266 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 or cached"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
 
 echo -n "ADAFRUIT AVR: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:avr 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 or cached"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
 
 echo -n "ADAFRUIT SAMD: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:samd 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 or cached"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""m\xe2\x9c\x93"; fi
 
 # install random lib so the arduino IDE grabs a new library index
 # see: https://github.com/arduino/Arduino/issues/3535
