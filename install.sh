@@ -29,7 +29,7 @@ sleep 3
 export DISPLAY=:1.0
 
 # define colors
-GRAY='\033[1;30'; RED='\033[0;31'; LRED='\033[1;31'; GREEN='\033[0;32'; LGREEN='\033[1;32'; ORANGE='\033[0;33'; YELLOW='\033[1;33'; BLUE='\033[0;34'; LBLUE='\033[1;34'; PURPLE='\033[0;35'; LPURPLE='\033[1;35'; CYAN='\033[0;36'; LCYAN='\033[1;36'; LGRAY='\033[0;37'; WHITE='\033[1;37'; 
+GRAY='\033[1;30m'; RED='\033[0;31m'; LRED='\033[1;31m'; GREEN='\033[0;32m'; LGREEN='\033[1;32m'; ORANGE='\033[0;33m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; LBLUE='\033[1;34m'; PURPLE='\033[0;35m'; LPURPLE='\033[1;35m'; CYAN='\033[0;36m'; LCYAN='\033[1;36m'; LGRAY='\033[0;37m'; WHITE='\033[1;37m'; 
 
 echo -e "\n########################################################################";
 echo -e "${YELLOW}INSTALLING ARDUINO IDE"
