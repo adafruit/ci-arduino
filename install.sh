@@ -292,7 +292,7 @@ function build_platform()
       echo -e """$RED""\xe2\x9c\x96"
 
       echo -e "-------------------------- DEBUG OUTPUT --------------------------\n"
-      echo "PDE EXTENSION. PLEASE UPDATE TO INO"
+      echo "${LRED}PDE EXTENSION. PLEASE UPDATE TO INO"
       echo -e "\n------------------------------------------------------------------\n"
 
       # add json
@@ -321,7 +321,7 @@ function build_platform()
       echo -e """$RED""\xe2\x9c\x96"
 
       echo -e "----------------------------- DEBUG OUTPUT -----------------------------\n"
-      echo "$build_stdout"
+      echo "${LRED}$build_stdout"
       echo -e "\n------------------------------------------------------------------------\n"
 
       # add json
