@@ -321,7 +321,7 @@ function build_platform()
       echo -e """$RED""\xe2\x9c\x96"
 
       echo -e "----------------------------- DEBUG OUTPUT -----------------------------\n"
-      echo "${LRED}$build_stdout"
+      echo "$build_stdout"
       echo -e "\n------------------------------------------------------------------------\n"
 
       # add json
