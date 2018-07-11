@@ -88,7 +88,7 @@ if [ ! -d $HOME/Arduino/hardware/espressif ]; then
 DEPENDENCY_OUTPUT=$(mkdir -p $HOME/Arduino/hardware/espressif &&
     cd $HOME/Arduino/hardware/espressif &&
     echo -n "DOWNLOADING: " &&
-    git -q clone https://github.com/espressif/arduino-esp32.git esp32 &&
+    git clone https://github.com/espressif/arduino-esp32.git esp32 -q &&
     cd esp32/tools/ &&
     python get.py &&
     cd $TRAVIS_BUILD_DIR
@@ -96,7 +96,7 @@ DEPENDENCY_OUTPUT=$(mkdir -p $HOME/Arduino/hardware/espressif &&
 else
 DEPENDENCY_OUTPUT=$(cd $HOME/Arduino/hardware/espressif &&
     echo -n "UPDATING: " &&
-    git -q pull origin master &&
+    git pull origin master -q &&
     cd esp32/tools/ &&
     python get.py &&
     cd $TRAVIS_BUILD_DIR
