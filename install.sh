@@ -57,7 +57,7 @@ echo -n "DOWNLOADING: "
 wget --quiet https://downloads.arduino.cc/arduino-$ARDUINO_IDE_VERSION-linux64.tar.xz
 if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 echo -n "UNPACKING ARDUINO IDE: "
-mkdir $HOME/arduino_ide
+[ ! -d $HOME/arduino_ide/ ] && mkdir $HOME/arduino_ide
 tar xf arduino-$ARDUINO_IDE_VERSION-linux64.tar.xz -C $HOME/arduino_ide/ --strip-components=1
 if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 touch $HOME/arduino_ide/$ARDUINO_IDE_VERSION
