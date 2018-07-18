@@ -45,6 +45,7 @@ fi
 if [ ! -f $HOME/arduino_ide/$ARDUINO_IDE_VERSION ] && [ -f $HOME/arduino_ide/arduino ]; then
 echo -n "DIFFERENT VERSION OF ARDUINO IDE REQUESTED: "
 shopt -s extglob
+cd $HOME/arduino_ide/
 rm -r -f !(esp32)
 if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 cd $OLDPWD
