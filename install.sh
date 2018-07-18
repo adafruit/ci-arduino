@@ -34,6 +34,7 @@ if [ -z $ARDUINO_IDE_VERSION ]; then export ARDUINO_IDE_VERSION="1.8.5"; fi
 # if newer version is requested
 if [ ! -f $HOME/arduino_ide/$ARDUINO_IDE_VERSION ] && [ -f $HOME/arduino_ide/arduino ]; then
 shopt -s extglob
+cd $HOME/arduino_ide/
 rm -r -f !(esp32)
 cd $OLDPWD
 echo "DIFFERENT VERSION OF ARDUINO IDE REQUESTED!"
