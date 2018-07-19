@@ -28,95 +28,114 @@ export IO_PLATFORMS='declare -A io_platforms=( [zero]="arduino:samd:arduino_zero
 sleep 3
 export DISPLAY=:1.0
 
+# define colors
+GRAY='\033[1;30m'; RED='\033[0;31m'; LRED='\033[1;31m'; GREEN='\033[0;32m'; LGREEN='\033[1;32m'; ORANGE='\033[0;33m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; LBLUE='\033[1;34m'; PURPLE='\033[0;35m'; LPURPLE='\033[1;35m'; CYAN='\033[0;36m'; LCYAN='\033[1;36m'; LGRAY='\033[0;37m'; WHITE='\033[1;37m'; 
+
+echo -e "\n########################################################################";
+echo -e "${YELLOW}INSTALLING ARDUINO IDE"
+echo "########################################################################";
+
 # if .travis.yml does not set version
-if [ -z $ARDUINO_IDE_VERSION ]; then export ARDUINO_IDE_VERSION="1.8.5"; fi
+if [ -z $ARDUINO_IDE_VERSION ]; then
+export ARDUINO_IDE_VERSION="1.8.5"
+echo "NOTE: YOUR .TRAVIS.YML DOES NOT SPECIFY ARDUINO IDE VERSION, USING $ARDUINO_IDE_VERSION"
+fi
 
 # if newer version is requested
 if [ ! -f $HOME/arduino_ide/$ARDUINO_IDE_VERSION ] && [ -f $HOME/arduino_ide/arduino ]; then
+echo -n "DIFFERENT VERSION OF ARDUINO IDE REQUESTED: "
 shopt -s extglob
 cd $HOME/arduino_ide/
 rm -r -f !(esp32)
+if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 cd $OLDPWD
-echo "DIFFERENT VERSION OF ARDUINO IDE REQUESTED!"
 fi
 
-# if not already cached, download and install arduino 1.8.5
+# if not already cached, download and install arduino IDE
+echo -n "ARDUINO IDE STATUS: "
 if [ ! -f $HOME/arduino_ide/arduino ]; then
-echo "DOWNLOADING ARDUINO IDE..."
+echo -n "DOWNLOADING: "
 wget --quiet https://downloads.arduino.cc/arduino-$ARDUINO_IDE_VERSION-linux64.tar.xz
-echo "UNPACKING ARDUINO IDE..."
-mkdir $HOME/arduino_ide
+if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+echo -n "UNPACKING ARDUINO IDE: "
+[ ! -d $HOME/arduino_ide/ ] && mkdir $HOME/arduino_ide
 tar xf arduino-$ARDUINO_IDE_VERSION-linux64.tar.xz -C $HOME/arduino_ide/ --strip-components=1
+if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 touch $HOME/arduino_ide/$ARDUINO_IDE_VERSION
+else
+echo -n "CACHED: "
+echo -e """$GREEN""\xe2\x9c\x93"
 fi
 
-# move this library to the arduino libraries folder
-ln -s $PWD $HOME/arduino_ide/libraries/Adafruit_Test_Library
+# link test library folder to the arduino libraries folder
+ln -s $TRAVIS_BUILD_DIR $HOME/arduino_ide/libraries/Adafruit_Test_Library
 
 # add the arduino CLI to our PATH
 export PATH="$HOME/arduino_ide:$PATH"
 
 echo -e "\n########################################################################";
-echo "INSTALLING DEPENDENCIES"
+echo -e "${YELLOW}INSTALLING DEPENDENCIES"
 echo "########################################################################";
 
 
 # install the due, esp8266, and adafruit board packages
 echo -n "ADD PACKAGE INDEX: "
 DEPENDENCY_OUTPUT=$(arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs 2>&1)
-if [ $? -ne 0 ]; then echo -e "\033[0;31m\xe2\x9c\x96"; else echo -e "\033[0;32m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 echo -n "ESP32: "
 
 if [ ! -d $HOME/Arduino/hardware/espressif ]; then
 DEPENDENCY_OUTPUT=$(mkdir -p $HOME/Arduino/hardware/espressif &&
     cd $HOME/Arduino/hardware/espressif &&
-    git clone https://github.com/espressif/arduino-esp32.git esp32 &&
+    echo -n "DOWNLOADING: " &&
+    git clone https://github.com/espressif/arduino-esp32.git esp32 -q &&
     cd esp32/tools/ &&
     python get.py &&
     cd $TRAVIS_BUILD_DIR
 )
 else
 DEPENDENCY_OUTPUT=$(cd $HOME/Arduino/hardware/espressif &&
-    git pull origin master &&
+    echo -n "UPDATING: " &&
+    git pull origin master -q &&
     cd esp32/tools/ &&
     python get.py &&
     cd $TRAVIS_BUILD_DIR
 )
 fi
 
-if [ $? -ne 0 ]; then echo -e "\033[0;31m\xe2\x9c\x96"; else echo -e "\033[0;32m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 echo -n "DUE: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 or cached"; else echo -e "\033[0;32m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 echo -n "ZERO: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:samd 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 or cached"; else echo -e "\033[0;32m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 echo -n "ESP8266: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards esp8266:esp8266 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 or cached"; else echo -e "\033[0;32m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 echo -n "ADAFRUIT AVR: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:avr 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 or cached"; else echo -e "\033[0;32m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 echo -n "ADAFRUIT SAMD: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:samd 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 or cached"; else echo -e "\033[0;32m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 # install random lib so the arduino IDE grabs a new library index
 # see: https://github.com/arduino/Arduino/issues/3535
 echo -n "UPDATE LIBRARY INDEX: "
 DEPENDENCY_OUTPUT=$(arduino --install-library USBHost > /dev/null 2>&1)
-if [ $? -ne 0 ]; then echo -e "\033[0;31m\xe2\x9c\x96"; else echo -e "\033[0;32m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 # set the maximal compiler warning level
 echo -n "SET BUILD PREFERENCES: "
 DEPENDENCY_OUTPUT=$(arduino --pref "compiler.warning_level=all" --save-prefs 2>&1)
-if [ $? -ne 0 ]; then echo -e "\033[0;31m\xe2\x9c\x96"; else echo -e "\033[0;32m\xe2\x9c\x93"; fi
+if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 # init the json temp var for the current platform
 export PLATFORM_JSON=""
@@ -177,7 +196,7 @@ function build_platform()
 
   echo -e "\n########################################################################";
 
-  echo -n "SWITCHING TO ${platform_key}: "
+  echo -e -n "${YELLOW}SWITCHING TO ${platform_key}: "
 
   # switch to the requested board.
   # we have to avoid reading the exit code of local:
@@ -191,12 +210,12 @@ function build_platform()
   # notify if the platform switch failed
   if [ $platform_switch -ne 0 ]; then
     # heavy X
-    echo -e "\033[0;31m\xe2\x9c\x96"
+    echo -e """$RED""\xe2\x9c\x96"
     echo $platform_stdout
     exit_code=1
   else
     # heavy checkmark
-    echo -e "\033[0;32m\xe2\x9c\x93"
+    echo -e """$GREEN""\xe2\x9c\x93"
   fi
 
   echo "########################################################################";
@@ -221,7 +240,7 @@ function build_platform()
     # continue to next example if platform switch failed
     if [ $platform_switch -ne 0 ]; then
       # heavy X
-      echo -e "\033[0;31m\xe2\x9c\x96"
+      echo -e """$RED""\xe2\x9c\x96"
 
       # add json
       PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch 0 $example_file $last_example)"
@@ -271,10 +290,10 @@ function build_platform()
     if [[ $example =~ \.pde$ ]]; then
 
       # heavy X
-      echo -e "\033[0;31m\xe2\x9c\x96"
+      echo -e """$RED""\xe2\x9c\x96"
 
       echo -e "-------------------------- DEBUG OUTPUT --------------------------\n"
-      echo "PDE EXTENSION. PLEASE UPDATE TO INO"
+      echo "${LRED}PDE EXTENSION. PLEASE UPDATE TO INO"
       echo -e "\n------------------------------------------------------------------\n"
 
       # add json
@@ -300,7 +319,7 @@ function build_platform()
     if [ $? -ne 0 ]; then
 
       # heavy X
-      echo -e "\033[0;31m\xe2\x9c\x96"
+      echo -e """$RED""\xe2\x9c\x96"
 
       echo -e "----------------------------- DEBUG OUTPUT -----------------------------\n"
       echo "$build_stdout"
@@ -318,7 +337,7 @@ function build_platform()
     else
 
       # heavy checkmark
-      echo -e "\033[0;32m\xe2\x9c\x93"
+      echo -e """$GREEN""\xe2\x9c\x93"
 
       # add json
       PLATFORM_JSON="${PLATFORM_JSON}$(json_sketch 1 "$example_file" $last_example)"
@@ -647,4 +666,3 @@ function json_main_platforms()
   echo -e "||||||||||||||||||||||||||||| JSON STATUS ||||||||||||||||||||||||||||||\n"
 
 }
-
