@@ -8,8 +8,8 @@ fi
 
 # associative array for the platforms that will be verified in build_main_platforms()
 # this will be eval'd in the functions below because arrays can't be exported
-# Uno is ATmega328, Zero is SAMD21G18, ESP8277, Leonardo is ATmega32u4, M4 is SAMD51, Mega is ATmega2560, ESP32
-export MAIN_PLATFORMS='declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80" [leonardo]="arduino:avr:leonardo" [m4]="adafruit:samd:adafruit_metro_m4" [mega2560]="arduino:avr:mega:cpu=atmega2560" [esp32]="espressif:esp32:featheresp32:FlashFreq=80" )'
+# Uno is ATmega328, Zero is SAMD21G18, ESP8266, Leonardo is ATmega32u4, M4 is SAMD51, Mega is ATmega2560, ESP32
+export MAIN_PLATFORMS='declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80" [leonardo]="arduino:avr:leonardo" [m4]="adafruit:samd:adafruit_metro_m4" [mega2560]="arduino:avr:mega:cpu=atmega2560" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
 
 # associative array for other platforms that can be called explicitly in .travis.yml configs
 # this will be eval'd in the functions below because arrays can't be exported
@@ -21,7 +21,7 @@ export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_
 
 export M4_PLATFORMS='declare -A m4_platforms=( [m4]="adafruit:samd:adafruit_metro_m4" )'
 
-export IO_PLATFORMS='declare -A io_platforms=( [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80" [esp32]="espressif:esp32:featheresp32:FlashFreq=80" )'
+export IO_PLATFORMS='declare -A io_platforms=( [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
 
 # make display available for arduino CLI
 /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
