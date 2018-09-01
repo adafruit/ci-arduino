@@ -80,31 +80,12 @@ echo "########################################################################";
 
 # install the due, esp8266, and adafruit board packages
 echo -n "ADD PACKAGE INDEX: "
-DEPENDENCY_OUTPUT=$(arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs 2>&1)
+DEPENDENCY_OUTPUT=$(arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json" --save-prefs 2>&1)
 if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 echo -n "ESP32: "
-
-if [ ! -d $HOME/Arduino/hardware/espressif ]; then
-DEPENDENCY_OUTPUT=$(mkdir -p $HOME/Arduino/hardware/espressif &&
-    cd $HOME/Arduino/hardware/espressif &&
-    echo -n "DOWNLOADING: " &&
-    git clone https://github.com/espressif/arduino-esp32.git esp32 -q &&
-    cd esp32/tools/ &&
-    python get.py &&
-    cd $TRAVIS_BUILD_DIR
-)
-else
-DEPENDENCY_OUTPUT=$(cd $HOME/Arduino/hardware/espressif &&
-    echo -n "UPDATING: " &&
-    git pull origin master -q &&
-    cd esp32/tools/ &&
-    python get.py &&
-    cd $TRAVIS_BUILD_DIR
-)
-fi
-
-if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+DEPENDENCY_OUTPUT=$(arduino --install-boards esp32:esp32 2>&1)
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 echo -n "DUE: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
