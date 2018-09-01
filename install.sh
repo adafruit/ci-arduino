@@ -37,7 +37,7 @@ echo "########################################################################";
 
 # if .travis.yml does not set version
 if [ -z $ARDUINO_IDE_VERSION ]; then
-export ARDUINO_IDE_VERSION="1.8.5"
+export ARDUINO_IDE_VERSION="1.8.6"
 echo "NOTE: YOUR .TRAVIS.YML DOES NOT SPECIFY ARDUINO IDE VERSION, USING $ARDUINO_IDE_VERSION"
 fi
 
@@ -46,7 +46,7 @@ if [ ! -f $HOME/arduino_ide/$ARDUINO_IDE_VERSION ] && [ -f $HOME/arduino_ide/ard
 echo -n "DIFFERENT VERSION OF ARDUINO IDE REQUESTED: "
 shopt -s extglob
 cd $HOME/arduino_ide/
-rm -r -f !(esp32)
+rm -r -f
 if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 cd $OLDPWD
 fi
