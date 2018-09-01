@@ -8,8 +8,8 @@ fi
 
 # associative array for the platforms that will be verified in build_main_platforms()
 # this will be eval'd in the functions below because arrays can't be exported
-# Uno is ATmega328, Zero is SAMD21G18, ESP8277, Leonardo is ATmega32u4, M4 is SAMD51, Mega is ATmega2560, ESP32
-export MAIN_PLATFORMS='declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80" [leonardo]="arduino:avr:leonardo" [m4]="adafruit:samd:adafruit_metro_m4" [mega2560]="arduino:avr:mega:cpu=atmega2560" [esp32]="espressif:esp32:featheresp32:FlashFreq=80" )'
+# Uno is ATmega328, Zero is SAMD21G18, ESP8266, Leonardo is ATmega32u4, M4 is SAMD51, Mega is ATmega2560, ESP32
+export MAIN_PLATFORMS='declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80" [leonardo]="arduino:avr:leonardo" [m4]="adafruit:samd:adafruit_metro_m4" [mega2560]="arduino:avr:mega:cpu=atmega2560" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
 
 # associative array for other platforms that can be called explicitly in .travis.yml configs
 # this will be eval'd in the functions below because arrays can't be exported
@@ -21,7 +21,7 @@ export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_
 
 export M4_PLATFORMS='declare -A m4_platforms=( [m4]="adafruit:samd:adafruit_metro_m4" )'
 
-export IO_PLATFORMS='declare -A io_platforms=( [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80" [esp32]="espressif:esp32:featheresp32:FlashFreq=80" )'
+export IO_PLATFORMS='declare -A io_platforms=( [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
 
 # make display available for arduino CLI
 /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
@@ -37,7 +37,7 @@ echo "########################################################################";
 
 # if .travis.yml does not set version
 if [ -z $ARDUINO_IDE_VERSION ]; then
-export ARDUINO_IDE_VERSION="1.8.5"
+export ARDUINO_IDE_VERSION="1.8.6"
 echo "NOTE: YOUR .TRAVIS.YML DOES NOT SPECIFY ARDUINO IDE VERSION, USING $ARDUINO_IDE_VERSION"
 fi
 
@@ -46,7 +46,7 @@ if [ ! -f $HOME/arduino_ide/$ARDUINO_IDE_VERSION ] && [ -f $HOME/arduino_ide/ard
 echo -n "DIFFERENT VERSION OF ARDUINO IDE REQUESTED: "
 shopt -s extglob
 cd $HOME/arduino_ide/
-rm -r -f !(esp32)
+rm -rf *
 if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 cd $OLDPWD
 fi
@@ -80,31 +80,12 @@ echo "########################################################################";
 
 # install the due, esp8266, and adafruit board packages
 echo -n "ADD PACKAGE INDEX: "
-DEPENDENCY_OUTPUT=$(arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs 2>&1)
+DEPENDENCY_OUTPUT=$(arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json" --save-prefs 2>&1)
 if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 echo -n "ESP32: "
-
-if [ ! -d $HOME/Arduino/hardware/espressif ]; then
-DEPENDENCY_OUTPUT=$(mkdir -p $HOME/Arduino/hardware/espressif &&
-    cd $HOME/Arduino/hardware/espressif &&
-    echo -n "DOWNLOADING: " &&
-    git clone https://github.com/espressif/arduino-esp32.git esp32 -q &&
-    cd esp32/tools/ &&
-    python get.py &&
-    cd $TRAVIS_BUILD_DIR
-)
-else
-DEPENDENCY_OUTPUT=$(cd $HOME/Arduino/hardware/espressif &&
-    echo -n "UPDATING: " &&
-    git pull origin master -q &&
-    cd esp32/tools/ &&
-    python get.py &&
-    cd $TRAVIS_BUILD_DIR
-)
-fi
-
-if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+DEPENDENCY_OUTPUT=$(arduino --install-boards esp32:esp32 2>&1)
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
 echo -n "DUE: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
