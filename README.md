@@ -42,6 +42,10 @@ notifications:
     on_failure: change
 ```
 
+**Choosing Arduino IDE version**
+
+You could use any version of IDE by setting `ARDUINO_IDE_VERSION` variable but we recommend keeping this variable unused because script gets updated and you then will not have to modify `.travis.yml` manually.
+
 ## Automated Example Verification Bash Functions
 
 `build_platform` will build all `.ino` examples in the repo using the passed platform. The platforms
