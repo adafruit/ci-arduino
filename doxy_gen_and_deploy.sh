@@ -29,7 +29,7 @@ __AUTHOR__="Jeroen de Bruijn, modified by ladyada"
 # the gh-pages branch of a repository
 # Before this script is used there should already be a gh-pages branch in the
 # repository.
-# 
+#
 ################################################################################
 
 ################################################################################
@@ -41,7 +41,7 @@ set -e
 cd $TRAVIS_BUILD_DIR
 
 # The default version of doxygen is too old so we'll use a modern version
-wget -q ftp://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.13.linux.bin.tar.gz
+wget -q https://cdn-learn.adafruit.com/assets/assets/000/067/405/original/doxygen-1.8.13.linux.bin.tar.gz
 tar -xf doxygen-1.8.13.linux.bin.tar.gz
 mv doxygen-1.8.13/bin/doxygen .
 chmod +x doxygen
@@ -68,7 +68,7 @@ git config user.email "travis@travis-ci.org"
 # can be safely cleaned, and it is sure that everything pushed later is the new
 # documentation.
 # If there's no index.html (forwarding stub) grab our default one
-shopt -s extglob 
+shopt -s extglob
 if [ ! -f index.html ]; then
     rm -rf *
     curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_index.html > index.html
@@ -113,7 +113,7 @@ if [ -s foo.txt ]; then exit 1 ; fi
 rm foo.txt
 
 # If we're a pull request, don't push docs to github!
-if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then 
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
     echo "This is a Pull Request, we're done!"
     exit 0
 else
@@ -137,7 +137,7 @@ if [ -d "html" ] && [ -f "html/index.html" ]; then
     echo 'Adding all files'
     git add --all
 
-    if [ -n "$(git status --porcelain)" ]; then 
+    if [ -n "$(git status --porcelain)" ]; then
     echo "Changes to commit"
     else
     echo "No changes to commit"
