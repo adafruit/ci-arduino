@@ -193,6 +193,7 @@ function build_platform()
   if [ $platform_switch -ne 0 ]; then
     # heavy X
     echo -e """$RED""\xe2\x9c\x96"
+    echo -e "arduino --board ${platform} --save-prefs 2>&1"
     echo $platform_stdout
     exit_code=1
   else
