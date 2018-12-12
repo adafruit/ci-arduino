@@ -98,6 +98,7 @@ if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""
 echo -n "ESP8266: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards esp8266:esp8266 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+chmod +x /home/travis/.arduino15/packages/esp8266/hardware/esp8266/2.5.0-beta1/tools/signing.py
 
 echo -n "ADAFRUIT AVR: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:avr 2>&1)
