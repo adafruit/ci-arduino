@@ -154,8 +154,20 @@ function build_platform()
   # grab all pde and ino example sketches
   declare -a examples
 
-  # loop through results and add them to the array
-  examples=($(find $PWD -name "*.pde" -o -name "*.ino"))
+  if [ "$PLATFORM_CHECK_ONLY_ON_FILE" = true ]; then
+    # loop through results and add them to the array
+    examples=($(
+      for f in $(find . -type f -iname '*.ino' -o -iname '*.pde'); do
+        # TODO: distinguish platforms
+        if [ -e "$(dirname $f)/.$platform_key.test" ]; then
+            echo "$f"
+        fi
+      done
+    ))
+  else
+    # loop through results and add them to the array
+    examples=($(find $PWD -name "*.pde" -o -name "*.ino"))
+  fi
 
   # get the last example in the array
   local last="${examples[@]:(-1)}"
