@@ -154,8 +154,20 @@ function build_platform()
   # grab all pde and ino example sketches
   declare -a examples
 
-  # loop through results and add them to the array
-  examples=($(find $PWD -name "*.pde" -o -name "*.ino"))
+  if [ "$PLATFORM_CHECK_ONLY_ON_FILE" = true ]; then
+    # loop through results and add them to the array
+    examples=($(
+      for f in $(find . -type f -iname '*.ino' -o -iname '*.pde'); do
+        # TODO: distinguish platforms
+        if [ -e "$(dirname $f)/.$platform_key.test" ]; then
+            echo "$f"
+        fi
+      done
+    ))
+  else
+    # loop through results and add them to the array
+    examples=($(find $PWD -name "*.pde" -o -name "*.ino"))
+  fi
 
   # get the last example in the array
   local last="${examples[@]:(-1)}"
@@ -336,7 +348,7 @@ function build_platform()
 
 }
 
-# build all examples for every platform in $main_platforms
+# build all examples for every platform in $MAIN_PLATFORMS
 function build_main_platforms()
 {
 
@@ -385,6 +397,54 @@ function build_main_platforms()
 
 }
 
+# build all examples for every platform in $AUX_PLATFORMS
+function build_aux_platforms()
+{
+
+  # arrays can't be exported, so we have to eval
+  eval $AUX_PLATFORMS
+
+  # track the build status all platforms
+  local exit_code=0
+
+  # var to hold platforms
+  local platforms_json=""
+
+  # get the last element in the array
+  local last="${aux_platforms[@]:(-1)}"
+
+  # loop through platforms in main platforms assoc array
+  for p_key in "${!aux_platforms[@]}"; do
+
+    # is this the last platform in the loop
+    local last_platform=0
+    if [ "$last" == "${aux_platforms[$p_key]}" ]; then
+      last_platform=1
+    fi
+
+    # build all examples for this platform
+    build_platform $p_key
+
+    # check if build failed
+    if [ $? -ne 0 ]; then
+      platforms_json="${platforms_json}$(json_platform $p_key 0 "$PLATFORM_JSON" $last_platform)"
+      exit_code=1
+    else
+      platforms_json="${platforms_json}$(json_platform $p_key 1 "$PLATFORM_JSON" $last_platform)"
+    fi
+
+  done
+
+  # exit code is opposite of json build status
+  if [ $exit_code -eq 0 ]; then
+    json_main_platforms 1 "$platforms_json"
+  else
+    json_main_platforms 0 "$platforms_json"
+  fi
+
+  return $exit_code
+
+}
 function build_cplay_platforms()
 {
 
