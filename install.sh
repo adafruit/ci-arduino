@@ -98,7 +98,6 @@ if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""
 echo -n "ESP8266: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards esp8266:esp8266 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
-chmod +x /home/travis/.arduino15/packages/esp8266/hardware/esp8266/2.5.0-beta1/tools/signing.py
 
 echo -n "ADAFRUIT AVR: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:avr 2>&1)
@@ -308,7 +307,7 @@ function build_platform()
     # we have to avoid reading the exit code of local:
     # "when declaring a local variable in a function, the local acts as a command in its own right"
     local build_stdout
-    build_stdout=$(arduino --verify $example 2>&1)
+    build_stdout=$(arduino --verbose --verify $example 2>&1)
 
     # echo output if the build failed
     if [ $? -ne 0 ]; then
