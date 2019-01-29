@@ -86,6 +86,8 @@ if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\x
 echo -n "ESP32: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards esp32:esp32 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+echo -n "packages list:"
+ls ~/.arduino15/packages/
 
 echo -n "DUE: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
