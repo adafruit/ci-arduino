@@ -83,11 +83,15 @@ echo -n "ADD PACKAGE INDEX: "
 DEPENDENCY_OUTPUT=$(arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json" --save-prefs 2>&1)
 if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
+# This is a hack, we have to install by hand so lets delete it
+echo "Removing ESP32 cache"
+rm -rf ~/.arduino15/packages/esp32
+echo -n "Current packages list:"
+ls ~/.arduino15/packages/
+
 echo -n "ESP32: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards esp32:esp32 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
-echo -n "packages list:"
-ls ~/.arduino15/packages/
 
 echo -n "DUE: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
