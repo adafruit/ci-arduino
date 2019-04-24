@@ -1,4 +1,4 @@
-# Travis CI Arduino Init Script [![Build Status](https://travis-ci.org/adafruit/travis-ci-arduino.svg?branch=master)](https://travis-ci.org/adafruit/travis-ci-arduino)
+# Travis CI Arduino Init Script [![Build Status](https://travis-ci.com/adafruit/travis-ci-arduino.svg?branch=master)](https://travis-ci.com/adafruit/travis-ci-arduino)
 
 The purpose of this repo is to create a centrally managed dependency
 install script for all Adafruit Arduino Library Travis CI configs.
