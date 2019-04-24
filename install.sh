@@ -17,7 +17,7 @@ export AUX_PLATFORMS='declare -A aux_platforms=( [trinket]="adafruit:avr:trinket
 
 export CPLAY_PLATFORMS='declare -A cplay_platforms=( [cplayClassic]="arduino:avr:circuitplay32u4cat" [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0" ) '
 
-export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_zero_native", [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0", [m4]="adafruit:samd:adafruit_metro_m4" )'
+export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_zero_native", [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0", [m4]="adafruit:samd:adafruit_metro_m4:speed=120" )'
 
 export M4_PLATFORMS='declare -A m4_platforms=( [m4]="adafruit:samd:adafruit_metro_m4:speed=120", [trellis_m4]="adafruit:samd:adafruit_trellis_m4:speed=120" )'
 
