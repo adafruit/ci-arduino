@@ -19,7 +19,7 @@ export CPLAY_PLATFORMS='declare -A cplay_platforms=( [cplayClassic]="arduino:avr
 
 export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_zero_native", [cplayExpress]="arduino:samd:adafruit_circuitplayground_m0", [m4]="adafruit:samd:adafruit_metro_m4" )'
 
-export M4_PLATFORMS='declare -A m4_platforms=( [m4]="adafruit:samd:adafruit_metro_m4", [trellis_m4]="adafruit:samd:adafruit_trellis_m4" )'
+export M4_PLATFORMS='declare -A m4_platforms=( [m4]="adafruit:samd:adafruit_metro_m4:speed=120", [trellis_m4]="adafruit:samd:adafruit_trellis_m4:speed=120" )'
 
 export IO_PLATFORMS='declare -A io_platforms=( [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:eesz=4M3M,xtal=80" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
 
