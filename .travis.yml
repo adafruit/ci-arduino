@@ -16,6 +16,8 @@ script:
   - build_platform zero
   - build_platform esp8266
   - build_platform m4
+  - build_platform arcada
+
 notifications:
   email:
     on_success: change
