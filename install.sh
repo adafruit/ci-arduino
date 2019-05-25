@@ -21,6 +21,8 @@ export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_
 
 export M4_PLATFORMS='declare -A m4_platforms=( [m4]="adafruit:samd:adafruit_metro_m4:speed=120", [trellis_m4]="adafruit:samd:adafruit_trellis_m4:speed=120" )'
 
+export ARCADA_PLATFORMS='declare -A m4_platforms=( [pybadge]="adafruit:samd:adafruit_pybadge_m4:speed=120", [pygamer]="adafruit:samd:adafruit_pygamer_m4:speed=120" )'
+
 export IO_PLATFORMS='declare -A io_platforms=( [zero]="arduino:samd:arduino_zero_native", [m4wifi]="adafruit:samd:adafruit_metro_m4_airliftlite:speed=120", [esp8266]="esp8266:esp8266:huzzah:eesz=4M3M,xtal=80" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
 
 # make display available for arduino CLI
@@ -142,6 +144,7 @@ function build_platform()
   eval $AUX_PLATFORMS
   eval $CPLAY_PLATFORMS
   eval $M4_PLATFORMS
+  eval $ARCADA_PLATFORMS
   eval $IO_PLATFORMS
 
   # reset platform json var
@@ -641,6 +644,57 @@ function build_io_platforms()
   return $exit_code
 
 }
+
+
+
+function build_arcada_platforms()
+{
+
+  # arrays can't be exported, so we have to eval
+  eval $ARCADA_PLATFORMS
+
+  # track the build status all platforms
+  local exit_code=0
+
+  # var to hold platforms
+  local platforms_json=""
+
+  # get the last element in the array
+  local last="${arcada_platforms[@]:(-1)}"
+
+  # loop through platforms in main platforms assoc array
+  for p_key in "${!arcada_platforms[@]}"; do
+
+    # is this the last platform in the loop
+    local last_platform=0
+    if [ "$last" == "${arcada_platforms[$p_key]}" ]; then
+      last_platform=1
+    fi
+
+    # build all examples for this platform
+    build_platform $p_key
+
+    # check if build failed
+    if [ $? -ne 0 ]; then
+      platforms_json="${platforms_json}$(json_platform $p_key 0 "$PLATFORM_JSON" $last_platform)"
+      exit_code=1
+    else
+      platforms_json="${platforms_json}$(json_platform $p_key 1 "$PLATFORM_JSON" $last_platform)"
+    fi
+
+  done
+
+  # exit code is opposite of json build status
+  if [ $exit_code -eq 0 ]; then
+    json_main_platforms 1 "$platforms_json"
+  else
+    json_main_platforms 0 "$platforms_json"
+  fi
+
+  return $exit_code
+
+}
+
 
 # generate json string for a sketch
 function json_sketch()
