@@ -25,7 +25,7 @@ export ARCADA_PLATFORMS='declare -A arcada_platforms=( [pybadge]="adafruit:samd:
 
 export IO_PLATFORMS='declare -A io_platforms=( [zero]="arduino:samd:arduino_zero_native", [m4wifi]="adafruit:samd:adafruit_metro_m4_airliftlite:speed=120", [esp8266]="esp8266:esp8266:huzzah:eesz=4M3M,xtal=80" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
 
-export NRF5X_PLATFORMS='declare -A nrf5x_platforms=( [nrf52]="adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0")'
+export NRF5X_PLATFORMS='declare -A nrf5x_platforms=( [nrf52840]="adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0")'
 
 # make display available for arduino CLI
 /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
