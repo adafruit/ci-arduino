@@ -25,6 +25,8 @@ export ARCADA_PLATFORMS='declare -A arcada_platforms=( [pybadge]="adafruit:samd:
 
 export IO_PLATFORMS='declare -A io_platforms=( [zero]="arduino:samd:arduino_zero_native", [m4wifi]="adafruit:samd:adafruit_metro_m4_airliftlite:speed=120", [esp8266]="esp8266:esp8266:huzzah:eesz=4M3M,xtal=80" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
 
+export NRF5X_PLATFORMS='declare -A nrf5x_platforms=( [nrf52840]="adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0")'
+
 # make display available for arduino CLI
 /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
 sleep 3
@@ -115,6 +117,10 @@ echo -n "ADAFRUIT SAMD: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:samd 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 
+echo -n "ADAFRUIT NRF5X: "
+DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:nrf52 2>&1)
+if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+
 # install random lib so the arduino IDE grabs a new library index
 # see: https://github.com/arduino/Arduino/issues/3535
 echo -n "UPDATE LIBRARY INDEX: "
@@ -146,6 +152,7 @@ function build_platform()
   eval $M4_PLATFORMS
   eval $ARCADA_PLATFORMS
   eval $IO_PLATFORMS
+  eval $NRF5X_PLATFORMS
 
   # reset platform json var
   PLATFORM_JSON=""
@@ -193,6 +200,8 @@ function build_platform()
     platform=${arcada_platforms[$platform_key]}
   elif [[ ${io_platforms[$platform_key]} ]]; then
     platform=${io_platforms[$platform_key]}
+  elif [[ ${nrf5x_platforms[$platform_key]} ]]; then
+    platform=${nrf5x_platforms[$platform_key]}
   else
     echo "NON-STANDARD PLATFORM KEY: $platform_key"
     platform=$platform_key
@@ -670,6 +679,55 @@ function build_arcada_platforms()
     # is this the last platform in the loop
     local last_platform=0
     if [ "$last" == "${arcada_platforms[$p_key]}" ]; then
+      last_platform=1
+    fi
+
+    # build all examples for this platform
+    build_platform $p_key
+
+    # check if build failed
+    if [ $? -ne 0 ]; then
+      platforms_json="${platforms_json}$(json_platform $p_key 0 "$PLATFORM_JSON" $last_platform)"
+      exit_code=1
+    else
+      platforms_json="${platforms_json}$(json_platform $p_key 1 "$PLATFORM_JSON" $last_platform)"
+    fi
+
+  done
+
+  # exit code is opposite of json build status
+  if [ $exit_code -eq 0 ]; then
+    json_main_platforms 1 "$platforms_json"
+  else
+    json_main_platforms 0 "$platforms_json"
+  fi
+
+  return $exit_code
+
+}
+
+
+function build_nrf5x_platforms()
+{
+
+  # arrays can't be exported, so we have to eval
+  eval $NRF5X_PLATFORMS
+
+  # track the build status all platforms
+  local exit_code=0
+
+  # var to hold platforms
+  local platforms_json=""
+
+  # get the last element in the array
+  local last="${nrf5x_platforms[@]:(-1)}"
+
+  # loop through platforms in main platforms assoc array
+  for p_key in "${!nrf5x_platforms[@]}"; do
+
+    # is this the last platform in the loop
+    local last_platform=0
+    if [ "$last" == "${nrf5x_platforms[$p_key]}" ]; then
       last_platform=1
     fi
 
