@@ -92,7 +92,7 @@ echo "Removing ESP32 cache"
 rm -rf ~/.arduino15/packages/esp32
 echo -n "Current packages list:"
 ls ~/.arduino15/packages/
-:'
+
 echo -n "ESP32: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards esp32:esp32 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
@@ -116,7 +116,6 @@ if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""
 echo -n "ADAFRUIT SAMD: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:samd 2>&1)
 if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
-'
 
 echo -n "ADAFRUIT NRF5X: "
 DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:nrf52 2>&1)
