@@ -16,6 +16,9 @@ You will need to source the script in the `before_install` step of your
 source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 ```
 
+If you only want to install and build on certain platforms, you can set the
+`INSTALL_PLATFORMS` envionrment variable to a comma-seperated list of platforms.
+
 **Example `.travis.yml`:**
 ```
 language: c
