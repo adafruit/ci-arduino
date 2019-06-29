@@ -93,33 +93,55 @@ rm -rf ~/.arduino15/packages/esp32
 echo -n "Current packages list:"
 ls ~/.arduino15/packages/
 
-echo -n "ESP32: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards esp32:esp32 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+INSTALL_ESP32=$([[ $INSTALL_PLATFORMS == *"esp32"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_DUE=$([[ $INSTALL_PLATFORMS == *"due"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_ZERO=$([[ $INSTALL_PLATFORMS == *"zero"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_ESP8266=$([[ $INSTALL_PLATFORMS == *"esp8266"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_AVR=$([[ $INSTALL_PLATFORMS == *"avr"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_SAMD=$([[ $INSTALL_PLATFORMS == *"samd"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_NRF52=$([[ $INSTALL_PLATFORMS == *"nrf52"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
 
-echo -n "DUE: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+if [[ $INSTALL_ESP32 == 1 ]]; then
+  echo -n "ESP32: "
+  DEPENDENCY_OUTPUT=$(arduino --install-boards esp32:esp32 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
 
-echo -n "ZERO: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:samd 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+if [[ $INSTALL_DUE == 1 ]]; then
+  echo -n "DUE: "
+  DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
 
-echo -n "ESP8266: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards esp8266:esp8266 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+if [[ $INSTALL_ZERO == 1 ]]; then
+  echo -n "ZERO: "
+  DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:samd 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
 
-echo -n "ADAFRUIT AVR: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:avr 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+if [[ $INSTALL_ESP8266 == 1 ]]; then
+  echo -n "ESP8266: "
+  DEPENDENCY_OUTPUT=$(arduino --install-boards esp8266:esp8266 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
 
-echo -n "ADAFRUIT SAMD: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:samd 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+if [[ $INSTALL_AVR == 1 ]]; then
+  echo -n "ADAFRUIT AVR: "
+  DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:avr 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
 
-echo -n "ADAFRUIT NRF5X: "
-DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:nrf52 2>&1)
-if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+if [[ $INSTALL_SAMD == 1 ]]; then
+  echo -n "ADAFRUIT SAMD: "
+  DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:samd 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
+
+if [[ $INSTALL_NRF52 == 1 ]]; then
+  echo -n "ADAFRUIT NRF5X: "
+  DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:nrf52 2>&1)
+  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
+fi
 
 # install random lib so the arduino IDE grabs a new library index
 # see: https://github.com/arduino/Arduino/issues/3535
