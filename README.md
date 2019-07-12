@@ -28,21 +28,19 @@ cache:
     - ~/arduino_ide
     - ~/.arduino15/packages/
 git:
-  depth: false
   quiet: true
 env:
   global:
-     - ARDUINO_IDE_VERSION="1.8.7"
+    #- ARDUINO_IDE_VERSION = "1.8.9"
+    - PRETTYNAME =  "Example"
 before_install:
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 install:
-  - arduino --install-library "Adafruit SleepyDog Library","Adafruit FONA Library"
+  # Note that every library should be installed in a seperate command
+  - arduino --install-library "Adafruit SleepyDog Library"
+  - arduibo --install-library "Adafruit FONA Library"
 script:
   - build_main_platforms
-notifications:
-  email:
-    on_success: change
-    on_failure: change
 ```
 
 **Choosing Arduino IDE version**
@@ -77,7 +75,7 @@ wish to skip. You will need to use the array key defined in `MAIN_PLATFORMS` for
 you wish to skip.
 
 For example, if you would like to skip the `esp8266` platform for an example
-in your lib called `blink.ino`, you would need to do something like this in your library repo:
+in your library called `blink.ino`, you would need to do something like this in your library repo:
 
 ```
 $ touch examples/blink/.esp8266.test.skip
@@ -115,4 +113,13 @@ It will automatically add the `.YOUR_PLATFORM_HERE.test.skip` files to the examp
 
 ```
 $ travis_skip esp8266
+```
+
+## Using custom libraries
+Some libraries are not available via the `arduino` command. However you can import them by adding this to your `travis.yml`.
+
+```
+install:
+ #- ...
+  - - if [! -d "$HOME/arduino_ide/libraries/<Name>" ]; then git clone <URL> $HOME/arduino_ide/libraries/<Name>; fi
 ```
