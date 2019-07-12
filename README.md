@@ -36,7 +36,9 @@ env:
 before_install:
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 install:
-  - arduino --install-library "Adafruit SleepyDog Library","Adafruit FONA Library"
+  # Note that every library should be installed in a seperate command
+  - arduino --install-library "Adafruit SleepyDog Library"
+  - arduino --install-library "Adafruit FONA Library"
 script:
   - build_main_platforms
 notifications:
