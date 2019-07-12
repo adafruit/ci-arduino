@@ -118,3 +118,9 @@ It will automatically add the `.YOUR_PLATFORM_HERE.test.skip` files to the examp
 ```
 $ travis_skip esp8266
 ```
+
+## Using external libraries
+External libraries (which are not hosted by the Arduino library manager) can be installed using the following command:
+```
+- if [! -d "$HOME/arduino_ide/libraries/<Name>" ]; then git clone <URL> $HOME/arduino_ide/libraries/<Name>; fi
+```
