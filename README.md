@@ -36,7 +36,9 @@ env:
 before_install:
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 install:
-  - arduino --install-library "Adafruit SleepyDog Library","Adafruit FONA Library"
+  # Note that every library should be installed in a seperate command
+  - arduino --install-library "Adafruit SleepyDog Library"
+  - arduino --install-library "Adafruit FONA Library"
 script:
   - build_main_platforms
 notifications:
@@ -115,4 +117,10 @@ It will automatically add the `.YOUR_PLATFORM_HERE.test.skip` files to the examp
 
 ```
 $ travis_skip esp8266
+```
+
+## Using external libraries
+External libraries (which are not hosted by the Arduino library manager) can be installed using the following command:
+```
+- if [! -d "$HOME/arduino_ide/libraries/<Name>" ]; then git clone <URL> $HOME/arduino_ide/libraries/<Name>; fi
 ```
