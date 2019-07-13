@@ -32,7 +32,7 @@ git:
   quiet: true
 env:
   global:
-     # >ou can uncomment this to explicitly choose an (old) version of the Arduino IDE
+     # You can uncomment this to explicitly choose an (old) version of the Arduino IDE
      #- ARDUINO_IDE_VERSION="1.8.7"
 before_install:
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
