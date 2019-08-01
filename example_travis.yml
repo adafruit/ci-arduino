@@ -7,6 +7,13 @@ cache:
 git:
   depth: false
   quiet: true
+addons:
+  apt:
+    sources:
+      - llvm-toolchain-trusty-5.0
+      - key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+    packages:
+      - clang-format-5.0
 env:
   global:
 #    - ARDUINO_IDE_VERSION="1.8.7"
@@ -16,11 +23,13 @@ env:
 
 before_install:
    - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+   - curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/run-clang-format.py > run-clang-format.py
 
 install:
    - arduino --install-library "Adafruit ILI9341","Adafruit GFX Library"
 
 script:
+   - python run-clang-format.py -r .
    - build_main_platforms
 
 # Generate and deploy documentation
