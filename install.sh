@@ -91,7 +91,7 @@ if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\x
 echo "Removing ESP32 cache"
 rm -rf ~/.arduino15/packages/esp32
 echo -n "Current packages list:"
-ls ~/.arduino15/packages/
+[ -d ~/.arduino15/packages/ ] && ls ~/.arduino15/packages/
 
 INSTALL_ESP32=$([[ $INSTALL_PLATFORMS == *"esp32"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
 INSTALL_DUE=$([[ $INSTALL_PLATFORMS == *"due"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
