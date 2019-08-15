@@ -1,4 +1,4 @@
-name: CI
+name: Github Arduino Library CI
 
 on: [push]
 
@@ -9,9 +9,19 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
+    - name: pre-install
       run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        source install.sh
+    - name: install libraries
+      run: |
+        arduino --install-library "Adafruit BusIO"
+    - name: test platform
+      run: |
+        build_platform esp32
+        build_platform uno
+        build_platform leonardo
+        build_platform zero
+        build_platform esp8266
+        build_platform m4
+        build_platform nrf52840
+
