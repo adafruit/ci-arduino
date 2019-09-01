@@ -71,6 +71,9 @@ echo -n "CACHED: "
 echo -e """$GREEN""\xe2\x9c\x93"
 fi
 
+# define output directory for .hex files
+export ARDUINO_HEX_DIR=$HOME/compiled_arduino_sketches/arduino_build_$TRAVIS_BUILD_NUMBER
+
 # link test library folder to the arduino libraries folder
 ln -s $TRAVIS_BUILD_DIR $HOME/arduino_ide/libraries/Adafruit_Test_Library
 
@@ -345,11 +348,15 @@ function build_platform()
 
     fi
 
+    # get the sketch name so we can place the generated files in the respective folder
+    local sketch_filename_with_ending=$(basename -- "$example")
+    local sketch_filename="${sketch_filename_with_ending%.*}"
+    local build_path=$ARDUINO_HEX_DIR/$platform_key/$sketch_filename
     # verify the example, and save stdout & stderr to a variable
     # we have to avoid reading the exit code of local:
     # "when declaring a local variable in a function, the local acts as a command in its own right"
     local build_stdout
-    build_stdout=$(arduino --verify $example 2>&1)
+    build_stdout=$(arduino --verify --pref build.path=$build_path --preserve-temp-files $example 2>&1)
 
     # echo output if the build failed
     if [ $? -ne 0 ]; then

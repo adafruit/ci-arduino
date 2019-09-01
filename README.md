@@ -125,3 +125,26 @@ External libraries (which are not hosted by the Arduino library manager) can be 
 ```
 - if [ ! -d "$HOME/arduino_ide/libraries/<Name>" ]; then git clone <URL> $HOME/arduino_ide/libraries/<Name>; fi
 ```
+
+## Deploying compiled artifacts
+If you need to get hold of the compiled sketches of your project, in order to release them or forward them to an
+deployment pipeline, you can find them in the `$ARDUINO_HEX_DIR` directory. Specifically, if `Foo` is the name
+of your project, you are compiling for an `Arduino Mega` and the primary sketch is called `Foo.ino`, the flashable
+`.hex` files will be found inside `$ARDUINO_HEX_DIR/mega2560/Foo` as `Foo.ino.hex` and `Foo.ino.with_bootloader.hex`.
+Similarly for the rest of the platforms.
+
+For example, assuming you have a `Foo` project as outlined above, to create a release which includes the `.hex`
+files on GitHub, you could add this to your `.travis.yml` configuration:
+
+```yaml
+deploy:
+  provider: releases
+  api_key:
+    secure: YOUR_API_KEY_ENCRYPTED
+  file:
+    - $ARDUINO_HEX_DIR/mega2560/Foo/Foo.ino.hex
+    - $ARDUINO_HEX_DIR/mega2560/Foo/Foo.ino.with_bootloader.hex
+  skip_cleanup: true
+  on:
+    tags: true
+```
