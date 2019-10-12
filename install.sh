@@ -21,7 +21,7 @@ export SAMD_PLATFORMS='declare -A samd_platforms=( [zero]="arduino:samd:arduino_
 
 export M4_PLATFORMS='declare -A m4_platforms=( [m4]="adafruit:samd:adafruit_metro_m4:speed=120", [trellis_m4]="adafruit:samd:adafruit_trellis_m4:speed=120" )'
 
-export ARCADA_PLATFORMS='declare -A arcada_platforms=( [pybadge]="adafruit:samd:adafruit_pybadge_m4:speed=120", [pygamer]="adafruit:samd:adafruit_pygamer_m4:speed=120", [hallowing_m4]="adafruit:samd:adafruit_hallowing_m4:speed=120", [cplayExpressAda]="adafruit:samd:adafruit_circuitplayground_m0", [cplayBluefruit]="adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0"  )'
+export ARCADA_PLATFORMS='declare -A arcada_platforms=( [pybadge]="adafruit:samd:adafruit_pybadge_m4:speed=120", [pygamer]="adafruit:samd:adafruit_pygamer_m4:speed=120", [hallowing_m4]="adafruit:samd:adafruit_hallowing_m4:speed=120", [cplayExpressAda]="adafruit:samd:adafruit_circuitplayground_m0" )'
 
 export IO_PLATFORMS='declare -A io_platforms=( [zero]="arduino:samd:arduino_zero_native", [m4wifi]="adafruit:samd:adafruit_metro_m4_airliftlite:speed=120", [esp8266]="esp8266:esp8266:huzzah:eesz=4M3M,xtal=80" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
 
