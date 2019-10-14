@@ -1,31 +1,26 @@
 language: c
 sudo: false
+dist: "trusty"
 cache:
   directories:
     - ~/arduino_ide
     - ~/.arduino15/packages/
+
 git:
   depth: false
   quiet: true
 
-addons:
-  apt:
-    packages:
-      - python3
-      - python3-pip
-      - python3-setuptools
-
 before_install:
-  - pip3 install --user adafruit-nrfutil
   - source $TRAVIS_BUILD_DIR/install.sh
+
 script:
+  - build_platform nrf52840
   - build_platform esp32
   - build_platform uno
   - build_platform leonardo
   - build_platform zero
   - build_platform esp8266
   - build_platform m4
-  - build_platform nrf52840
 
 notifications:
   email:
