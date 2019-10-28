@@ -9,7 +9,7 @@ fi
 # associative array for the platforms that will be verified in build_main_platforms()
 # this will be eval'd in the functions below because arrays can't be exported
 # Uno is ATmega328, Zero is SAMD21G18, ESP8266, Leonardo is ATmega32u4, M4 is SAMD51, Mega is ATmega2560, ESP32
-export MAIN_PLATFORMS='declare -A main_platforms=( [uno]="arduino:avr:uno" [due]="arduino:sam:arduino_due_x" [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:eesz=4M3M,xtal=80" [leonardo]="arduino:avr:leonardo" [m4]="adafruit:samd:adafruit_metro_m4:speed=120" [mega2560]="arduino:avr:mega:cpu=atmega2560" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
+export MAIN_PLATFORMS='declare -A main_platforms=( [uno]="arduino:avr:uno" [zero]="arduino:samd:arduino_zero_native" [esp8266]="esp8266:esp8266:huzzah:eesz=4M3M,xtal=80" [leonardo]="arduino:avr:leonardo" [m4]="adafruit:samd:adafruit_metro_m4:speed=120" [mega2560]="arduino:avr:mega:cpu=atmega2560" [esp32]="esp32:esp32:featheresp32:FlashFreq=80" )'
 
 # associative array for other platforms that can be called explicitly in .travis.yml configs
 # this will be eval'd in the functions below because arrays can't be exported
@@ -85,7 +85,7 @@ echo -e "${YELLOW}INSTALLING DEPENDENCIES"
 echo "########################################################################";
 
 
-# install the due, esp8266, and adafruit board packages
+# install the zero, esp8266, and adafruit board packages
 echo -n "ADD PACKAGE INDEX: "
 DEPENDENCY_OUTPUT=$(arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json" --save-prefs 2>&1)
 if [ $? -ne 0 ]; then echo -e """$RED""\xe2\x9c\x96"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
@@ -97,7 +97,6 @@ echo -n "Current packages list:"
 [ -d ~/.arduino15/packages/ ] && ls ~/.arduino15/packages/
 
 INSTALL_ESP32=$([[ $INSTALL_PLATFORMS == *"esp32"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
-INSTALL_DUE=$([[ $INSTALL_PLATFORMS == *"due"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
 INSTALL_ZERO=$([[ $INSTALL_PLATFORMS == *"zero"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
 INSTALL_ESP8266=$([[ $INSTALL_PLATFORMS == *"esp8266"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
 INSTALL_AVR=$([[ $INSTALL_PLATFORMS == *"avr"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
@@ -107,12 +106,6 @@ INSTALL_NRF52=$([[ $INSTALL_PLATFORMS == *"nrf52"* || -z "$INSTALL_PLATFORMS" ]]
 if [[ $INSTALL_ESP32 == 1 ]]; then
   echo -n "ESP32: "
   DEPENDENCY_OUTPUT=$(arduino --install-boards esp32:esp32 2>&1)
-  if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
-fi
-
-if [[ $INSTALL_DUE == 1 ]]; then
-  echo -n "DUE: "
-  DEPENDENCY_OUTPUT=$(arduino --install-boards arduino:sam 2>&1)
   if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 fi
 
