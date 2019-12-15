@@ -361,7 +361,7 @@ function build_platform()
     # we have to avoid reading the exit code of local:
     # "when declaring a local variable in a function, the local acts as a command in its own right"
     local build_stdout
-    build_stdout=$(arduino --verify --pref build.path=$build_path --preserve-temp-files $example 2>&1)
+    build_stdout=$(arduino --verify --pref build.path=$build_path --preserve-temp-files ${EXTRA_VERIFY_ARGS} $example 2>&1)
 
     # echo output if the build failed
     if [ $? -ne 0 ]; then
