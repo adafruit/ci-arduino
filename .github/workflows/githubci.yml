@@ -12,9 +12,6 @@ jobs:
     - name: pre-install
       run: |
         source install.sh
-    - name: install libraries
-      run: |
-        arduino --install-library "Adafruit BusIO"
     - name: test platform
       run: |
         build_platform esp32
