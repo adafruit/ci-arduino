@@ -12,7 +12,7 @@ We have a guide that you can use to follow along to install both TravisCI and Do
 You will need to source the script in the `before_install` step of your
 `.travis.yml` file.
 
-```
+```sh
 source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 ```
 
@@ -20,7 +20,7 @@ If you only want to install and build on certain platforms, you can set the
 `INSTALL_PLATFORMS` envionrment variable to a comma-seperated list of platforms.
 
 **Example `.travis.yml`:**
-```
+```yaml
 language: c
 sudo: false
 cache:
@@ -61,13 +61,13 @@ All of the examples will be built with the platforms in `MAIN_PLATFORMS` if you 
 and `AUX_PLATFORMS` can be used to define other platforms that don't need to be verified for every repo.
 
 Build the examples using the platforms in the MAIN_PLATFORMS array:
-```
+```yaml
 script:
   - build_main_platforms
 ```
 
 Build the examples only using the trinket:
-```
+```yaml
 script:
   - build_platform trinket
 ```
@@ -82,7 +82,7 @@ you wish to skip.
 For example, if you would like to skip the `esp8266` platform for an example
 in your lib called `blink.ino`, you would need to do something like this in your library repo:
 
-```
+```sh
 $ touch examples/blink/.esp8266.test.skip
 $ git add -A
 $ git commit -a
@@ -91,7 +91,7 @@ $ git push
 
 If you need an easy way to skip a platform, you can also add something like this to your `~/.bash_profile`:
 
-```
+```sh
 function travis_skip()
 {
 
@@ -116,13 +116,13 @@ function travis_skip()
 You will then be able to skip a platform for all examples by running the `travis_skip` function from your library repo.
 It will automatically add the `.YOUR_PLATFORM_HERE.test.skip` files to the examples.
 
-```
+```sh
 $ travis_skip esp8266
 ```
 
 ## Using external libraries
 External libraries (which are not hosted by the Arduino library manager) can be installed using the following command:
-```
+```sh
 - if [ ! -d "$HOME/arduino_ide/libraries/<Name>" ]; then git clone <URL> $HOME/arduino_ide/libraries/<Name>; fi
 ```
 
