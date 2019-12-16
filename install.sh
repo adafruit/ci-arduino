@@ -96,12 +96,12 @@ rm -rf ~/.arduino15/packages/esp32
 echo -n "Current packages list:"
 [ -d ~/.arduino15/packages/ ] && ls ~/.arduino15/packages/
 
-#INSTALL_ESP32=$([[ $INSTALL_PLATFORMS == *"esp32"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
-#INSTALL_ZERO=$([[ $INSTALL_PLATFORMS == *"zero"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_ESP32=$([[ $INSTALL_PLATFORMS == *"esp32"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_ZERO=$([[ $INSTALL_PLATFORMS == *"zero"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
 INSTALL_ESP8266=$([[ $INSTALL_PLATFORMS == *"esp8266"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
-#INSTALL_AVR=$([[ $INSTALL_PLATFORMS == *"avr"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
-#INSTALL_SAMD=$([[ $INSTALL_PLATFORMS == *"samd"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
-#INSTALL_NRF52=$([[ $INSTALL_PLATFORMS == *"nrf52"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_AVR=$([[ $INSTALL_PLATFORMS == *"avr"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_SAMD=$([[ $INSTALL_PLATFORMS == *"samd"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
+INSTALL_NRF52=$([[ $INSTALL_PLATFORMS == *"nrf52"* || -z "$INSTALL_PLATFORMS" ]] && echo 1 || echo 0)
 
 if [[ $INSTALL_ESP32 == 1 ]]; then
   echo -n "ESP32: "

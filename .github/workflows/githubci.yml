@@ -14,5 +14,11 @@ jobs:
         source install.sh
     - name: test platform
       run: |
+        ./build.sh build_platform esp32
+        ./build.sh build_platform uno
+        ./build.sh build_platform leonardo
+        ./build.sh build_platform zero
         ./build.sh build_platform esp8266
+        ./build.sh build_platform m4
+        ./build.sh build_platform nrf52840
 
