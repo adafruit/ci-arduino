@@ -138,6 +138,7 @@ if [[ $INSTALL_NRF52 == 1 ]]; then
   echo -n "ADAFRUIT NRF5X: "
   pip3 install --user setuptools
   pip3 install --user adafruit-nrfutil
+  sudo pip3 install adafruit-nrfutil
   pip3 install --user pyserial
   DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:nrf52 2>&1)
   if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
