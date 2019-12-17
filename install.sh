@@ -74,7 +74,7 @@ echo -e """$GREEN""\xe2\x9c\x93"
 fi
 
 # define output directory for .hex files
-export ARDUINO_HEX_DIR=$HOME/compiled_arduino_sketches/arduino_build_$TRAVIS_BUILD_NUMBER
+export ARDUINO_HEX_DIR=arduino_build_$TRAVIS_BUILD_NUMBER
 
 # link test library folder to the arduino libraries folder
 ln -s $TRAVIS_BUILD_DIR $HOME/arduino_ide/libraries/Adafruit_Test_Library
@@ -860,7 +860,7 @@ function json_main_platforms()
 
 }
 # define output directory for .hex files
-export ARDUINO_HEX_DIR=$HOME/compiled_arduino_sketches/arduino_build_$TRAVIS_BUILD_NUMBER
+export ARDUINO_HEX_DIR=arduino_build_$TRAVIS_BUILD_NUMBER
 
 # link test library folder to the arduino libraries folder
 ln -s $TRAVIS_BUILD_DIR $HOME/arduino_ide/libraries/Adafruit_Test_Library
