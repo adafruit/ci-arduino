@@ -10,6 +10,8 @@ fi
 if [ -z $HOME ]; then
   export HOME="/home/travis"
   echo "NOTE: YOUR HOME WAS NOT DEFINED. USING $HOME"
+else
+  echo "YOUR HOME FOLDER IS $HOME"
 fi
 
 # associative array for the platforms that will be verified in build_main_platforms()
