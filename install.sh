@@ -6,14 +6,6 @@ if [ "${BASH_VERSION%%[^0-9]*}" -lt "4" ]; then
   exit 1
 fi
 
-# if HOME is not set
-if [ -z $HOME ]; then
-  export HOME="/home/travis"
-  echo "NOTE: YOUR HOME WAS NOT DEFINED. USING $HOME"
-else
-  echo "YOUR HOME FOLDER IS $HOME"
-fi
-
 # associative array for the platforms that will be verified in build_main_platforms()
 # this will be eval'd in the functions below because arrays can't be exported
 # Uno is ATmega328, Zero is SAMD21G18, ESP8266, Leonardo is ATmega32u4, M4 is SAMD51, Mega is ATmega2560, ESP32
@@ -89,6 +81,7 @@ ln -s $TRAVIS_BUILD_DIR $HOME/arduino_ide/libraries/Adafruit_Test_Library
 
 # add the arduino CLI to our PATH
 export PATH="$HOME/arduino_ide:$PATH"
+echo "The PATH is $PATH"
 
 echo -e "\n########################################################################";
 echo -e "${YELLOW}INSTALLING DEPENDENCIES"
