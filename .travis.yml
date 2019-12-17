@@ -14,18 +14,19 @@ addons:
     packages:
       - python3
       - python3-pip
+      - python3-setuptools
 
 before_install:
   - source $TRAVIS_BUILD_DIR/install.sh
 
 script:
-  - $TRAVIS_BUILD_DIR/install.sh build_platform nrf52840
-  - $TRAVIS_BUILD_DIR/install.sh build_platform esp32
-  - $TRAVIS_BUILD_DIR/install.sh build_platform uno
-  - $TRAVIS_BUILD_DIR/install.sh build_platform leonardo
-  - $TRAVIS_BUILD_DIR/install.sh build_platform zero
-  - $TRAVIS_BUILD_DIR/install.sh build_platform esp8266
-  - $TRAVIS_BUILD_DIR/install.sh build_platform m4
+  - build_platform nrf52840
+  - build_platform esp32
+  - build_platform uno
+  - build_platform leonardo
+  - build_platform zero
+  - build_platform esp8266
+  - build_platform m4
 
 notifications:
   email:
