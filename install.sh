@@ -166,8 +166,10 @@ export PASS_COUNT=0
 export SKIP_COUNT=0
 export FAIL_COUNT=0
 export PDE_COUNT=0
-else
+# close if [[ $# -eq 0 ]] ; then
+fi 
 # build all of the examples for the passed platform
+#Sourcing and defining functions
 function build_platform()
 {
 
@@ -858,6 +860,8 @@ function json_main_platforms()
   echo -e "||||||||||||||||||||||||||||| JSON STATUS ||||||||||||||||||||||||||||||\n"
 
 }
+#If there is an argument
+if [[ ! $# -eq 0 ]] ; then
 # define output directory for .hex files
 export ARDUINO_HEX_DIR=arduino_build_$TRAVIS_BUILD_NUMBER
 
