@@ -86,6 +86,8 @@ echo -e "\n#####################################################################
 echo -e "${YELLOW}INSTALLING DEPENDENCIES"
 echo "########################################################################";
 
+# install dependancy libraries in library.properties
+grep "depends=" $HOME/arduino_ide/libraries/Adafruit_Test_Library/library.properties | sed 's/depends=//' | sed -n 1'p' |  tr ',' '\n' | while read word; do arduino --install-library "$word"; done
 
 # install the zero, esp8266, and adafruit board packages
 echo -n "ADD PACKAGE INDEX: "
