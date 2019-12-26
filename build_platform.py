@@ -28,7 +28,10 @@ ALL_PLATFORMS={
     # Adafruit nRF
     "cplayBluefruit" : "adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0",
 }
-print(ALL_PLATFORMS)
+#print(ALL_PLATFORMS)
+
+# Try installing a library
+os.system('arduino-cli lib install "Adafruit NeoPixel"')
 
 ESP8266_INSTALLED = False
 def install_esp8266():
@@ -41,4 +44,6 @@ platforms = sys.argv[1:]
 for platform in platforms:
     fqbn = ALL_PLATFORMS[platform]
     print("building", platform, "full name", fqbn)
-        
+    print('#'*40)
+    print(colored.yellow("SWITCHING TO "+fqbn))
+    os.system('arduino-cli compile --fqbn ', fqbn)
