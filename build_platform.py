@@ -31,8 +31,6 @@ ALL_PLATFORMS={
 #print(ALL_PLATFORMS)
 
 
-
-
 ESP8266_INSTALLED = False
 def install_esp8266():
     ESP8266_INSTALLED = (os.system('arduino_cli core install esp8266:esp8266') != 0)
@@ -47,4 +45,11 @@ for platform in platforms:
     print('#'*40)
     print(colored.yellow("SWITCHING TO "+fqbn))
     print('#'*40)
-    os.system('arduino-cli compile --fqbn '+fqbn)
+    exampledir = os.environ['TRAVIS_BUILD_DIR']+"/examples"
+    for example in os.listdir(exampledir):
+        for filename in os.listdir(exampledir+"/"+example):
+            if filename.endswith(".ino"):
+                print(filename)
+                # print(os.path.join(directory, filename))
+                os.system('arduino-cli compile --fqbn '+fqbn+" "+filename)
+    
