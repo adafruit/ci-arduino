@@ -40,7 +40,7 @@ def install_platform(platform):
     if ret != 0:
         print(colored.red("FAILED to install "+platform))
         exit(-1)
-     print(" ", colored.green(CHECK))
+    print(" ", colored.green(CHECK))
 
 platforms = sys.argv[1:]
 for platform in platforms:
