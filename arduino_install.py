@@ -14,7 +14,7 @@ print("hi!")
 
 ALL_PLATFORMS={
     # classic Arduino AVR
-    "uno" : "arduino:avr:uno".
+    "uno" : "arduino:avr:uno",
     "leonardo" : "arduino:avr:leonardo",
     "mega2560" : "arduino:avr:mega:cpu=atmega2560",
     # Arduino SAMD
@@ -34,3 +34,8 @@ ALL_PLATFORMS={
     "cplayBluefruit" : "adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0",
 }
 print(ALL_PLATFORMS)
+########################################################################
+print()
+print('#'x40)
+print(colored.yellow("INSTALLING ARDUINO IDE")
+print('#'x40)
