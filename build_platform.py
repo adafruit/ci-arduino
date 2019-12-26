@@ -33,9 +33,7 @@ ALL_PLATFORMS={
 }
 
 BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json"
-if os.system("arduino-cli core update-index --additional-urls "+BSP_URLS+" > /dev/null") != 0:
-    print(colored.red("FAILED to update core indecies"))
-    exit(-1)
+
 
 def install_platform(platform):
     print("Installing", platform, end=" ")
@@ -44,6 +42,36 @@ def install_platform(platform):
         exit(-1)
     print(colored.green(CHECK))
 
+def run_or_die(cmd, error):
+    if os.system(cmd) != 0:
+        print(colored.red(error))
+        exit(-1)
+
+################################ Install Arduino IDE
+print()
+print('#'*40)
+print(colored.yellow("INSTALLING ARDUINO IDE"))
+print('#'*40)
+
+run_or_die('curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh', "FAILED to install arduino CLI")
+
+# make all our directories we need for files and libraries
+for directory in ("/.arduino15", "/.arduino15/packages",
+                  "/Arduino", "/Arduino/libraries"):
+    os.mkdir(os.environ["HOME"]+directory)
+
+run_or_die('arduino-cli config init > /dev/null',
+           "FAILED to configure arduino CLI")
+run_or_die('arduino-cli core update-index > /dev/null',
+           "FAILED to update arduino core")
+run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
+           " > /dev/null", "FAILED to update core indecies")
+
+# link test library folder to the arduino libraries folder
+os.symlink(os.environ['TRAVIS_BUILD_DIR'], os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
+
+
+################################ Test platforms
 platforms = sys.argv[1:]
 for platform in platforms:
     fqbn = ALL_PLATFORMS[platform]
