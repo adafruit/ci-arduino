@@ -43,11 +43,13 @@ if os.system('curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/m
     print(colored.red("FAILED to install arduino CLI"))
     exit(-1)
 
-os.mkdir(os.environ["PATH"]+"/.arduino15")
+os.mkdir(os.environ["HOME"]+"/.arduino15")
 if os.system('arduino-cli config init') != 0:
     print(colored.red("FAILED to configure arduino CLI"))
     exit(-1)
 
 
 os.system('ls -lA')
+
+# Todo install dependencies
 
