@@ -28,8 +28,14 @@ if os.system('arduino-cli config init') != 0:
     print(colored.red("FAILED to configure arduino CLI"))
     exit(-1)
 
+# Try installing a library
+if os.system('arduino-cli lib install "Adafruit NeoPixel"') != 0:
+    print(colored.red("FAILED to install a library"))
+    exit(-1) 
 
 os.system('ls -lA')
+os.system('ls -lA ~')
+os.system('ls -lA ~/.arduino15')
 
 # Todo install dependencies
 

@@ -48,4 +48,4 @@ for platform in platforms:
     print("building", platform, "full name", fqbn)
     print('#'*40)
     print(colored.yellow("SWITCHING TO "+fqbn))
-    os.system('arduino-cli compile --fqbn ', fqbn)
+    os.system('arduino-cli compile --fqbn '+fqbn)
