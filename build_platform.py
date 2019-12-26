@@ -30,6 +30,11 @@ ALL_PLATFORMS={
 }
 print(ALL_PLATFORMS)
 
+def install_esp8266():
+    if os.system('arduino_cli core install esp8266:esp8266') != 0:
+        print(colored.red("FAILED to install ESP8266"))
+        exit(-1)       
+
 print(sys.argv)
 for platform in sys.argv:
     fqbn = ALL_PLATFORMS[platform]
