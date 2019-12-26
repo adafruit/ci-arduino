@@ -31,11 +31,11 @@ ALL_PLATFORMS={
 #print(ALL_PLATFORMS)
 
 
-ESP8266_INSTALLED = False
-def install_esp8266():
-    ESP8266_INSTALLED = (os.system('arduino_cli core install esp8266:esp8266') != 0)
-    if not ESP8266_INSTALLED:
-        print(colored.red("FAILED to install ESP8266"))
+def install_platform(platform):
+    print("Installing", platform)
+    ret = os.system('arduino_cli core install '+platform)
+    if ret != :
+        print(colored.red("FAILED to install "+platform))
         exit(-1)
 
 platforms = sys.argv[1:]
@@ -44,6 +44,7 @@ for platform in platforms:
     print("building", platform, "full name", fqbn)
     print('#'*40)
     print(colored.yellow("SWITCHING TO "+fqbn))
+    install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
     print('#'*40)
     exampledir = os.environ['TRAVIS_BUILD_DIR']+"/examples"
     for example in os.listdir(exampledir):
