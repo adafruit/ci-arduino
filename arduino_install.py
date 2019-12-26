@@ -4,13 +4,10 @@ import sys
 import glob
 import time
 import os
-
-# install our deps here
-os.system('pip3 install clint')
 from clint.textui import colored
 
-print("hi!")
-
+# add user bin to path!
+os.environ["PATH"] += os.pathsep + os.environ["TRAVIS_BUILD_DIR"] + "/bin"
 
 ALL_PLATFORMS={
     # classic Arduino AVR
@@ -33,7 +30,7 @@ ALL_PLATFORMS={
     # Adafruit nRF
     "cplayBluefruit" : "adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0",
 }
-print(ALL_PLATFORMS)
+#print(ALL_PLATFORMS)
 ########################################################################
 print()
 print('#'*40)
@@ -41,7 +38,10 @@ print(colored.yellow("INSTALLING ARDUINO IDE"))
 print('#'*40)
 
 print("build dir:", os.environ["TRAVIS_BUILD_DIR"])
-os.environ["PATH"] += os.pathsep + os.environ["HOME"] + "/build/adafruit/travis-ci-arduino/bin"
 
 os.system('curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh')
+os.system('arduino-cli config init')
+
+os.system('ls -l')
+os.system('ls -l'+os.environ["TRAVIS_BUILD_DIR"])
 
