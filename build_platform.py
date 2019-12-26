@@ -37,8 +37,6 @@ if os.system("arduino-cli core update-index --additional-urls "+BSP_URLS+" > /de
     print(colored.red("FAILED to update core indecies"))
     exit(-1)
 
-
-
 def install_platform(platform):
     print("Installing", platform, end=" ")
     if os.system("arduino-cli core install "+platform+" --additional-urls "+BSP_URLS+" > /dev/null") != 0:
@@ -50,10 +48,10 @@ platforms = sys.argv[1:]
 for platform in platforms:
     fqbn = ALL_PLATFORMS[platform]
     #print("building", platform, "full name", fqbn)
-    print('#'*40)
-    print(colored.yellow("SWITCHING TO "+fqbn))
+    print('#'*80)
+    print(colored.yellow("SWITCHING TO "+fqbn), end='   ')
     install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
-    print('#'*40)
+    print('#'*80)
     exampledir = os.environ['TRAVIS_BUILD_DIR']+"/examples"
     for example in os.listdir(exampledir):
         for filename in os.listdir(exampledir+"/"+example):
