@@ -5,7 +5,21 @@ import os
 from clint.textui import colored
 
 # add user bin to path!
-os.environ["PATH"] += os.pathsep + os.environ["TRAVIS_BUILD_DIR"] + "/bin"
+BUILD_DIR = ''
+# add user bin to path!
+try:
+    BUILD_DIR = os.environ["TRAVIS_BUILD_DIR"]
+except KeyError:
+    pass # ok maybe we're on actions?
+try:
+    BUILD_DIR = os.environ["GITHUB_WORKSPACE"]
+except KeyError:
+    pass # ok maybe we're on travis?
+
+os.environ["PATH"] += os.pathsep + BUILD_DIR + "/bin"
+print("build dir:", BUILD_DIR)
+os.system('pwd')
+os.system('ls -lA')
 
 CROSS = u'\N{cross mark}'
 CHECK = u'\N{check mark}'
@@ -68,7 +82,7 @@ run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
            " > /dev/null", "FAILED to update core indecies")
 
 # link test library folder to the arduino libraries folder
-os.symlink(os.environ['TRAVIS_BUILD_DIR'], os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
+os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
 
 
 ################################ Test platforms
@@ -80,7 +94,7 @@ for platform in platforms:
     print(colored.yellow("SWITCHING TO "+fqbn), end='   ')
     install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
     print('#'*80)
-    exampledir = os.environ['TRAVIS_BUILD_DIR']+"/examples"
+    exampledir = BUILD_DIR+"/examples"
     for example in os.listdir(exampledir):
         for filename in os.listdir(exampledir+"/"+example):
             if filename.endswith(".ino"):
