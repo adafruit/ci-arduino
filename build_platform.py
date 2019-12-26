@@ -35,17 +35,18 @@ ALL_PLATFORMS={
 
 
 def install_platform(platform):
-    print("Installing", platform)
+    bsp_urls = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json"
+    print("Installing", platform, end=" ")
     ret = os.system('arduino-cli core install '+platform+' > /dev/null')
     if ret != 0:
         print(colored.red("FAILED to install "+platform))
         exit(-1)
-    print(" ", colored.green(CHECK))
+    print(colored.green(CHECK))
 
 platforms = sys.argv[1:]
 for platform in platforms:
     fqbn = ALL_PLATFORMS[platform]
-    print("building", platform, "full name", fqbn)
+    #print("building", platform, "full name", fqbn)
     print('#'*40)
     print(colored.yellow("SWITCHING TO "+fqbn))
     install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
