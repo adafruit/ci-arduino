@@ -7,8 +7,9 @@ from clint.textui import colored
 # add user bin to path!
 os.environ["PATH"] += os.pathsep + os.environ["TRAVIS_BUILD_DIR"] + "/bin"
 
-FAIL = '\xe2\x9c\x96'
-CHECK = '\xe2\x9c\x96'
+CROSS = u'\N{cross mark}'
+CHECK = u'\N{check mark}'
+
 ALL_PLATFORMS={
     # classic Arduino AVR
     "uno" : "arduino:avr:uno",
@@ -54,7 +55,7 @@ for platform in platforms:
             if filename.endswith(".ino"):
                 print('\t\t'+filename, end='')
                 # print(os.path.join(directory, filename))
-                r = os.system('arduino-cli compile --fqbn '+fqbn+" "+exampledir+"/"+example+"/"+filename)
+                r = os.system('arduino-cli compile --fqbn '+fqbn+" "+exampledir+"/"+example+"/"+filename+' > /dev/null')
                 if r == 0:
                     print(colored.green(CHECK))
                 else:
