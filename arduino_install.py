@@ -37,7 +37,7 @@ print(ALL_PLATFORMS)
 ########################################################################
 print()
 print('#'*40)
-print(colored.yellow("INSTALLING ARDUINO IDE")
+print(colored.yellow("INSTALLING ARDUINO IDE"))
 print('#'*40)
 
 os.system('curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh')
