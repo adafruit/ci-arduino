@@ -12,6 +12,7 @@ addons:
       - python3-pip
 
 before_install:
+  - pip3 install clint
   - python3 $TRAVIS_BUILD_DIR/arduino_install.py
 
 script:

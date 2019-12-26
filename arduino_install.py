@@ -4,9 +4,6 @@ import sys
 import glob
 import time
 import os
-
-# install our deps here
-os.system('pip3 install clint')
 from clint.textui import colored
 
 print("hi!")
