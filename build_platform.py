@@ -36,10 +36,11 @@ ALL_PLATFORMS={
 
 def install_platform(platform):
     print("Installing", platform)
-    ret = os.system('arduino-cli core install '+platform)
+    ret = os.system('arduino-cli core install '+platform+' > /dev/null')
     if ret != 0:
         print(colored.red("FAILED to install "+platform))
         exit(-1)
+     print(" ", colored.green(CHECK))
 
 platforms = sys.argv[1:]
 for platform in platforms:
@@ -53,8 +54,7 @@ for platform in platforms:
     for example in os.listdir(exampledir):
         for filename in os.listdir(exampledir+"/"+example):
             if filename.endswith(".ino"):
-                print('\t\t'+filename, end='')
-                # print(os.path.join(directory, filename))
+                print('\t'+filename, end=' ')
                 r = os.system('arduino-cli compile --fqbn '+fqbn+" "+exampledir+"/"+example+"/"+filename+' > /dev/null')
                 if r == 0:
                     print(colored.green(CHECK))

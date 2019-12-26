@@ -17,7 +17,7 @@ before_install:
   - python3 $TRAVIS_BUILD_DIR/arduino_install.py
 
 script:
-  - python3 $TRAVIS_BUILD_DIR/build_platform.py uno
+  - python3 build_platform.py uno leonardo mega2560
 
 
 notifications:
