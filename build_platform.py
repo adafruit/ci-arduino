@@ -31,18 +31,17 @@ ALL_PLATFORMS={
     # Adafruit nRF
     "cpb" : "adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0",
 }
-#print(ALL_PLATFORMS)
+
+BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json"
+if os.system("arduino-cli core update-index --additional-urls "+BSP_URLS+" > /dev/null") != 0:
+    print(colored.red("FAILED to update core indecies"))
+    exit(-1)
+
 
 
 def install_platform(platform):
-    bsp_urls = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json"
     print("Installing", platform, end=" ")
-    ret = os.system("arduino-cli core update-index --additional-urls "+bsp_urls+"")
-    if ret != 0:
-        print(colored.red("FAILED to update core indecies"))
-        exit(-1)
-    ret = os.system("arduino-cli core install "+platform+" --additional-urls "+bsp_urls+"")
-    if ret != 0:
+    if os.system("arduino-cli core install "+platform+" --additional-urls "+BSP_URLS+" > /dev/null") != 0:
         print(colored.red("FAILED to install "+platform))
         exit(-1)
     print(colored.green(CHECK))
