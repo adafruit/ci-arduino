@@ -13,9 +13,9 @@ jobs:
       with:
         python-version: '3.x' # Version range or exact version of a Python version to use, using semvers version range syntax.
         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
-#    - name: pre-install
-#      run: |
-#        source install.sh
+    - name: pre-install
+      run: |
+        pip3 install clint
     - name: test platforms
       run: |
         python3 build_platform.py uno leonardo mega2560 zero esp8266 esp32
