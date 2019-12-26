@@ -38,7 +38,7 @@ if os.system('arduino-cli lib install "Adafruit NeoPixel"') != 0:
     exit(-1) 
 
 os.system('ls -lA')
-os.system('ls -lA ~/Arduino')
+os.system('ls -lA ~/Arduino/libraries')
 os.system('ls -lA ~/.arduino15')
 
 # link test library folder to the arduino libraries folder
