@@ -31,7 +31,9 @@ ALL_PLATFORMS={
 #print(ALL_PLATFORMS)
 
 # Try installing a library
+print("Install neopixel:")
 os.system('arduino-cli lib install "Adafruit NeoPixel"')
+print("OK")
 
 ESP8266_INSTALLED = False
 def install_esp8266():
