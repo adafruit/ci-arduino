@@ -30,13 +30,15 @@ ALL_PLATFORMS={
 }
 print(ALL_PLATFORMS)
 
+ESP8266_INSTALLED = False
 def install_esp8266():
-    if os.system('arduino_cli core install esp8266:esp8266') != 0:
+    ESP8266_INSTALLED = (os.system('arduino_cli core install esp8266:esp8266') != 0)
+    if not ESP8266_INSTALLED:
         print(colored.red("FAILED to install ESP8266"))
-        exit(-1)       
+        exit(-1)
 
-print(sys.argv)
-for platform in sys.argv:
+platforms = sys.argv[1:]
+for platform in platforms:
     fqbn = ALL_PLATFORMS[platform]
     print("building", platform, "full name", fqbn)
         
