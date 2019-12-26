@@ -33,7 +33,7 @@ ALL_PLATFORMS={
 
 def install_platform(platform):
     print("Installing", platform)
-    ret = os.system('arduino_cli core install '+platform)
+    ret = os.system('arduino-cli core install '+platform)
     if ret != 0:
         print(colored.red("FAILED to install "+platform))
         exit(-1)
