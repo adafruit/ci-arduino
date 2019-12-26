@@ -42,6 +42,7 @@ os.system('ls -lA ~/Arduino/libraries')
 os.system('ls -lA ~/.arduino15')
 
 # link test library folder to the arduino libraries folder
-os.symlink(os.environ['TRAVIS_BUILD_DIR'], '~/Arduino/libraries/Adafruit_Test_Library')
+os.system('ln -s '+os.environ['TRAVIS_BUILD_DIR']+" "+os.environ['HOME']+"/Arduino/libraries/Adafruit_Test_Library")
+#os.symlink(os.environ['TRAVIS_BUILD_DIR'], '~/Arduino/libraries/Adafruit_Test_Library')
 # Todo install dependencies
 
