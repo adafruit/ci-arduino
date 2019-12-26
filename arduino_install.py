@@ -37,6 +37,7 @@ if os.system('arduino-cli core update-index > /dev/null') != 0:
 #os.system('ls -lA ~/.arduino15')
 
 # link test library folder to the arduino libraries folder
+os.mkdir(os.environ["HOME"]+"/Arduino/libraries")
 os.symlink(os.environ['TRAVIS_BUILD_DIR'], os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
 
 # Todo install dependencies
