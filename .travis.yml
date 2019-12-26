@@ -16,7 +16,7 @@ addons:
       - python3-pip
 
 before_install:
-  - source $TRAVIS_BUILD_DIR/install.sh
+  - source $TRAVIS_BUILD_DIR/arduino_library_ci.py
 
 script:
   - build_platform nrf52840
