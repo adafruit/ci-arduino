@@ -31,3 +31,7 @@ ALL_PLATFORMS={
 print(ALL_PLATFORMS)
 
 print(sys.argv)
+for platform in sys.argv:
+    fqbn = ALL_PLATFORMS[platform]
+    print("building", platform, "full name", fqbn)
+        
