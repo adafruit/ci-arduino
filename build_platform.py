@@ -103,5 +103,5 @@ for platform in platforms:
                 if r == 0:
                     print(colored.green(CHECK))
                 else:
-                    print(colored.red(FAIL))
+                    print(colored.red(CROSS))
                     
