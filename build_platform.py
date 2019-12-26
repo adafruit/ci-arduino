@@ -7,6 +7,8 @@ from clint.textui import colored
 # add user bin to path!
 os.environ["PATH"] += os.pathsep + os.environ["TRAVIS_BUILD_DIR"] + "/bin"
 
+FAIL = '\xe2\x9c\x96'
+CHECK = '\xe2\x9c\x96'
 ALL_PLATFORMS={
     # classic Arduino AVR
     "uno" : "arduino:avr:uno",
@@ -14,19 +16,19 @@ ALL_PLATFORMS={
     "mega2560" : "arduino:avr:mega:cpu=atmega2560",
     # Arduino SAMD
     "zero" : "arduino:samd:arduino_zero_native",
-    "cplayExpress" : "arduino:samd:adafruit_circuitplayground_m0",
+    "cpx" : "arduino:samd:adafruit_circuitplayground_m0",
     # Espressif
     "esp8266" : "esp8266:esp8266:huzzah:eesz=4M3M,xtal=80",
     "esp32" : "esp32:esp32:featheresp32:FlashFreq=80",
     # Adafruit AVR
     "trinket" : "adafruit:avr:trinket5",
     "gemma" : "arduino:avr:gemma",
-    "cplayClassic" : "arduino:avr:circuitplay32u4cat",
+    "cpc" : "arduino:avr:circuitplay32u4cat",
     # Adafruit SAMD
     "m4" : "adafruit:samd:adafruit_metro_m4:speed=120",
-    "cplayExpressAda" : "adafruit:samd:adafruit_circuitplayground_m0",
+    "cpx_ada" : "adafruit:samd:adafruit_circuitplayground_m0",
     # Adafruit nRF
-    "cplayBluefruit" : "adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0",
+    "cpb" : "adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0",
 }
 #print(ALL_PLATFORMS)
 
@@ -50,7 +52,11 @@ for platform in platforms:
     for example in os.listdir(exampledir):
         for filename in os.listdir(exampledir+"/"+example):
             if filename.endswith(".ino"):
-                print(filename)
+                print('\t\t'+filename, end='')
                 # print(os.path.join(directory, filename))
-                os.system('arduino-cli compile --fqbn '+fqbn+" "+filename)
-    
+                r = os.system('arduino-cli compile --fqbn '+fqbn+" "+exampledir+"/"+example+"/"+filename)
+                if r == 0:
+                    print(colored.green(CHECK))
+                else:
+                    print(colored.red(FAIL))
+                    
