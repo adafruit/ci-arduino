@@ -111,11 +111,11 @@ success = 0
 # expand groups:
 for arg in sys.argv[1:]:
     platform = ALL_PLATFORMS[arg]
-    if isinstance(platform, collections.Iterable):
-        for p in platform:
-            platforms.append(ALL_PLATFORMS[p])
     if isinstance(platform, str):
         platforms.append(platform)
+    elif isinstance(platform, collections.Iterable):
+        for p in platform:
+            platforms.append(ALL_PLATFORMS[p])
 
 for fqbn in platforms:
     print('#'*80)
