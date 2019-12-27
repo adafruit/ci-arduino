@@ -2,6 +2,7 @@ import sys
 import glob
 import time
 import os
+import subprocess
 from clint.textui import colored
 
 # add user bin to path!
