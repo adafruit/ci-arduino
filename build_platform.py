@@ -102,7 +102,8 @@ for platform in platforms:
         for filename in os.listdir(exampledir+"/"+example):
             if filename.endswith(".ino"):
                 print('\t'+filename, end=' ')
-                cmd = 'arduino-cli compile --fqbn '+fqbn+" "+exampledir+"/"+example+"/"+filename
+                cmd = ['arduino-cli', 'compile', '--fqbn', fqbn,
+                       exampledir+"/"+example+"/"+filename]
                 proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE)
                 r = proc.wait()
