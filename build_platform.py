@@ -131,6 +131,7 @@ for platform in platforms:
 
                 # check if we should SKIP
                 skipfilename = exampledir+"/"+example+"/"+platform+".test.skip"
+                print("Skip?", skipfilename, "Only?", onlyfilename)
                 onlyfilename = exampledir+"/"+example+"/"+platform+".test.only"
                 if os.path.exists(skipfilename):
                     print("skipping")
