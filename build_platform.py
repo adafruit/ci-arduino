@@ -112,12 +112,12 @@ success = 0
 for arg in sys.argv[1:]:
     platform = ALL_PLATFORMS[arg]
     if isinstance(platform, collections.Iterable):
-        platforms.extend(platform)
+        for p in platform:
+            platforms.append(ALL_PLATFORMS[p])
     if isinstance(platform, str):
         platforms.append(platform)
 
 for fqbn in platforms:
-    #print("building", platform, "full name", fqbn)
     print('#'*80)
     print(colored.yellow("SWITCHING TO "+fqbn), end='   ')
     install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
