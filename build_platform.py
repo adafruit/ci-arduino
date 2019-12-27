@@ -109,13 +109,14 @@ for platform in platforms:
                 r = proc.wait()
                 err = proc.stderr.read()
                 out = proc.stdout.read()
-                print("OUTPUT: ", out)
-                print("ERROUT: ", err)
+                #print("OUTPUT: ", out)
+                #print("ERROUT: ", err)
 
                 if r == 0:
                     print(colored.green(CHECK))
                 else:
                     print(colored.red(CROSS))
+                    print(colored.red(err.decode("utf-8"))
                     success = 1
 
 exit(success)
