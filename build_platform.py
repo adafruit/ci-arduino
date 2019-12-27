@@ -116,7 +116,7 @@ for platform in platforms:
                     print(colored.green(CHECK))
                 else:
                     print(colored.red(CROSS))
-                    print(colored.red(err.decode("utf-8"))
+                    print(colored.red(err.decode("utf-8")))
                     success = 1
 
 exit(success)
