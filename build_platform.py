@@ -2,6 +2,7 @@ import sys
 import glob
 import time
 import os
+import subprocess
 from clint.textui import colored
 
 # add user bin to path!
@@ -84,9 +85,23 @@ run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
 # link test library folder to the arduino libraries folder
 os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
 
+################################ Install dependancies
+try:
+    libprop = open(BUILD_DIR+'/library.properties')
+    for line in libprop:
+        if line.startswith("depends="):
+            deps = line.replace("depends=", "").split(",")
+            for dep in deps:
+                dep = dep.strip()
+                run_or_die('arduino-cli lib install "'+dep+'"',
+                           "FAILED to install dependancy "+dep)
+except OSError:
+    pass  # no library properties
 
 ################################ Test platforms
 platforms = sys.argv[1:]
+success = 0
+
 for platform in platforms:
     fqbn = ALL_PLATFORMS[platform]
     #print("building", platform, "full name", fqbn)
@@ -99,9 +114,21 @@ for platform in platforms:
         for filename in os.listdir(exampledir+"/"+example):
             if filename.endswith(".ino"):
                 print('\t'+filename, end=' ')
-                r = os.system('arduino-cli compile --fqbn '+fqbn+" "+exampledir+"/"+example+"/"+filename+' > /dev/null')
+                cmd = ['arduino-cli', 'compile', '--fqbn', fqbn,
+                       exampledir+"/"+example+"/"+filename]
+                proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                                        stderr=subprocess.PIPE)
+                r = proc.wait()
+                err = proc.stderr.read()
+                out = proc.stdout.read()
+                #print("OUTPUT: ", out)
+                #print("ERROUT: ", err)
+
                 if r == 0:
                     print(colored.green(CHECK))
                 else:
                     print(colored.red(CROSS))
-                    
+                    print(colored.red(err.decode("utf-8")))
+                    success = 1
+
+exit(success)
