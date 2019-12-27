@@ -87,7 +87,7 @@ os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Libra
 
 ################################ Test platforms
 platforms = sys.argv[1:]
-success = True
+success = 0
 
 for platform in platforms:
     fqbn = ALL_PLATFORMS[platform]
@@ -114,6 +114,6 @@ for platform in platforms:
                     print(colored.green(CHECK))
                 else:
                     print(colored.red(CROSS))
-                    success = False
+                    success = 1
 
-return success
+exit(success)
