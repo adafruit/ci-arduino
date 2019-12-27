@@ -93,7 +93,7 @@ try:
             deps = line.replace("depends=", "").split(",")
             for dep in deps:
                 dep = dep.strip()
-                run_or_die("arduino-cli lib install "+dep,
+                run_or_die('arduino-cli lib install "'+dep+'"',
                            "FAILED to install dependancy "+dep)
 except OSError:
     pass  # no library properties
