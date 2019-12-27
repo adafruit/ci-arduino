@@ -19,8 +19,8 @@ except KeyError:
 
 os.environ["PATH"] += os.pathsep + BUILD_DIR + "/bin"
 print("build dir:", BUILD_DIR)
-os.system('pwd')
-os.system('ls -lA')
+#os.system('pwd')
+#os.system('ls -lA')
 
 CROSS = u'\N{cross mark}'
 CHECK = u'\N{check mark}'
@@ -93,7 +93,8 @@ try:
             deps = line.replace("depends=", "").split(",")
             for dep in deps:
                 dep = dep.strip()
-                run_or_die('arduino-cli lib install "'+dep+'"',
+                print(colored.yellow("Installing "+dep))
+                run_or_die('arduino-cli lib install "'+dep+'" > /dev/null',
                            "FAILED to install dependancy "+dep)
 except OSError:
     pass  # no library properties
