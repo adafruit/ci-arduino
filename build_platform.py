@@ -113,7 +113,7 @@ for arg in sys.argv[1:]:
     platform = ALL_PLATFORMS[arg]
     if isinstance(platform, collections.Iterable):
         platforms.extend(platform)
-    if isinstance(platform, basestring):
+    if isinstance(platform, str):
         platforms.append(platform)
 
 for fqbn in platforms:
