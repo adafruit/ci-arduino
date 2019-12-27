@@ -1,2 +1,2 @@
 pip3 install clint pyserial
-apt-get install clang-format
+sudo apt-get install clang-format
