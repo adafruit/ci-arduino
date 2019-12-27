@@ -117,7 +117,8 @@ success = 0
 
 # expand groups:
 for arg in sys.argv[1:]:
-    platform = ALL_PLATFORMS[arg]
+    print(arg)
+    platform = ALL_PLATFORMS.get(arg, None)
     if isinstance(platform, str):
         platforms.append(arg)
     elif isinstance(platform, collections.Iterable):
