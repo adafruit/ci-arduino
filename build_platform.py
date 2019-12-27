@@ -109,7 +109,7 @@ platforms = []
 success = 0
 
 # expand groups:
-for arg in sys.argv[1:]
+for arg in sys.argv[1:]:
     platform = ALL_PLATFORMS[arg]
     if isinstance(platform, collections.Iterable):
         platforms.extend(platform)
