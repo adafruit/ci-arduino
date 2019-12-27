@@ -15,14 +15,8 @@ jobs:
         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
     - name: pre-install
       run: |
-        source install.sh
-    - name: test platform
+        pip3 install clint pyserial
+    - name: test platforms
       run: |
-        ./install.sh build_platform esp32
-        ./install.sh build_platform uno
-        ./install.sh build_platform leonardo
-        ./install.sh build_platform zero
-        ./install.sh build_platform esp8266
-        ./install.sh build_platform m4
-        ./install.sh build_platform nrf52840
+        python3 build_platform.py uno leonardo mega2560 zero esp8266 esp32
 
