@@ -85,6 +85,18 @@ run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
 # link test library folder to the arduino libraries folder
 os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
 
+################################ Install dependancies
+try:
+    libprop = open(BUILD_DIR+'/library.properties')
+    for line in libprop:
+        if line.startswith("depends="):
+            deps = line.replace("depends=", "").split(",")
+            for dep in deps:
+                dep = dep.strip()
+                run_or_die("arduino-cli lib install "+dep,
+                           "FAILED to install dependancy "+dep)
+except OSError:
+    pass  # no library properties
 
 ################################ Test platforms
 platforms = sys.argv[1:]
