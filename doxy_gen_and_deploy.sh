@@ -45,7 +45,7 @@ if [[ -z "${TRAVIS_BUILD_DIR}" ]]; then
   export BUILD_DIR=${GITHUB_WORKSPACE}
   export AUTH=${GITHUB_ACTOR}:${GH_REPO_TOKEN}
   export REPO_SLUG=${GITHUB_REPOSITORY}
-  if [ "$GITHUB_EVENT_NAME" -eq "pull_request" ]; then
+  if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
     export IS_PULL=1
   fi
 else
