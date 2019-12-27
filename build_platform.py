@@ -135,8 +135,10 @@ for platform in platforms:
                 #print("Skip?", skipfilename, "Only?", onlyfilename)
                 if os.path.exists(skipfilename):
                     print("skipping")
+                    continue
                 if glob.glob(exampledir+"/"+example+"/.*.test.only") and not os.path.exists(onlyfilename):
                     print("skipping")
+                    continue
                 
                 cmd = ['arduino-cli', 'compile', '--fqbn', fqbn,
                        exampledir+"/"+example+"/"+filename]
