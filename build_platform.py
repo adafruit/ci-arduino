@@ -3,6 +3,7 @@ import glob
 import time
 import os
 import subprocess
+import collections
 from clint.textui import colored
 
 # add user bin to path!
@@ -45,9 +46,13 @@ ALL_PLATFORMS={
     "cpx_ada" : "adafruit:samd:adafruit_circuitplayground_m0",
     # Adafruit nRF
     "cpb" : "adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0",
+
+    "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
+                        "esp8266", "esp32", "m4", "cpb"),
 }
 
 BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json"
+
 
 
 def install_platform(platform):
@@ -100,11 +105,18 @@ except OSError:
     pass  # no library properties
 
 ################################ Test platforms
-platforms = sys.argv[1:]
+platforms = []
 success = 0
 
-for platform in platforms:
-    fqbn = ALL_PLATFORMS[platform]
+# expand groups:
+for arg in sys.argv[1:]
+    platform = ALL_PLATFORMS[arg]
+    if isinstance(platform, collections.Iterable):
+        platforms.extend(platform)
+    if isinstance(platform, basestring):
+        platforms.append(platform)
+
+for fqbn in platforms:
     #print("building", platform, "full name", fqbn)
     print('#'*80)
     print(colored.yellow("SWITCHING TO "+fqbn), end='   ')
