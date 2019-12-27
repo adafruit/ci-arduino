@@ -112,12 +112,13 @@ success = 0
 for arg in sys.argv[1:]:
     platform = ALL_PLATFORMS[arg]
     if isinstance(platform, str):
-        platforms.append(platform)
+        platforms.append(arg)
     elif isinstance(platform, collections.Iterable):
         for p in platform:
-            platforms.append(ALL_PLATFORMS[p])
+            platforms.append(p)
 
-for fqbn in platforms:
+for platform in platforms:
+    fqbn = ALL_PLATFORMS[platform]
     print('#'*80)
     print(colored.yellow("SWITCHING TO "+fqbn), end='   ')
     install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
@@ -127,6 +128,15 @@ for fqbn in platforms:
         for filename in os.listdir(exampledir+"/"+example):
             if filename.endswith(".ino"):
                 print('\t'+filename, end=' ')
+
+                # check if we should SKIP
+                skipfilename = exampledir+"/"+example+"/"+platform+".test.skip"
+                onlyfilename = exampledir+"/"+example+"/"+platform+".test.only"
+                if os.path.exists(skipfilename):
+                    print("skipping")
+                if glob.glob(exampledir+"/"+example+"/.*.test.only") and not os.path.exists(onlyfilename):
+                    print("skipping")
+                
                 cmd = ['arduino-cli', 'compile', '--fqbn', fqbn,
                        exampledir+"/"+example+"/"+filename]
                 proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
