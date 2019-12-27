@@ -87,6 +87,8 @@ os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Libra
 
 ################################ Test platforms
 platforms = sys.argv[1:]
+success = True
+
 for platform in platforms:
     fqbn = ALL_PLATFORMS[platform]
     #print("building", platform, "full name", fqbn)
@@ -99,9 +101,19 @@ for platform in platforms:
         for filename in os.listdir(exampledir+"/"+example):
             if filename.endswith(".ino"):
                 print('\t'+filename, end=' ')
-                r = os.system('arduino-cli compile --fqbn '+fqbn+" "+exampledir+"/"+example+"/"+filename+' > /dev/null')
+                cmd = 'arduino-cli compile --fqbn '+fqbn+" "+exampledir+"/"+example+"/"+filename
+                proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                                        stderr=subprocess.PIPE)
+                r = proc.wait()
+                err = proc.stderr.read()
+                out = proc.stdout.read()
+                print("OUTPUT: ", out)
+                print("ERROUT: ", err)
+
                 if r == 0:
                     print(colored.green(CHECK))
                 else:
                     print(colored.red(CROSS))
-                    
+                    success = False
+
+return success
