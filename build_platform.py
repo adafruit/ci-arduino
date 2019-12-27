@@ -45,10 +45,11 @@ ALL_PLATFORMS={
     "m4" : "adafruit:samd:adafruit_metro_m4:speed=120",
     "cpx_ada" : "adafruit:samd:adafruit_circuitplayground_m0",
     # Adafruit nRF
+    "nrf52840" : "adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0",
     "cpb" : "adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0",
 
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
-                        "esp8266", "esp32", "m4", "cpb"),
+                        "esp8266", "esp32", "m4", "nrf52840"),
 }
 
 BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json"
