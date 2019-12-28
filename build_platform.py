@@ -83,12 +83,6 @@ print(colored.yellow("INSTALLING ARDUINO IDE"))
 print('#'*40)
 
 run_or_die('curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh', "FAILED to install arduino CLI")
-
-# make all our directories we need for files and libraries
-for directory in ("/.arduino15", "/.arduino15/packages",
-                  "/Arduino", "/Arduino/libraries"):
-    os.mkdir(os.environ["HOME"]+directory)
-
 run_or_die('arduino-cli config init > /dev/null',
            "FAILED to configure arduino CLI")
 run_or_die('arduino-cli core update-index > /dev/null',
