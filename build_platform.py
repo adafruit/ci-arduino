@@ -64,6 +64,8 @@ BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_inde
 
 def install_platform(platform):
     print("Installing", platform, end=" ")
+    if platform == "adafruit:samd":   # we have a platform dep
+        install_platform("arduino:samd")
     if os.system("arduino-cli core install "+platform+" --additional-urls "+BSP_URLS+" > /dev/null") != 0:
         print(colored.red("FAILED to install "+platform))
         exit(-1)
