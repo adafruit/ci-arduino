@@ -113,6 +113,9 @@ try:
 except OSError:
     pass  # no library properties
 
+print("Home: ", os.environ["HOME"])
+print("Libraries installed: ", print(glob.glob(os.environ['HOME']+'/Arduino/libraries/*')))
+
 ################################ Test platforms
 platforms = []
 success = 0
