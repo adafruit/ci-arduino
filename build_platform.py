@@ -123,6 +123,9 @@ for arg in sys.argv[1:]:
     elif isinstance(platform, collections.Iterable):
         for p in platform:
             platforms.append(p)
+    else:
+        print("Unknown platform: ", arg)
+        exit(-1)
 
 for platform in platforms:
     fqbn = ALL_PLATFORMS[platform]
