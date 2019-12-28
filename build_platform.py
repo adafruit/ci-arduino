@@ -130,44 +130,47 @@ for arg in sys.argv[1:]:
         print("Unknown platform: ", arg)
         exit(-1)
 
+def test_examples_in_folder(folderpath):
+    global success
+    for example in os.listdir(folderpath):
+        examplepath = folderpath+"/"+example
+        if os.path.isdir(examplepath):
+            test_examples_in_folder(examplepath)
+            continue
+        if not examplepath.endswith(".ino"):
+            continue
+
+        print('\t'+example, end=' ')
+        # check if we should SKIP
+        skipfilename = folderpath+"/."+platform+".test.skip"
+        onlyfilename = folderpath+"/."+platform+".test.only"
+        if os.path.exists(skipfilename):
+            print("skipping")
+            continue
+        if glob.glob(folderpath+"/.*.test.only") and not os.path.exists(onlyfilename):
+            print("skipping")
+            continue
+
+        cmd = ['arduino-cli', 'compile', '--fqbn', fqbn, examplepath]
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        r = proc.wait()
+        out = proc.stdout.read()
+        err = proc.stderr.read()
+        if r == 0:
+            print(colored.green(CHECK))
+        else:
+            print(colored.red(CROSS))
+            print(colored.red(out.decode("utf-8")))
+            print(colored.red(err.decode("utf-8")))
+            success = 1
+
 for platform in platforms:
     fqbn = ALL_PLATFORMS[platform]
     print('#'*80)
     print(colored.yellow("SWITCHING TO "+fqbn), end='   ')
     install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
     print('#'*80)
-    exampledir = BUILD_DIR+"/examples"
-    for example in os.listdir(exampledir):
-        for filename in os.listdir(exampledir+"/"+example):
-            if filename.endswith(".ino"):
-                print('\t'+filename, end=' ')
-
-                # check if we should SKIP
-                skipfilename = exampledir+"/"+example+"/."+platform+".test.skip"
-                onlyfilename = exampledir+"/"+example+"/."+platform+".test.only"
-                #print("Skip?", skipfilename, "Only?", onlyfilename)
-                if os.path.exists(skipfilename):
-                    print("skipping")
-                    continue
-                if glob.glob(exampledir+"/"+example+"/.*.test.only") and not os.path.exists(onlyfilename):
-                    print("skipping")
-                    continue
-                
-                cmd = ['arduino-cli', 'compile', '--fqbn', fqbn,
-                       exampledir+"/"+example+"/"+filename]
-                proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-                                        stderr=subprocess.PIPE)
-                r = proc.wait()
-                err = proc.stderr.read()
-                out = proc.stdout.read()
-                #print("OUTPUT: ", out)
-                #print("ERROUT: ", err)
-
-                if r == 0:
-                    print(colored.green(CHECK))
-                else:
-                    print(colored.red(CROSS))
-                    print(colored.red(err.decode("utf-8")))
-                    success = 1
+    test_examples_in_folder(BUILD_DIR+"/examples")
 
 exit(success)
