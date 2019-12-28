@@ -47,6 +47,7 @@ ALL_PLATFORMS={
     "pygamer" : "adafruit:samd:adafruit_pygamer_m4:speed=120",
     "hallowing_m0" : "adafruit:samd:adafruit_hallowing",
     "hallowing_m4" : "adafruit:samd:adafruit_hallowing_m4:speed=120",
+    "monster_m4sk" : "adafruit:samd:adafruit_monster_m4sk:speed=120",
     "pyportal" : "adafruit:samd:adafruit_pyportal_m4:speed=120",
     "pyportal_titano" : "adafruit:samd:adafruit_pyportal_m4_titano:speed=120",
     "cpx_ada" : "adafruit:samd:adafruit_circuitplayground_m0",
