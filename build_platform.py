@@ -98,6 +98,7 @@ def install_platform(platform):
     ColorPrint.print_pass(CHECK)
 
 def run_or_die(cmd, error):
+    print(cmd)
     if os.system(cmd) != 0:
         ColorPrint.print_fail(error)
         exit(-1)
@@ -121,9 +122,12 @@ print()
 os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
 
 ################################ Install dependancies
+our_name=None
 try:
     libprop = open(BUILD_DIR+'/library.properties')
     for line in libprop:
+        if line.startswith("name="):
+            our_name = line.replace("depends=", "").strip()
         if line.startswith("depends="):
             deps = line.replace("depends=", "").split(",")
             for dep in deps:
@@ -133,6 +137,11 @@ try:
                            "FAILED to install dependancy "+dep)
 except OSError:
     pass  # no library properties
+
+# Delete the existing library if we somehow downloaded
+# due to dependancies
+if our_name:
+    run_or_die("arduino-cli lib uninstall \""+our_name+"\"", "Could not uninstall")
 
 print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/*'))
 
