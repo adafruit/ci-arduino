@@ -127,7 +127,7 @@ try:
     libprop = open(BUILD_DIR+'/library.properties')
     for line in libprop:
         if line.startswith("name="):
-            our_name = line.replace("depends=", "").strip()
+            our_name = line.replace("name=", "").strip()
         if line.startswith("depends="):
             deps = line.replace("depends=", "").split(",")
             for dep in deps:
