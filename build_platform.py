@@ -4,7 +4,6 @@ import time
 import os
 import subprocess
 import collections
-from clint.textui import colored
 
 # add user bin to path!
 BUILD_DIR = ''
@@ -66,6 +65,27 @@ ALL_PLATFORMS={
 
 BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json,https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json"
 
+class ColorPrint:
+
+    @staticmethod
+    def print_fail(message, end = '\n'):
+        sys.stdout.write('\x1b[1;31m' + message.strip() + '\x1b[0m' + end)
+
+    @staticmethod
+    def print_pass(message, end = '\n'):
+        sys.stdout.write('\x1b[1;32m' + message.strip() + '\x1b[0m' + end)
+
+    @staticmethod
+    def print_warn(message, end = '\n'):
+        sys.stdout.write('\x1b[1;33m' + message.strip() + '\x1b[0m' + end)
+
+    @staticmethod
+    def print_info(message, end = '\n'):
+        sys.stdout.write('\x1b[1;34m' + message.strip() + '\x1b[0m' + end)
+
+    @staticmethod
+    def print_bold(message, end = '\n'):
+        sys.stdout.write('\x1b[1;37m' + message.strip() + '\x1b[0m' + end)
 
 
 def install_platform(platform):
@@ -73,28 +93,29 @@ def install_platform(platform):
     if platform == "adafruit:samd":   # we have a platform dep
         install_platform("arduino:samd")
     if os.system("arduino-cli core install "+platform+" --additional-urls "+BSP_URLS+" > /dev/null") != 0:
-        print(colored.red("FAILED to install "+platform))
+        ColorPrint.print_fail("FAILED to install "+platform)
         exit(-1)
-    print(colored.green(CHECK))
+    ColorPrint.print_pass(CHECK)
 
 def run_or_die(cmd, error):
     if os.system(cmd) != 0:
-        print(colored.red(error))
+        ColorPrint.print_fail(error)
         exit(-1)
 
 ################################ Install Arduino IDE
 print()
-print('#'*40)
-print(colored.yellow("INSTALLING ARDUINO IDE"))
-print('#'*40)
+ColorPrint.print_info('#'*40)
+print("INSTALLING ARDUINO IDE")
+ColorPrint.print_info('#'*40)
 
-run_or_die('curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh', "FAILED to install arduino CLI")
+run_or_die('curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh 2>&1', "FAILED to install arduino CLI")
 run_or_die('arduino-cli config init > /dev/null',
            "FAILED to configure arduino CLI")
 run_or_die('arduino-cli core update-index > /dev/null',
            "FAILED to update arduino core")
 run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
            " > /dev/null", "FAILED to update core indecies")
+print()
 
 # link test library folder to the arduino libraries folder
 os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
@@ -107,14 +128,13 @@ try:
             deps = line.replace("depends=", "").split(",")
             for dep in deps:
                 dep = dep.strip()
-                print(colored.yellow("Installing "+dep))
+                print("Installing "+dep)
                 run_or_die('arduino-cli lib install "'+dep+'" > /dev/null',
                            "FAILED to install dependancy "+dep)
 except OSError:
     pass  # no library properties
 
-print("Home: ", os.environ["HOME"])
-print("Libraries installed: ", print(glob.glob(os.environ['HOME']+'/Arduino/libraries/*')))
+print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/*'))
 
 ################################ Test platforms
 platforms = []
@@ -122,7 +142,6 @@ success = 0
 
 # expand groups:
 for arg in sys.argv[1:]:
-    print(arg)
     platform = ALL_PLATFORMS.get(arg, None)
     if isinstance(platform, str):
         platforms.append(arg)
@@ -148,10 +167,10 @@ def test_examples_in_folder(folderpath):
         skipfilename = folderpath+"/."+platform+".test.skip"
         onlyfilename = folderpath+"/."+platform+".test.only"
         if os.path.exists(skipfilename):
-            print("skipping")
+            ColorPrint.print_warn("skipping")
             continue
         if glob.glob(folderpath+"/.*.test.only") and not os.path.exists(onlyfilename):
-            print("skipping")
+            ColorPrint.print_warn("skipping")
             continue
 
         cmd = ['arduino-cli', 'compile', '--fqbn', fqbn, examplepath]
@@ -161,17 +180,17 @@ def test_examples_in_folder(folderpath):
         out = proc.stdout.read()
         err = proc.stderr.read()
         if r == 0:
-            print(colored.green(CHECK))
+            ColorPrint.print_pass(CHECK)
         else:
-            print(colored.red(CROSS))
-            print(colored.red(out.decode("utf-8")))
-            print(colored.red(err.decode("utf-8")))
+            ColorPrint.print_fail(CROSS)
+            ColorPrint.print_fail(out.decode("utf-8"))
+            ColorPrint.print_fail(err.decode("utf-8"))
             success = 1
 
 for platform in platforms:
     fqbn = ALL_PLATFORMS[platform]
     print('#'*80)
-    print(colored.yellow("SWITCHING TO "+fqbn), end='   ')
+    ColorPrint.print_info("SWITCHING TO "+fqbn)
     install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
     print('#'*80)
     test_examples_in_folder(BUILD_DIR+"/examples")

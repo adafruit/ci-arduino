@@ -37,7 +37,6 @@ __AUTHOR__="Jeroen de Bruijn, modified by ladyada"
 echo 'Setting up the script...'
 # Exit with nonzero exit code if anything fails
 set -e
-set -x
 
 export IS_PULL=0
 
