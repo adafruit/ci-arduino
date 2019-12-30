@@ -42,7 +42,9 @@ ALL_PLATFORMS={
     "cpc" : "arduino:avr:circuitplay32u4cat",
     # Adafruit SAMD
     "metro_m0" : "adafruit:samd:adafruit_metro_m0",
+    "metro_m0_tinyusb" : "adafruit:samd:adafruit_metro_m0,usbstack=tinyusb",
     "metro_m4" : "adafruit:samd:adafruit_metro_m4:speed=120",
+    "metro_m4_tinyusb" : "adafruit:samd:adafruit_metro_m4:speed=120,usbstack=tinyusb",
     "pybadge" : "adafruit:samd:adafruit_pybadge_m4:speed=120",
     "pygamer" : "adafruit:samd:adafruit_pygamer_m4:speed=120",
     "hallowing_m0" : "adafruit:samd:adafruit_hallowing",
