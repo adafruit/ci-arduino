@@ -42,7 +42,9 @@ ALL_PLATFORMS={
     "cpc" : "arduino:avr:circuitplay32u4cat",
     # Adafruit SAMD
     "metro_m0" : "adafruit:samd:adafruit_metro_m0",
+    "metro_m0_tinyusb" : "adafruit:samd:adafruit_metro_m0:usbstack=tinyusb",
     "metro_m4" : "adafruit:samd:adafruit_metro_m4:speed=120",
+    "metro_m4_tinyusb" : "adafruit:samd:adafruit_metro_m4:speed=120,usbstack=tinyusb",
     "pybadge" : "adafruit:samd:adafruit_pybadge_m4:speed=120",
     "pygamer" : "adafruit:samd:adafruit_pygamer_m4:speed=120",
     "hallowing_m0" : "adafruit:samd:adafruit_hallowing",
@@ -60,7 +62,7 @@ ALL_PLATFORMS={
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
                         "esp8266", "esp32", "metro_m4", "nrf52840"),
     "arcada_platforms" : ("pybadge", "pygamer", "hallowing_m4",
-                          "cpb", "cpx_ada"),
+                          "cpb", "cpx_ada")
 }
 
 BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json,https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json"
