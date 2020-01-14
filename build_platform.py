@@ -47,6 +47,7 @@ ALL_PLATFORMS={
     "metro_m4_tinyusb" : "adafruit:samd:adafruit_metro_m4:speed=120,usbstack=tinyusb",
     "metro_m4_airliftlite" : "adafruit:samd:adafruit_metro_m4_airliftlite:speed=120",
     "pybadge" : "adafruit:samd:adafruit_pybadge_m4:speed=120",
+    "pybadge_tinyusb" : "adafruit:samd:adafruit_pybadge_m4:speed=120,usbstack=tinyusb",
     "pygamer" : "adafruit:samd:adafruit_pygamer_m4:speed=120",
     "hallowing_m0" : "adafruit:samd:adafruit_hallowing",
     "hallowing_m4" : "adafruit:samd:adafruit_hallowing_m4:speed=120",
