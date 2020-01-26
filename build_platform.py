@@ -60,6 +60,7 @@ ALL_PLATFORMS={
     # Adafruit nRF
     "nrf52840" : "adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0",
     "cpb" : "adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0",
+    "clue" : "adafruit:nrf52:cluenrf52840:softdevice=s140v6,debug=l0",
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
                         "esp8266", "esp32", "metro_m4", "nrf52840"),
