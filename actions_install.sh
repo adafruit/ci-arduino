@@ -4,7 +4,7 @@ set -e
 
 pip3 install clint pyserial setuptools adafruit-nrfutil
 sudo apt-get update
-sudo apt-get install -y libllvm8
+sudo apt-get install -y libllvm8=1:8-3~ubuntu18.04.2 -V
 sudo apt install -fy cppcheck clang-format-8
 sudo ln -s /usr/bin/clang-format-8 /usr/bin/clang-format
 
