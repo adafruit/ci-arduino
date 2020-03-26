@@ -178,9 +178,10 @@ def test_examples_in_folder(folderpath):
 
         print('\t'+example, end=' ')
         # check if we should SKIP
+        skip_test_filename = folderpath+"/.test.skip"
         skipfilename = folderpath+"/."+platform+".test.skip"
         onlyfilename = folderpath+"/."+platform+".test.only"
-        if os.path.exists(skipfilename):
+        if os.path.exists(skip_test_filename) or os.path.exists(skipfilename):
             ColorPrint.print_warn("skipping")
             continue
         if glob.glob(folderpath+"/.*.test.only") and not os.path.exists(onlyfilename):
