@@ -38,6 +38,8 @@ ALL_PLATFORMS={
     "esp32" : "esp32:esp32:featheresp32:FlashFreq=80",
     # Adafruit AVR
     "trinket" : "adafruit:avr:trinket5",
+    "trinket_3v" : "adafruit:avr:trinket3",
+    "trinket_5v" : "adafruit:avr:trinket5",
     "gemma" : "arduino:avr:gemma",
     "cpc" : "arduino:avr:circuitplay32u4cat",
     # Adafruit SAMD
