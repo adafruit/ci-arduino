@@ -30,22 +30,35 @@ cache:
 git:
   depth: false
   quiet: true
+addons:
+  apt:
+    sources:
+      - llvm-toolchain-trusty-5.0
+      - key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+    packages:
+      - clang-format-5.0
 env:
   global:
-     # You can uncomment this to explicitly choose an (old) version of the Arduino IDE
-     #- ARDUINO_IDE_VERSION="1.8.10"
+#    - ARDUINO_IDE_VERSION="1.8.10"
+     - PRETTYNAME="Adafruit FT6206 Arduino Library"
+# Optional, will default to "$TRAVIS_BUILD_DIR/Doxyfile"
+#    - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
+
 before_install:
-  - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+   - curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/run-clang-format.py > run-clang-format.py
+
 install:
-  # Note that every library should be installed in a seperate command
-  - arduino --install-library "Adafruit SleepyDog Library"
-  - arduino --install-library "Adafruit FONA Library"
+   - arduino --install-library "Adafruit ILI9341","Adafruit GFX Library"
+
 script:
-  - build_main_platforms
-notifications:
-  email:
-    on_success: change
-    on_failure: change
+   - python run-clang-format.py -r .
+   - build_main_platforms
+
+# Generate and deploy documentation
+after_success:
+  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/library_check.sh)
+  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_gen_and_deploy.sh)
 ```
 
 **Choosing Arduino IDE version**
