@@ -22,6 +22,7 @@ print("build dir:", BUILD_DIR)
 
 IS_LEARNING_SYS = False
 if "Adafruit_Learning_System_Guides" in BUILD_DIR:
+    print("Found learning system repo")
     IS_LEARNING_SYS = True
 
 #os.system('pwd')
@@ -140,7 +141,6 @@ our_name=None
 try:
     if IS_LEARNING_SYS:
         libprop = open(BUILD_DIR+'/library.deps')
-        print("Found library.deps!")
     else:
         libprop = open(BUILD_DIR+'/library.properties')
     for line in libprop:
@@ -154,6 +154,7 @@ try:
                 run_or_die('arduino-cli lib install "'+dep+'" > /dev/null',
                            "FAILED to install dependancy "+dep)
 except OSError:
+    print("No library dep or properties found!")
     pass  # no library properties
 
 # Delete the existing library if we somehow downloaded
@@ -214,12 +215,50 @@ def test_examples_in_folder(folderpath):
             ColorPrint.print_fail(err.decode("utf-8"))
             success = 1
 
+def test_examples_in_learningrepo(folderpath):
+    global success
+    for project in os.listdir(folderpath):
+        projectpath = folderpath+"/"+project
+        if os.path.isdir(learningrepo):
+            test_examples_in_learningrepo(projectpath)
+            continue
+        if not projectpath.endswith(".ino"):
+            continue
+	# found an INO!
+        print('\t'+projectpath, end=' ')
+        # check if we should SKIP
+        skipfilename = folderpath+"/."+platform+".test.skip"
+        onlyfilename = folderpath+"/."+platform+".test.only"
+        if os.path.exists(skipfilename):
+            ColorPrint.print_warn("skipping")
+            continue
+        elif glob.glob(folderpath+"/.*.test.only") and not os.path.exists(onlyfilename):
+            ColorPrint.print_warn("skipping")
+            continue
+	    
+        cmd = ['arduino-cli', 'compile', '--fqbn', fqbn, projectpath]
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        r = proc.wait()
+        out = proc.stdout.read()
+        err = proc.stderr.read()
+        if r == 0:
+            ColorPrint.print_pass(CHECK)
+        else:
+            ColorPrint.print_fail(CROSS)
+            ColorPrint.print_fail(out.decode("utf-8"))
+            ColorPrint.print_fail(err.decode("utf-8"))
+            success = 1
+
+
 for platform in platforms:
     fqbn = ALL_PLATFORMS[platform]
     print('#'*80)
     ColorPrint.print_info("SWITCHING TO "+fqbn)
     install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
     print('#'*80)
-    test_examples_in_folder(BUILD_DIR+"/examples")
-
+    if not IS_LEARNING_SYS:
+        test_examples_in_folder(BUILD_DIR+"/examples")
+    else:
+        test_examples_in_folder(BUILD_DIR)
 exit(success)
