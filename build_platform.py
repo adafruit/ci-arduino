@@ -19,6 +19,11 @@ except KeyError:
 
 os.environ["PATH"] += os.pathsep + BUILD_DIR + "/bin"
 print("build dir:", BUILD_DIR)
+
+IS_LEARNING_SYS = False
+if "Adafruit_Learning_System_Guides" in BUILD_DIR:
+    IS_LEARNING_SYS = True
+
 #os.system('pwd')
 #os.system('ls -lA')
 
@@ -127,12 +132,17 @@ run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
 print()
 
 # link test library folder to the arduino libraries folder
-os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
+if not IS_LEARNING_SYS:
+    os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
 
 ################################ Install dependancies
 our_name=None
 try:
-    libprop = open(BUILD_DIR+'/library.properties')
+    if IS_LEARNING_SYS:
+        libprop = open(BUILD_DIR+'/library.deps')
+        print("Found library.deps!")
+    else:
+        libprop = open(BUILD_DIR+'/library.properties')
     for line in libprop:
         if line.startswith("name="):
             our_name = line.replace("name=", "").strip()
