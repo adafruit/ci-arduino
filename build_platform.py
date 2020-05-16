@@ -65,6 +65,7 @@ ALL_PLATFORMS={
     # Arduino nRF
     "microbit" : "sandeepmistry:nRF5:BBCmicrobit:softdevice=s130",
     # Adafruit nRF
+    "nrf52832" : "adafruit:nrf52:feather52832:softdevice=s132v6,debug=l0",
     "nrf52840" : "adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0",
     "cpb" : "adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0",
     "clue" : "adafruit:nrf52:cluenrf52840:softdevice=s140v6,debug=l0",
