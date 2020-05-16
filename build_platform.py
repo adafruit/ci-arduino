@@ -49,8 +49,11 @@ ALL_PLATFORMS={
     "protrinket_5v" : "adafruit:avr:protrinket5",
     "gemma" : "arduino:avr:gemma",
     "flora" : "arduino:avr:flora",
+    "feather32u4" : "arduino:avr:feather32u4",
     "cpc" : "arduino:avr:circuitplay32u4cat",
     # Adafruit SAMD
+    "gemma_m0" : "adafruit:samd:adafruit_gemma_m0",
+    "trinket_m0" : "adafruit:samd:adafruit_trinket_m0",
     "metro_m0" : "adafruit:samd:adafruit_metro_m0",
     "metro_m0_tinyusb" : "adafruit:samd:adafruit_metro_m0:usbstack=tinyusb",
     "metro_m4" : "adafruit:samd:adafruit_metro_m4:speed=120",
