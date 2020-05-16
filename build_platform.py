@@ -47,9 +47,9 @@ ALL_PLATFORMS={
     "trinket_5v" : "adafruit:avr:trinket5",
     "protrinket_3v" : "adafruit:avr:protrinket3",
     "protrinket_5v" : "adafruit:avr:protrinket5",
-    "gemma" : "arduino:avr:gemma",
-    "flora" : "arduino:avr:flora8",
-    "feather32u4" : "arduino:avr:feather32u4",
+    "gemma" : "adafruit:avr:gemma",
+    "flora" : "adafruit:avr:flora8",
+    "feather32u4" : "adafruit:avr:feather32u4",
     "cpc" : "arduino:avr:circuitplay32u4cat",
     # Adafruit SAMD
     "gemma_m0" : "adafruit:samd:adafruit_gemma_m0",
