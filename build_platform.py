@@ -186,7 +186,7 @@ for arg in sys.argv[1:]:
 
 def test_examples_in_folder(folderpath):
     global success
-    for example in os.listdir(folderpath):
+    for example in sorted(os.listdir(folderpath)):
         examplepath = folderpath+"/"+example
         if os.path.isdir(examplepath):
             test_examples_in_folder(examplepath)
