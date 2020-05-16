@@ -45,6 +45,8 @@ ALL_PLATFORMS={
     # Adafruit AVR
     "trinket_3v" : "adafruit:avr:trinket3",
     "trinket_5v" : "adafruit:avr:trinket5",
+    "protrinket_3v" : "adafruit:avr:protrinket3",
+    "protrinket_5v" : "adafruit:avr:protrinket5",
     "gemma" : "arduino:avr:gemma",
     "cpc" : "arduino:avr:circuitplay32u4cat",
     # Adafruit SAMD
