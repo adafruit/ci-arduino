@@ -178,23 +178,33 @@ platforms = []
 success = 0
 
 # expand groups:
+use_warnings_all = False
 for arg in sys.argv[1:]:
-    platform = ALL_PLATFORMS.get(arg, None)
-    if isinstance(platform, str):
-        platforms.append(arg)
-    elif isinstance(platform, collections.Iterable):
-        for p in platform:
-            platforms.append(p)
+    if arg == '--compiler-warnings-all':
+        # This configures arduino-cli to use `compiler.warning_level=all`
+        # That setting determins which value of `compiler.warning_flags` to use.
+        # Some platforms (notably ESP32) include `-Werror` which can cause compiler
+        # errors that we want to test against.
+        # This is opt-in for now, so libraries can migrate at their own pace.
+        # Ideally this changes to an opt-out flag eventually.
+        use_warnings_all = True
     else:
-        print("Unknown platform: ", arg)
-        exit(-1)
+        platform = ALL_PLATFORMS.get(arg, None)
+        if isinstance(platform, str):
+            platforms.append(arg)
+        elif isinstance(platform, collections.Iterable):
+            for p in platform:
+                platforms.append(p)
+        else:
+            print("Unknown platform: ", arg)
+            exit(-1)
 
-def test_examples_in_folder(folderpath):
+def test_examples_in_folder(folderpath, use_warnings_all=False):
     global success
     for example in sorted(os.listdir(folderpath)):
         examplepath = folderpath+"/"+example
         if os.path.isdir(examplepath):
-            test_examples_in_folder(examplepath)
+            test_examples_in_folder(examplepath, use_warnings_all)
             continue
         if not examplepath.endswith(".ino"):
             continue
@@ -210,7 +220,10 @@ def test_examples_in_folder(folderpath):
             ColorPrint.print_warn("skipping")
             continue
 
-        cmd = ['arduino-cli', 'compile', '--fqbn', fqbn, examplepath]
+        if use_warnings_all:
+            cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, examplepath]
+        else:
+            cmd = ['arduino-cli', 'compile', '--fqbn', fqbn, examplepath]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         r = proc.wait()
@@ -267,7 +280,7 @@ for platform in platforms:
     install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
     print('#'*80)
     if not IS_LEARNING_SYS:
-        test_examples_in_folder(BUILD_DIR+"/examples")
+        test_examples_in_folder(BUILD_DIR+"/examples", use_warnings_all)
     else:
-        test_examples_in_folder(BUILD_DIR)
+        test_examples_in_folder(BUILD_DIR, use_warnings_all)
 exit(success)
