@@ -129,14 +129,9 @@ def run_or_die(cmd, error):
 ################################ Install Arduino IDE
 print()
 ColorPrint.print_info('#'*40)
-print("INSTALLING ARDUINO IDE")
+print("INSTALLING ARDUINO BOARDS")
 ColorPrint.print_info('#'*40)
 
-run_or_die('curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh 2>&1', "FAILED to install arduino CLI")
-run_or_die('arduino-cli config init > /dev/null',
-           "FAILED to configure arduino CLI")
-run_or_die('arduino-cli core update-index > /dev/null',
-           "FAILED to update arduino core")
 run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
            " > /dev/null", "FAILED to update core indecies")
 print()
