@@ -16,3 +16,7 @@ mkdir ${HOME}/.arduino15/packages
 mkdir ${HOME}/Arduino
 mkdir ${HOME}/Arduino/libraries
 
+# install arduino IDE
+curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh 2>&1
+arduino-cli config init > /dev/null
+arduino-cli core update-index > /dev/null
