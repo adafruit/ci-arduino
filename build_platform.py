@@ -136,7 +136,10 @@ print()
 
 # link test library folder to the arduino libraries folder
 if not IS_LEARNING_SYS:
-    os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
+    try:
+        os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
+    catch FileExistsError:
+        pass
 
 ################################ Install dependancies
 our_name=None
