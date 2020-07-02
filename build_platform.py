@@ -138,7 +138,7 @@ print()
 if not IS_LEARNING_SYS:
     try:
         os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
-    catch FileExistsError:
+    except FileExistsError:
         pass
 
 ################################ Install dependancies
