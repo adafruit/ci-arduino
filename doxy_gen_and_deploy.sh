@@ -122,8 +122,14 @@ fi
 sed -i "s;^HTML_OUTPUT .*;HTML_OUTPUT = code_docs/${REPO_NAME}/html;"  ${DOXYFILE}
 cd $BUILD_DIR
 
-# Print out doxygen warnings in red
-${BUILD_DIR}/doxygen $DOXYFILE 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
+if [ ! -z $1 ]
+then
+    # Print out doxygen warnings in red, use specified path (for when everything is in src)
+    ( cat $DOXYFILE; echo "INPUT=${BUILD_DIR}/$1" ) | ${BUILD_DIR}/doxygen - 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
+else
+    # Print out doxygen warnings in red, use default path
+    ${BUILD_DIR}/doxygen $DOXYFILE 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
+fi
 
 # if any warnings, bail!
 if [ -s foo.txt ]; then exit 1 ; fi
