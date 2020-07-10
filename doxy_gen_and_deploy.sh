@@ -51,6 +51,7 @@ else
   export BUILD_DIR=${TRAVIS_BUILD_DIR}
   export AUTH=${GH_REPO_TOKEN}
   export REPO_SLUG=${TRAVIS_REPO_SLUG}
+  export GITHUB_REF=${TRAVIS_BRANCH}
   if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
     export IS_PULL=1
   fi
@@ -156,7 +157,7 @@ cd code_docs/${REPO_NAME}
 # Check this by verifying that the html directory and the file html/index.html
 # both exist. This is a good indication that Doxygen did it's work.
 CURRENT_BRANCH_NAME="${GITHUB_REF##*/}"
-readonly DEFAULT_BRANCH_NAME="$(curl "https://api.github.com/repos/${GITHUB_REPOSITORY}" | jq --raw-output .default_branch)"
+readonly DEFAULT_BRANCH_NAME="$(curl "https://api.github.com/repos/${REPO_SLUG}" | jq --raw-output .default_branch)"
 
 if [[ "$CURRENT_BRANCH_NAME" = "$DEFAULT_BRANCH_NAME" ]]; then
     if [ -d "html" ] && [ -f "html/index.html" ]; then
