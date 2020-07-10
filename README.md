@@ -176,7 +176,7 @@ deploy:
 6. Still in the top-level directory of the library you'll be testing, copy the current library to Adafruit_Test_Library
    * `cp -r * ~/Arduino/libraries/Adafruit_Test_Library`
 7. Find out what boards to test. Open .github/workflows/githubci.yml and find the line that runs build_platforms.py.
-8. Run test-platforms
+8. Run test-platforms. This will take a while, and tests for some boards run orders of magnitude slower than tests for other boards.
    * `test-platforms main_platforms`
    * OR, if githubci.yml specified other boards, let's say the metro m0 and pyportal:
      * `test-platforms metro_m0 pyportal`
