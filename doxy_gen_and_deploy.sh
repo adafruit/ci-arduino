@@ -146,12 +146,19 @@ fi
 
 cd code_docs/${REPO_NAME}
 
+
+
+
+
 ################################################################################
 ##### Upload the documentation to the gh-pages branch of the repository.   #####
 # Only upload if Doxygen successfully created the documentation.
 # Check this by verifying that the html directory and the file html/index.html
 # both exist. This is a good indication that Doxygen did it's work.
-if echo $GITHUB_REF | grep -q 'master\|main'; then
+CURRENT_BRANCH_NAME="${GITHUB_REF##*/}"
+readonly DEFAULT_BRANCH_NAME="$(curl "https://api.github.com/repos/${GITHUB_REPOSITORY}" | jq --raw-output .default_branch)"
+
+if [[ "$CURRENT_BRANCH_NAME" = "$DEFAULT_BRANCH_NAME" ]]; then
     if [ -d "html" ] && [ -f "html/index.html" ]; then
 
         echo 'Uploading documentation to the gh-pages branch...'
