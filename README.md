@@ -181,16 +181,12 @@ deploy:
    ```
 6. Still in the top-level directory of the library you'll be testing, copy the current library to Adafruit_Test_Library
    ```bash
-   adafruit@adafruit:~/Adafruit_BMP183_Library$ vi .github/workflows/githubci.yml 
+   adafruit@adafruit:~/Adafruit_BMP183_Library$ cp * ~/Arduino/libraryes/Adafruit_Test_Library/
    ```
-7. Find out what boards to test. Open .github/workflows/githubci.yml and find the line that runs build_platforms.py.
+7. Grep for build_platform.py in githubci.yml to find out what boards to test.
    ```bash
-   vi .github/workflows/githubci.yml
-   ```
-   These are the lines you're looking for
-   ```bash
-      - name: test platforms
-      run: python3 ci/build_platform.py main_platforms
+   adafruit@adafruit:~/Adafruit_BMP183_Library$ grep 'build_platform.py' .github/workflows/githubci.yml
+           run: python3 ci/build_platform.py main_platforms
    ```
 8. Run test-platforms. This may take a while, and tests for some boards sometimes run orders of magnitude slower than tests for other boards.
    ```bash
