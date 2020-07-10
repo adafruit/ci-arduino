@@ -70,6 +70,7 @@ ALL_PLATFORMS={
     "pyportal" : "adafruit:samd:adafruit_pyportal_m4:speed=120,usbstack=tinyusb",
     "pyportal_titano" : "adafruit:samd:adafruit_pyportal_m4_titano:speed=120,usbstack=tinyusb",
     "cpx_ada" : "adafruit:samd:adafruit_circuitplayground_m0",
+    "grand_central_m4" : "adafruit:samd:adafruit_grand_central_m4:speed=120,usbstack=tinyusb",
     # Arduino nRF
     "microbit" : "sandeepmistry:nRF5:BBCmicrobit:softdevice=s130",
     # Adafruit nRF
