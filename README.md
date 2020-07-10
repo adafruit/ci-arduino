@@ -164,16 +164,16 @@ deploy:
 
 ## Running build_platforms.py locally
 1. Install arduino-cli from here: https://arduino.github.io/arduino-cli/installation/
-2. Download ci-arduion
+2. Download ci-arduino
    * `git clone https://github.com/adafruit/ci-arduino`
-3. Put these lines in `.bashrc` or `.bash_profile` if you're on OSX, making sure to fill in the path to where you installed ci-arduino and replacing USER with your username.
+3. Put these lines in `.bashrc` or `.bash_profile` if you're on OSX. Make sure to fill in the path to where you installed ci-arduino and replacing USER with your username.
    * `alias test-platforms='python3 ~/path/to/ci-arduino/build_platform.py'`
    * `export HOME=/home/USER/`
 4. Run this at the top level of the library you want to test
    * `export GITHUB_WORKSPACE=$(pwd)`
 5. Remove everything in test library, and re-create it
    * `rm -rf ~/Arduino/libraries/Adafruit_Test_Library/; mkdir ~/Arduino/libraries/Adafruit_Test_Library`
-6. copy current library to Adafruit_Test_Library
+6. Still in the top-level directory of the library you'll be testing, copy the current library to Adafruit_Test_Library
    * `cp -r * ~/Arduino/libraries/Adafruit_Test_Library`
 7. Find out what boards to test. Open .github/workflows/githubci.yml and find the line that runs build_platforms.py.
 8. Run test-platforms
