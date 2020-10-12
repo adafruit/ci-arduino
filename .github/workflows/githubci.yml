@@ -11,18 +11,10 @@ jobs:
     - uses: actions/checkout@v1
     - uses: actions/setup-python@v1
       with:
-        python-version: '3.x' # Version range or exact version of a Python version to use, using semvers version range syntax.
-        architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+        python-version: '3.x'
     - name: pre-install
+      run: bash ./actions_install.sh
+    - name: test platforms
       run: |
-        source install.sh
-    - name: test platform
-      run: |
-        ./install.sh build_platform esp32
-        ./install.sh build_platform uno
-        ./install.sh build_platform leonardo
-        ./install.sh build_platform zero
-        ./install.sh build_platform esp8266
-        ./install.sh build_platform m4
-        ./install.sh build_platform nrf52840
+        python3 build_platform.py uno leonardo mega2560 zero esp8266 esp32
 

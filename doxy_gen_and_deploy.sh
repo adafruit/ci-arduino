@@ -38,7 +38,25 @@ echo 'Setting up the script...'
 # Exit with nonzero exit code if anything fails
 set -e
 
-cd $TRAVIS_BUILD_DIR
+export IS_PULL=0
+
+if [[ -z "${TRAVIS_BUILD_DIR}" ]]; then
+  export BUILD_DIR=${GITHUB_WORKSPACE}
+  export AUTH=${GITHUB_ACTOR}:${GH_REPO_TOKEN}
+  export REPO_SLUG=${GITHUB_REPOSITORY}
+  if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+    export IS_PULL=1
+  fi
+else
+  export BUILD_DIR=${TRAVIS_BUILD_DIR}
+  export AUTH=${GH_REPO_TOKEN}
+  export REPO_SLUG=${TRAVIS_REPO_SLUG}
+  if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+    export IS_PULL=1
+  fi
+fi
+
+cd $BUILD_DIR
 
 # The default version of doxygen is too old so we'll use a modern version
 wget -q https://cdn-learn.adafruit.com/assets/assets/000/067/405/original/doxygen-1.8.13.linux.bin.tar.gz
@@ -51,15 +69,15 @@ mkdir code_docs
 cd code_docs
 
 # Get the current gh-pages branch
-git clone -b gh-pages https://github.com/${TRAVIS_REPO_SLUG}.git
-export TRAVIS_REPO_NAME=${TRAVIS_REPO_SLUG#*/}
-cd ${TRAVIS_REPO_NAME}
+git clone -b gh-pages https://github.com/${REPO_SLUG}.git
+export REPO_NAME=${REPO_SLUG#*/}
+cd ${REPO_NAME}
 
 ##### Configure git.
 # Set the push default to simple i.e. push only the current branch.
 git config --global push.default simple
-# Pretend to be an user called Travis CI.
-git config user.name "Travis CI"
+# Pretend to be an user called Doxygen CI.
+git config user.name "Doxygen CI"
 git config user.email "travis@travis-ci.org"
 
 # Remove everything currently in the gh-pages branch.
@@ -88,9 +106,9 @@ echo "" > .nojekyll
 echo 'Generating Doxygen code documentation...'
 # Redirect both stderr and stdout to the log file AND the console.
 
-if [ ! -f "$DOXYFILE" ]; then
+export DOXYFILE=${BUILD_DIR}/Doxyfile
+if [ ! -f ${DOXYFILE} ]; then
     echo "Grabbing default Doxyfile"
-    export DOXYFILE=${TRAVIS_BUILD_DIR}/Doxyfile
 
     curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/Doxyfile.default > ${DOXYFILE}
     #sed -i "s/^INPUT .*/INPUT = ..\/../"  ${DOXYFILE}
@@ -101,11 +119,17 @@ if [ ! -f "$DOXYFILE" ]; then
     fi
 fi
 
-sed -i "s;^HTML_OUTPUT .*;HTML_OUTPUT = code_docs/${TRAVIS_REPO_NAME}/html;"  ${DOXYFILE}
-cd $TRAVIS_BUILD_DIR
+sed -i "s;^HTML_OUTPUT .*;HTML_OUTPUT = code_docs/${REPO_NAME}/html;"  ${DOXYFILE}
+cd $BUILD_DIR
 
-# Print out doxygen warnings in red
-${TRAVIS_BUILD_DIR}/doxygen $DOXYFILE 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
+if [ ! -z $1 ]
+then
+    # Print out doxygen warnings in red, use specified path (for when everything is in src)
+    ( cat $DOXYFILE; echo "INPUT=${BUILD_DIR}/$1" ) | ${BUILD_DIR}/doxygen - 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
+else
+    # Print out doxygen warnings in red, use default path
+    ${BUILD_DIR}/doxygen $DOXYFILE 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
+fi
 
 # if any warnings, bail!
 if [ -s foo.txt ]; then exit 1 ; fi
@@ -113,14 +137,14 @@ if [ -s foo.txt ]; then exit 1 ; fi
 rm foo.txt
 
 # If we're a pull request, don't push docs to github!
-if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+if [ ${IS_PULL} == 1 ]; then
     echo "This is a Pull Request, we're done!"
     exit 0
 else
     echo "This is a Commit, Uploading documentation..."
 fi
 
-cd code_docs/${TRAVIS_REPO_NAME}
+cd code_docs/${REPO_NAME}
 
 ################################################################################
 ##### Upload the documentation to the gh-pages branch of the repository.   #####
@@ -153,7 +177,7 @@ if [ -d "html" ] && [ -f "html/index.html" ]; then
     # The ouput is redirected to /dev/null to hide any sensitive credential data
     # that might otherwise be exposed.
     echo 'Git pushing'
-    git push --force "https://${GH_REPO_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git" > /dev/null 2>&1
+    git push --force "https://${AUTH}@github.com/${REPO_SLUG}.git" > /dev/null 2>&1
 else
     echo '' >&2
     echo 'Warning: No documentation (html) files have been found!' >&2

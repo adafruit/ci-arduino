@@ -30,22 +30,35 @@ cache:
 git:
   depth: false
   quiet: true
+addons:
+  apt:
+    sources:
+      - llvm-toolchain-trusty-5.0
+      - key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+    packages:
+      - clang-format-5.0
 env:
   global:
-     # You can uncomment this to explicitly choose an (old) version of the Arduino IDE
-     #- ARDUINO_IDE_VERSION="1.8.10"
+#    - ARDUINO_IDE_VERSION="1.8.10"
+     - PRETTYNAME="Adafruit FT6206 Arduino Library"
+# Optional, will default to "$TRAVIS_BUILD_DIR/Doxyfile"
+#    - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
+
 before_install:
-  - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+   - curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/run-clang-format.py > run-clang-format.py
+
 install:
-  # Note that every library should be installed in a seperate command
-  - arduino --install-library "Adafruit SleepyDog Library"
-  - arduino --install-library "Adafruit FONA Library"
+   - arduino --install-library "Adafruit ILI9341","Adafruit GFX Library"
+
 script:
-  - build_main_platforms
-notifications:
-  email:
-    on_success: change
-    on_failure: change
+   - python run-clang-format.py -r .
+   - build_main_platforms
+
+# Generate and deploy documentation
+after_success:
+  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/library_check.sh)
+  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_gen_and_deploy.sh)
 ```
 
 **Choosing Arduino IDE version**
@@ -147,4 +160,97 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+```
+
+## Running build_platforms.py locally
+1. Install arduino-cli from here: https://arduino.github.io/arduino-cli/installation/
+2. Download ci-arduino
+   * `git clone https://github.com/adafruit/ci-arduino`
+3. Put these lines at the end of your `.bashrc` or `.bash_profile` if you're on OSX. Make sure to fill in the path to where you installed ci-arduino and replacing USER with your username.
+   ```bash
+   alias test-platforms='python3 ~/path/to/ci-arduino/build_platform.py'
+   export HOME=/home/USER/
+   ```
+4. Run this at the top level of the library you want to test
+   ```bash
+   adafruit@adafruit:~/Adafruit_BMP183_Library$ export GITHUB_WORKSPACE=$(pwd)
+   ```
+5. Remove everything in test library, and re-create it
+   ```bash
+   adafruit@adafruit:~/Adafruit_BMP183_Library$ rm -rf ~/Arduino/libraries/Adafruit_Test_Library/; mkdir ~/Arduino/libraries/Adafruit_Test_Library
+   ```
+6. Still in the top-level directory of the library you'll be testing, copy the current library to Adafruit_Test_Library
+   ```bash
+   adafruit@adafruit:~/Adafruit_BMP183_Library$ cp * ~/Arduino/libraryes/Adafruit_Test_Library/
+   ```
+7. Grep for build_platform.py in githubci.yml to find out what boards to test.
+   ```bash
+   adafruit@adafruit:~/Adafruit_BMP183_Library$ grep 'build_platform.py' .github/workflows/githubci.yml
+           run: python3 ci/build_platform.py main_platforms
+   ```
+8. Run test-platforms. This may take a while, and tests for some boards sometimes run orders of magnitude slower than tests for other boards.
+   ```bash
+   test-platforms main_platforms
+   ```
+   OR, if githubci.yml specified other boards, let's say the metro m0 and pyportal, you'd run this:
+   ```bash
+   test-platforms metro_m0 pyportal
+   ```
+
+Here's what that returns
+```bash
+adafruit@adafruit:~/Adafruit_BMP183_Library$ test-platforms main_platforms
+build dir: /home/dherrada/Adafruit_BMP183_Library
+
+########################################
+INSTALLING ARDUINO BOARDS
+########################################
+arduino-cli core update-index --additional-urls https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json,https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json > /dev/null
+
+Installing Adafruit Unified Sensor
+arduino-cli lib install "Adafruit Unified Sensor" > /dev/null
+arduino-cli lib uninstall "Adafruit BMP183 Library"
+Library Adafruit BMP183 Library is not installed
+Libraries installed:  ['/home/adafruit/Arduino/libraries/Adafruit_VL53L0X', '/home/adafruit/Arduino/libraries/RTClib', '/home/adafruit/Arduino/libraries/Adafruit-RGB-LCD-Shield-Library', '/home/adafruit/Arduino/libraries/readme.txt', '/home/adafruit/Arduino/libraries/Adafruit_Test_Library', '/home/adafruit/Arduino/libraries/Adafruit_Unified_Sensor']
+  elif isinstance(platform, collections.Iterable):
+################################################################################
+SWITCHING TO arduino:avr:uno
+Installing arduino:avr ✓
+################################################################################
+	BMP183test.ino ✓
+################################################################################
+SWITCHING TO arduino:avr:leonardo
+Installing arduino:avr ✓
+################################################################################
+	BMP183test.ino ✓
+################################################################################
+SWITCHING TO arduino:avr:mega:cpu=atmega2560
+Installing arduino:avr ✓
+################################################################################
+	BMP183test.ino ✓
+################################################################################
+SWITCHING TO arduino:samd:arduino_zero_native
+Installing arduino:samd ✓
+################################################################################
+	BMP183test.ino ✓
+################################################################################
+SWITCHING TO esp8266:esp8266:huzzah:eesz=4M3M,xtal=80
+Installing esp8266:esp8266 ✓
+################################################################################
+	BMP183test.ino ✓
+################################################################################
+SWITCHING TO esp32:esp32:featheresp32:FlashFreq=80
+Installing esp32:esp32 ✓
+################################################################################
+  BMP183test.ino ✓
+################################################################################
+SWITCHING TO adafruit:samd:adafruit_metro_m4:speed=120
+Installing adafruit:samd ✓
+################################################################################
+	BMP183test.ino ✓
+################################################################################
+SWITCHING TO adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0
+Installing adafruit:nrf52 ✓
+################################################################################
+	BMP183test.ino ✓
 ```
