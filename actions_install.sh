@@ -3,6 +3,7 @@
 set -e
 
 sudo apt-get update
+sudo apt-get remove python3 python
 sudo apt-get install python3.8
 
 pip3 install clint pyserial setuptools adafruit-nrfutil
