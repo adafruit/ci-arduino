@@ -81,7 +81,7 @@ ALL_PLATFORMS={
     "clue" : "adafruit:nrf52:cluenrf52840:softdevice=s140v6,debug=l0",
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
-                        "esp8266", "esp32", "metro_m4", "nrf52840"),
+                        "esp8266", "esp32", "metro_m4"),
     "arcada_platforms" : ("pybadge", "pygamer", "hallowing_m4",
                           "cpb", "cpx_ada")
 }
