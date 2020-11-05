@@ -180,7 +180,7 @@ for arg in sys.argv[1:]:
     platform = ALL_PLATFORMS.get(arg, None)
     if isinstance(platform, str):
         platforms.append(arg)
-    elif isinstance(platform, collections.Iterable):
+    elif isinstance(platform, collections.abc.Iterable):
         for p in platform:
             platforms.append(p)
     else:
