@@ -3,7 +3,7 @@
 The purpose of this repo is to create a centrally managed dependency
 install script for all Adafruit Arduino Library Travis CI configs.
 This will allow us to easily update the install steps without
-having to manually or programatically update 100+ `.travis.yml` files.
+having to manually or programmatically update 100+ `.travis.yml` files.
 
 We have a guide that you can use to follow along to install both TravisCI and Doxygen generation here https://learn.adafruit.com/the-well-automated-arduino-library/
 
@@ -17,7 +17,7 @@ source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/
 ```
 
 If you only want to install and build on certain platforms, you can set the
-`INSTALL_PLATFORMS` envionrment variable to a comma-seperated list of platforms.
+`INSTALL_PLATFORMS` environment variable to a comma-separated list of platforms.
 
 **Example `.travis.yml`:**
 ```yaml
@@ -181,7 +181,7 @@ deploy:
    ```
 6. Still in the top-level directory of the library you'll be testing, copy the current library to Adafruit_Test_Library
    ```bash
-   adafruit@adafruit:~/Adafruit_BMP183_Library$ cp * ~/Arduino/libraryes/Adafruit_Test_Library/
+   adafruit@adafruit:~/Adafruit_BMP183_Library$ cp * ~/Arduino/libraries/Adafruit_Test_Library/
    ```
 7. Grep for build_platform.py in githubci.yml to find out what boards to test.
    ```bash
