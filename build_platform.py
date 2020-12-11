@@ -21,7 +21,7 @@ os.environ["PATH"] += os.pathsep + BUILD_DIR + "/bin"
 print("build dir:", BUILD_DIR)
 
 IS_LEARNING_SYS = False
-if "Adafruit_Learning_System_Guides" in BUILD_DIR:
+if "Adafruit_Learning_System_Guides" or "METROX-Examples-and-Project-Sketches" in BUILD_DIR:
     print("Found learning system repo")
     IS_LEARNING_SYS = True
 
