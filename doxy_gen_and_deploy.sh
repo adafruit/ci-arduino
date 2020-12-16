@@ -51,6 +51,7 @@ else
   export BUILD_DIR=${TRAVIS_BUILD_DIR}
   export AUTH=${GH_REPO_TOKEN}
   export REPO_SLUG=${TRAVIS_REPO_SLUG}
+  export GITHUB_REF=${TRAVIS_BRANCH}
   if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
     export IS_PULL=1
   fi
@@ -141,46 +142,58 @@ if [ ${IS_PULL} == 1 ]; then
     echo "This is a Pull Request, we're done!"
     exit 0
 else
-    echo "This is a Commit, Uploading documentation..."
+    echo "This is a Commit, we may want to upload documentation..."
 fi
 
 cd code_docs/${REPO_NAME}
+
+
+
+
 
 ################################################################################
 ##### Upload the documentation to the gh-pages branch of the repository.   #####
 # Only upload if Doxygen successfully created the documentation.
 # Check this by verifying that the html directory and the file html/index.html
 # both exist. This is a good indication that Doxygen did it's work.
-if [ -d "html" ] && [ -f "html/index.html" ]; then
+CURRENT_BRANCH_NAME="${GITHUB_REF##*/}"
+readonly DEFAULT_BRANCH_NAME="$(curl "https://api.github.com/repos/${REPO_SLUG}" | jq --raw-output .default_branch)"
 
-    echo 'Uploading documentation to the gh-pages branch...'
-    # Add everything in this directory (the Doxygen code documentation) to the
-    # gh-pages branch.
-    # GitHub is smart enough to know which files have changed and which files have
-    # stayed the same and will only update the changed files.
-    echo 'Adding all files'
-    git add --all
+if [[ "$CURRENT_BRANCH_NAME" = "$DEFAULT_BRANCH_NAME" ]]; then
+    if [ -d "html" ] && [ -f "html/index.html" ]; then
 
-    if [ -n "$(git status --porcelain)" ]; then
-    echo "Changes to commit"
+        echo 'Uploading documentation to the gh-pages branch...'
+        # Add everything in this directory (the Doxygen code documentation) to the
+        # gh-pages branch.
+        # GitHub is smart enough to know which files have changed and which files have
+        # stayed the same and will only update the changed files.
+        echo 'Adding all files'
+        git add --all
+
+        if [ -n "$(git status --porcelain)" ]; then
+        echo "Changes to commit"
+        else
+        echo "No changes to commit"
+        exit 0
+        fi
+
+        # Commit the added files with a title and description containing the Travis CI
+        # build number and the GitHub commit reference that issued this build.
+        echo 'Git committing'
+        git commit -m "Deploy code docs to GitHub Pages Travis build: ${TRAVIS_BUILD_NUMBER}" -m "Commit: ${TRAVIS_COMMIT}"
+
+        # Force push to the remote gh-pages branch.
+        # The ouput is redirected to /dev/null to hide any sensitive credential data
+        # that might otherwise be exposed.
+        echo 'Git pushing'
+        git push --force "https://${AUTH}@github.com/${REPO_SLUG}.git" > /dev/null 2>&1
     else
-    echo "No changes to commit"
-    exit 0
+        echo '' >&2
+        echo 'Warning: No documentation (html) files have been found!' >&2
+        echo 'Warning: Not going to push the documentation to GitHub!' >&2
+        exit 1
     fi
-
-    # Commit the added files with a title and description containing the Travis CI
-    # build number and the GitHub commit reference that issued this build.
-    echo 'Git committing'
-    git commit -m "Deploy code docs to GitHub Pages Travis build: ${TRAVIS_BUILD_NUMBER}" -m "Commit: ${TRAVIS_COMMIT}"
-
-    # Force push to the remote gh-pages branch.
-    # The ouput is redirected to /dev/null to hide any sensitive credential data
-    # that might otherwise be exposed.
-    echo 'Git pushing'
-    git push --force "https://${AUTH}@github.com/${REPO_SLUG}.git" > /dev/null 2>&1
 else
-    echo '' >&2
-    echo 'Warning: No documentation (html) files have been found!' >&2
-    echo 'Warning: Not going to push the documentation to GitHub!' >&2
-    exit 1
+    echo "Branch is not master or main, we're done!"
+    exit 0
 fi
