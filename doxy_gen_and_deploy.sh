@@ -44,6 +44,8 @@ if [[ -z "${TRAVIS_BUILD_DIR}" ]]; then
   export BUILD_DIR=${GITHUB_WORKSPACE}
   export AUTH=${GITHUB_ACTOR}:${GH_REPO_TOKEN}
   export REPO_SLUG=${GITHUB_REPOSITORY}
+  export COMMIT_SHA1=${GITHUB_SHA}
+  export BUILD_ID="GitHub Actions run: ${GITHUB_RUN_ID}"
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
     export IS_PULL=1
   fi
@@ -51,6 +53,8 @@ else
   export BUILD_DIR=${TRAVIS_BUILD_DIR}
   export AUTH=${GH_REPO_TOKEN}
   export REPO_SLUG=${TRAVIS_REPO_SLUG}
+  export COMMIT_SHA1=${TRAVIS_COMMIT}
+  export BUILD_ID="Travis build: ${TRAVIS_BUILD_NUMBER}"
   if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
     export IS_PULL=1
   fi
@@ -78,7 +82,7 @@ cd ${REPO_NAME}
 git config --global push.default simple
 # Pretend to be an user called Doxygen CI.
 git config user.name "Doxygen CI"
-git config user.email "travis@travis-ci.org"
+git config user.email "ci-arduino@invalid"
 
 # Remove everything currently in the gh-pages branch.
 # GitHub is smart enough to know which files have changed and which files have
@@ -171,7 +175,9 @@ if [ -d "html" ] && [ -f "html/index.html" ]; then
     # Commit the added files with a title and description containing the Travis CI
     # build number and the GitHub commit reference that issued this build.
     echo 'Git committing'
-    git commit -m "Deploy code docs to GitHub Pages Travis build: ${TRAVIS_BUILD_NUMBER}" -m "Commit: ${TRAVIS_COMMIT}"
+    git commit \
+      -m "Deploy docs to GitHub Pages from commit ${COMMIT_SHA1:0:10}" \
+      -m "Commit: ${COMMIT_SHA1}"$'\n'"${BUILD_ID}"
 
     # Force push to the remote gh-pages branch.
     # The ouput is redirected to /dev/null to hide any sensitive credential data
