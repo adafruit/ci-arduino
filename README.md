@@ -1,7 +1,7 @@
 # Travis CI Arduino Init Script [![Build Status](https://travis-ci.com/adafruit/travis-ci-arduino.svg?branch=master)](https://travis-ci.com/adafruit/travis-ci-arduino)
 
 The purpose of this repo is to create a centrally managed dependency
-install script for all Adafruit Arduino Library Travis CI configs.
+install script for all Adafruit Arduino Library Travis CI and Github Actions configs.
 This will allow us to easily update the install steps without
 having to manually or programatically update 100+ `.travis.yml` files.
 
@@ -181,7 +181,7 @@ deploy:
    ```
 6. Still in the top-level directory of the library you'll be testing, copy the current library to Adafruit_Test_Library
    ```bash
-   adafruit@adafruit:~/Adafruit_BMP183_Library$ cp * ~/Arduino/libraryes/Adafruit_Test_Library/
+   adafruit@adafruit:~/Adafruit_BMP183_Library$ cp * ~/Arduino/libraries/Adafruit_Test_Library/
    ```
 7. Grep for build_platform.py in githubci.yml to find out what boards to test.
    ```bash
