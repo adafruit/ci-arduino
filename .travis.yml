@@ -15,9 +15,8 @@ addons:
       - python3-pip
 
 before_install:
+  - travis_wait 30 mvn install
   - source $TRAVIS_BUILD_DIR/install.sh
-
-install: travis_wait 30 mvn install
 
 script:
   - build_platform nrf52840
