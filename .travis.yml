@@ -17,6 +17,8 @@ addons:
 before_install:
   - source $TRAVIS_BUILD_DIR/install.sh
 
+install: travis_wait 30 mvn install
+
 script:
   - build_platform nrf52840
   - build_platform esp32
