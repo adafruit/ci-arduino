@@ -3,7 +3,6 @@ sudo: false
 cache:
   directories:
     - ~/arduino_ide
-    - ~/.arduino15/packages/
 
 git:
   depth: false
@@ -16,6 +15,7 @@ addons:
       - python3-pip
 
 before_install:
+  - travis_wait 30 mvn install
   - source $TRAVIS_BUILD_DIR/install.sh
 
 script:

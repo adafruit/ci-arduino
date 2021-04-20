@@ -24,6 +24,9 @@ IS_LEARNING_SYS = False
 if "Adafruit_Learning_System_Guides" in BUILD_DIR:
     print("Found learning system repo")
     IS_LEARNING_SYS = True
+elif "METROX-Examples-and-Project-Sketches" in BUILD_DIR:
+    print("Found MetroX Examples Repo")
+    IS_LEARNING_SYS = True
 
 #os.system('pwd')
 #os.system('ls -lA')
@@ -55,6 +58,8 @@ ALL_PLATFORMS={
     "gemma_m0" : "adafruit:samd:adafruit_gemma_m0",
     "trinket_m0" : "adafruit:samd:adafruit_trinket_m0",
     "feather_m0_express" : "adafruit:samd:adafruit_feather_m0_express",
+    "feather_m4_can" : "adafruit:samd:adafruit_feather_m4_can:speed=120",
+    "feather_m4_can_tinyusb" : "adafruit:samd:adafruit_feather_m4_can:speed=120,usbstack=tinyusb",
     "metro_m0" : "adafruit:samd:adafruit_metro_m0",
     "metro_m0_tinyusb" : "adafruit:samd:adafruit_metro_m0:usbstack=tinyusb",
     "metro_m4" : "adafruit:samd:adafruit_metro_m4:speed=120",
@@ -71,6 +76,7 @@ ALL_PLATFORMS={
     "pyportal_titano" : "adafruit:samd:adafruit_pyportal_m4_titano:speed=120,usbstack=tinyusb",
     "cpx_ada" : "adafruit:samd:adafruit_circuitplayground_m0",
     "grand_central" : "adafruit:samd:adafruit_grandcentral_m4:speed=120,usbstack=tinyusb",
+    "matrixportal" : "adafruit:samd:adafruit_matrixportal_m4:speed=120,usbstack=tinyusb",
     # Arduino nRF
     "microbit" : "sandeepmistry:nRF5:BBCmicrobit:softdevice=s130",
     # Adafruit nRF
@@ -80,7 +86,7 @@ ALL_PLATFORMS={
     "clue" : "adafruit:nrf52:cluenrf52840:softdevice=s140v6,debug=l0",
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
-                        "esp8266", "esp32", "metro_m4", "nrf52840"),
+                        "esp8266", "esp32", "metro_m4"),
     "arcada_platforms" : ("pybadge", "pygamer", "hallowing_m4",
                           "cpb", "cpx_ada")
 }
@@ -179,7 +185,7 @@ for arg in sys.argv[1:]:
     platform = ALL_PLATFORMS.get(arg, None)
     if isinstance(platform, str):
         platforms.append(arg)
-    elif isinstance(platform, collections.Iterable):
+    elif isinstance(platform, collections.abc.Iterable):
         for p in platform:
             platforms.append(p)
     else:
