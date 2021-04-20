@@ -45,6 +45,9 @@ ALL_PLATFORMS={
     # Espressif
     "esp8266" : "esp8266:esp8266:huzzah:eesz=4M3M,xtal=80",
     "esp32" : "esp32:esp32:featheresp32:FlashFreq=80",
+    "magtag" : "esp32:esp32:adafruit_magtag29_esp32s2",
+    "funhouse" : "esp32:esp32:adafruit_funhouse_esp32s2",
+    "metroesp32s2" : "esp32:esp32:adafruit_metro_esp32s2",
     # Adafruit AVR
     "trinket_3v" : "adafruit:avr:trinket3",
     "trinket_5v" : "adafruit:avr:trinket5",
@@ -91,7 +94,7 @@ ALL_PLATFORMS={
                           "cpb", "cpx_ada")
 }
 
-BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://dl.espressif.com/dl/package_esp32_index.json,https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json"
+BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json,https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json"
 
 class ColorPrint:
 
