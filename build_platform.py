@@ -87,14 +87,18 @@ ALL_PLATFORMS={
     "nrf52840" : "adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0",
     "cpb" : "adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0",
     "clue" : "adafruit:nrf52:cluenrf52840:softdevice=s140v6,debug=l0",
+    # RP2040 (Philhower)
+    "pico_rp2040" : "rp2040:rp2040:rpipico:freq=125,flash=2097152_0",
+    "feather_rp2040" : "rp2040:rp2040:adafruitfeather:freq=125,flash=8388608_0",
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
                         "esp8266", "esp32", "metro_m4"),
     "arcada_platforms" : ("pybadge", "pygamer", "hallowing_m4",
                           "cpb", "cpx_ada")
+    "rp2040_platforms" : ("pico_rp2040", "feather_rp2040")
 }
 
-BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json,https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json"
+BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json,https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json,https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
 
 class ColorPrint:
 
