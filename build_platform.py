@@ -92,7 +92,7 @@ ALL_PLATFORMS={
     "feather_rp2040" : "rp2040:rp2040:adafruitfeather:freq=125,flash=8388608_0",
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
-                        "esp8266", "esp32", "metro_m4"),
+                        "esp8266", "esp32", "metro_m4", "trinket_m0"),
     "arcada_platforms" : ("pybadge", "pygamer", "hallowing_m4",
                           "cpb", "cpx_ada"),
     "rp2040_platforms" : ("pico_rp2040", "feather_rp2040")
