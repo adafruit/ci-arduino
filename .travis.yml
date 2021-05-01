@@ -1,6 +1,10 @@
-dist: xenial
 language: python
-sudo: false
+
+python:
+  - "3.8"
+
+dist: xenial
+
 cache:
   directories:
     - ~/arduino_ide
@@ -9,10 +13,10 @@ git:
   depth: false
   quiet: true
 
-python:
-  - "3.8"
 
 before_install:
+  - sudo apt-get update
+  - sudo apt-get install python3
   - source $TRAVIS_BUILD_DIR/install.sh
 
 script:
