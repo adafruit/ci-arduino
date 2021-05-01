@@ -139,6 +139,7 @@ fi
 
 if [[ $INSTALL_NRF52 == 1 ]]; then
   echo -n "ADAFRUIT NRF5X: "
+  sudo pip3 install --upgrade pip
   pip3 install --user wheel
   pip3 install --user setuptools
   pip3 install --user adafruit-nrfutil
