@@ -3,7 +3,7 @@ language: python
 python:
   - "3.8"
 
-dist: xenial
+dist: focal
 
 cache:
   directories:
@@ -15,8 +15,8 @@ git:
 
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install python3
+  #- sudo apt-get update
+  #- sudo apt-get install python3
   - source $TRAVIS_BUILD_DIR/install.sh
 
 script:
