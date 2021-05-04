@@ -1,5 +1,7 @@
-language: c
-sudo: false
+language: python
+
+dist: focal
+
 cache:
   directories:
     - ~/arduino_ide
@@ -8,14 +10,8 @@ git:
   depth: false
   quiet: true
 
-addons:
-  apt:
-    packages:
-      - python3
-      - python3-pip
 
 before_install:
-  - travis_wait 30 mvn install
   - source $TRAVIS_BUILD_DIR/install.sh
 
 script:
