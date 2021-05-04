@@ -109,6 +109,7 @@ INSTALL_NRF52=$([[ $INSTALL_PLATFORMS == *"nrf52"* || -z "$INSTALL_PLATFORMS" ]]
 
 if [[ $INSTALL_ESP32 == 1 ]]; then
   echo -n "ESP32: "
+  pip install pyserial
   DEPENDENCY_OUTPUT=$(arduino --install-boards esp32:esp32 2>&1)
   if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 fi
@@ -139,11 +140,10 @@ fi
 
 if [[ $INSTALL_NRF52 == 1 ]]; then
   echo -n "ADAFRUIT NRF5X: "
-  sudo python3 -m pip install --upgrade pip
-  sudo python3 -m pip install wheel
-  sudo python3 -m pip install setuptools
-  sudo python3 -m pip install adafruit-nrfutil
-  sudo python3 -m pip install pyserial
+  pip install wheel
+  pip install setuptools
+  pip install adafruit-nrfutil
+  pip install pyserial
   DEPENDENCY_OUTPUT=$(arduino --install-boards adafruit:nrf52 2>&1)
   if [ $? -ne 0 ]; then echo -e "\xe2\x9c\x96 OR CACHED"; else echo -e """$GREEN""\xe2\x9c\x93"; fi
 fi
@@ -168,7 +168,7 @@ export SKIP_COUNT=0
 export FAIL_COUNT=0
 export PDE_COUNT=0
 # close if [[ $# -eq 0 ]] ; then
-fi 
+fi
 # build all of the examples for the passed platform
 #Sourcing and defining functions
 function build_platform()

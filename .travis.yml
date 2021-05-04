@@ -1,7 +1,7 @@
 language: python
 
-python:
-  - "3.8"
+#python:
+#  - "3.8"
 
 dist: focal
 
@@ -15,8 +15,6 @@ git:
 
 
 before_install:
-  #- sudo apt-get update
-  #- sudo apt-get install python3
   - source $TRAVIS_BUILD_DIR/install.sh
 
 script:
