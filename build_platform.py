@@ -5,17 +5,26 @@ import os
 import subprocess
 import collections
 
+# optional wall option
+BUILD_WARNING = 'default'
+if "--wall" in sys.argv:
+    BUILD_WARNING = 'all'
+    sys.argv.remove("--wall")
+
 # add user bin to path!
 BUILD_DIR = ''
 # add user bin to path!
 try:
-    BUILD_DIR = os.environ["TRAVIS_BUILD_DIR"]
-except KeyError:
-    pass # ok maybe we're on actions?
-try:
+    # If we're on actions
     BUILD_DIR = os.environ["GITHUB_WORKSPACE"]
 except KeyError:
-    pass # ok maybe we're on travis?
+    try:
+        # If we're on travis
+        BUILD_DIR = os.environ["TRAVIS_BUILD_DIR"]
+    except KeyError:
+        # If we're running on local machine
+        BUILD_DIR = os.path.abspath(".")
+        pass
 
 os.environ["PATH"] += os.pathsep + BUILD_DIR + "/bin"
 print("build dir:", BUILD_DIR)
@@ -89,7 +98,9 @@ ALL_PLATFORMS={
     "clue" : "adafruit:nrf52:cluenrf52840:softdevice=s140v6,debug=l0",
     # RP2040 (Philhower)
     "pico_rp2040" : "rp2040:rp2040:rpipico:freq=125,flash=2097152_0",
+    "pico_rp2040_tinyusb" : "rp2040:rp2040:rpipico:flash=2097152_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb",
     "feather_rp2040" : "rp2040:rp2040:adafruitfeather:freq=125,flash=8388608_0",
+    "feather_rp2040_tinyusb" : "rp2040:rp2040:adafruit_feather:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb",
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
                         "esp8266", "esp32", "metro_m4", "trinket_m0"),
@@ -220,7 +231,7 @@ def test_examples_in_folder(folderpath):
             ColorPrint.print_warn("skipping")
             continue
 
-        cmd = ['arduino-cli', 'compile', '--fqbn', fqbn, examplepath]
+        cmd = ['arduino-cli', 'compile', '--warnings', BUILD_WARNING, '--fqbn', fqbn, examplepath]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         r = proc.wait()
@@ -228,6 +239,9 @@ def test_examples_in_folder(folderpath):
         err = proc.stderr.read()
         if r == 0:
             ColorPrint.print_pass(CHECK)
+            if err:
+                # also print out warning message
+                ColorPrint.print_fail(err.decode("utf-8"))
         else:
             ColorPrint.print_fail(CROSS)
             ColorPrint.print_fail(out.decode("utf-8"))
@@ -254,8 +268,8 @@ def test_examples_in_learningrepo(folderpath):
         elif glob.glob(folderpath+"/.*.test.only") and not os.path.exists(onlyfilename):
             ColorPrint.print_warn("skipping")
             continue
-	    
-        cmd = ['arduino-cli', 'compile', '--fqbn', fqbn, projectpath]
+
+        cmd = ['arduino-cli', 'compile', '--warnings', BUILD_WARNING, '--fqbn', fqbn, projectpath]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         r = proc.wait()
@@ -263,6 +277,9 @@ def test_examples_in_learningrepo(folderpath):
         err = proc.stderr.read()
         if r == 0:
             ColorPrint.print_pass(CHECK)
+            if err:
+                # also print out warning message
+                ColorPrint.print_fail(err.decode("utf-8"))
         else:
             ColorPrint.print_fail(CROSS)
             ColorPrint.print_fail(out.decode("utf-8"))
