@@ -95,6 +95,11 @@ ALL_PLATFORMS={
     "grand_central_tinyusb" : "adafruit:samd:adafruit_grandcentral_m4:speed=120,usbstack=tinyusb",
     "matrixportal" : "adafruit:samd:adafruit_matrixportal_m4:speed=120",
     "matrixportal_tinyusb" : "adafruit:samd:adafruit_matrixportal_m4:speed=120,usbstack=tinyusb",
+    "neotrinkey_m0" : "adafruit:samd:adafruit_neotrinkey_m0",
+    "rotarytrinkey_m0" : "adafruit:samd:adafruit_rotarytrinkey_m0",
+    "neokeytrinkey_m0" : "adafruit:samd:adafruit_neokeytrinkey_m0",
+    "slidetrinkey_m0" : "adafruit:samd:adafruit_slidetrinkey_m0",
+    "proxlighttrinkey_m0" : "adafruit:samd:adafruit_proxlighttrinkey_m0",
     # Arduino nRF
     "microbit" : "sandeepmistry:nRF5:BBCmicrobit:softdevice=s130",
     # Adafruit nRF
