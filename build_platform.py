@@ -113,6 +113,8 @@ ALL_PLATFORMS={
     "pico_rp2040_tinyusb" : "rp2040:rp2040:rpipico:flash=2097152_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb",
     "feather_rp2040" : "rp2040:rp2040:adafruitfeather:freq=125,flash=8388608_0",
     "feather_rp2040_tinyusb" : "rp2040:rp2040:adafruit_feather:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb",
+    # Attiny8xy (SpenceKonde)
+    "attiny817" : "megaTinyCore:megaavr:atxy7:chip=817",
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
                         "esp8266", "esp32", "metro_m4", "trinket_m0"),
@@ -121,7 +123,7 @@ ALL_PLATFORMS={
     "rp2040_platforms" : ("pico_rp2040", "feather_rp2040")
 }
 
-BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json,https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json,https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
+BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json,https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json,https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json,http://drazzy.com/package_drazzy.com_index.json"
 
 class ColorPrint:
 
