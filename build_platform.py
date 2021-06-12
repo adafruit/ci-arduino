@@ -116,6 +116,8 @@ ALL_PLATFORMS={
     # Attiny8xy (SpenceKonde)
     "attiny817" : "megaTinyCore:megaavr:atxy7:chip=817",
     "attiny816" : "megaTinyCore:megaavr:atxy6:chip=816",
+    "attiny807" : "megaTinyCore:megaavr:atxy7:chip=807",
+    "attiny806" : "megaTinyCore:megaavr:atxy6:chip=806",
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
                         "esp8266", "esp32", "metro_m4", "trinket_m0"),
