@@ -29,7 +29,7 @@ except KeyError:
 try:
     ARDUINO_LOCATION = os.environ["ARDUINO_LIB_DIR"]
 except KeyError:
-    ARDUINO_LOCATION = os.environ['HOME']+'/Arduino/libraries'
+    ARDUINO_LOCATION = '/Arduino/libraries'
 
 os.environ["PATH"] += os.pathsep + BUILD_DIR + "/bin"
 print("build dir:", BUILD_DIR)
