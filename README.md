@@ -179,7 +179,8 @@ deploy:
    export HOME=/Users/USER
    export ARDUINO_LIB_DIR=/Documents/Arduino/libraries
    ```
-   * Then run `source .bashrc` (Linux) or `source .bash_profile` (Mac/OSX)
+   * Then run `source ~/.bashrc` (Linux) or `source ~/.bash_profile` (Mac/OSX)
+   * If this file doesn't already exist, you can create it with `source ~/.bashrc` (Linux) or `source ~/.bash_profile` (Mac/OSX)
 4. Run this at the top level of the library you want to test
    ```bash
    adafruit@adafruit:~/Adafruit_BMP183_Library$ export GITHUB_WORKSPACE=$(pwd)
