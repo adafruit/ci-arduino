@@ -114,7 +114,7 @@ ALL_PLATFORMS={
     "feather_rp2040" : "rp2040:rp2040:adafruitfeather:freq=125,flash=8388608_0",
     "feather_rp2040_tinyusb" : "rp2040:rp2040:adafruit_feather:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb",
     "qt2040_trinkey" : "rp2040:rp2040:adafruit_trinkeyrp2040qt:freq=125,flash=8388608_0",
-    "qt2040_trinkey_tinyusb" : "rp2040:rp2040:adafruit_trinkeyrp2040qt:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb"
+    "qt2040_trinkey_tinyusb" : "rp2040:rp2040:adafruit_trinkeyrp2040qt:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb",
     # Attiny8xy (SpenceKonde)
     "attiny817" : "megaTinyCore:megaavr:atxy7:chip=817",
     "attiny816" : "megaTinyCore:megaavr:atxy6:chip=816",
