@@ -166,17 +166,17 @@ deploy:
 1. Install arduino-cli from here: https://arduino.github.io/arduino-cli/installation/
 2. Download ci-arduino
    * `git clone https://github.com/adafruit/ci-arduino`
-3. Put these lines at the end of your `.bashrc` or `.bash_profile` if you're on OSX. Make sure to fill in the path to where you installed ci-arduino and replacing USER with your username. Make sure to that the libraries directory exists by installing a library first:
+3. Put these lines at the end of your `.bashrc` or `.bash_profile` if you're on OSX. Make sure to fill in the path to where you installed ci-arduino. Make sure to that the libraries directory exists by installing a library first:
    * `arduino-cli lib install "Adafruit NeoPixel"` 
    * Linux
    ```bash
    alias test-platforms='python3 ~/path/to/ci-arduino/build_platform.py'
-   export HOME=/home/USER
+   export HOME_DIR=/home/$USER
    ```
    * Mac/OSX
    ```bash
    alias test-platforms='python3 ~/path/to/ci-arduino/build_platform.py'
-   export HOME=/Users/USER
+   export HOME_DIR=/Users/$USER
    export ARDUINO_LIB_DIR=/Documents/Arduino/libraries
    ```
    * Then run `source ~/.bashrc` (Linux) or `source ~/.bash_profile` (Mac/OSX)
@@ -187,11 +187,11 @@ deploy:
    ```
 5. Remove everything in test library, and re-create it
    ```bash
-   adafruit@adafruit:~/Adafruit_BMP183_Library$ rm -rf $HOME$ARDUINO_LIB_DIR/Adafruit_Test_Library/; mkdir $HOME$ARDUINO_LIB_DIR/Adafruit_Test_Library
+   adafruit@adafruit:~/Adafruit_BMP183_Library$ rm -rf $HOME_DIR$ARDUINO_LIB_DIR/Adafruit_Test_Library/; mkdir $HOME_DIR$ARDUINO_LIB_DIR/Adafruit_Test_Library
    ```
 6. Still in the top-level directory of the library you'll be testing, copy the current library to Adafruit_Test_Library
    ```bash
-   adafruit@adafruit:~/Adafruit_BMP183_Library$ cp * $HOME$ARDUINO_LIB_DIR/Adafruit_Test_Library/
+   adafruit@adafruit:~/Adafruit_BMP183_Library$ cp * $HOME_DIR$ARDUINO_LIB_DIR/Adafruit_Test_Library/
    ```
 7. Grep for build_platform.py in githubci.yml to find out what boards to test.
    ```bash

@@ -26,6 +26,12 @@ except KeyError:
         BUILD_DIR = os.path.abspath(".")
         pass
 
+# Get home directory
+try:
+    HOME = os.environ["HOME_DIR"]
+except KeyError:
+    HOME = os.environ["HOME"]
+
 try:
     ARDUINO_LOCATION = os.environ["ARDUINO_LIB_DIR"]
 except KeyError:
@@ -184,7 +190,7 @@ print()
 # link test library folder to the arduino libraries folder
 if not IS_LEARNING_SYS:
     try:
-        os.symlink(BUILD_DIR, os.environ['HOME']+ARDUINO_LOCATION+'/Adafruit_Test_Library')
+        os.symlink(BUILD_DIR, HOME+ARDUINO_LOCATION+'/Adafruit_Test_Library')
     except FileExistsError:
         pass
 
@@ -214,7 +220,7 @@ except OSError:
 if our_name:
     run_or_die("arduino-cli lib uninstall \""+our_name+"\"", "Could not uninstall")
 
-print("Libraries installed: ", glob.glob(os.environ['HOME']+ARDUINO_LOCATION+'/*'))
+print("Libraries installed: ", glob.glob(HOME+ARDUINO_LOCATION+'/*'))
 
 ################################ Test platforms
 platforms = []
