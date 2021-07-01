@@ -275,7 +275,7 @@ def test_examples_in_learningrepo(folderpath):
         if not projectpath.endswith(".ino"):
             continue
 	    # found an INO!
-        print('\t'+projectpath, end=' ')
+        print('\t'+projectpath, end=' ', flush=True)
         # check if we should SKIP
         skipfilename = folderpath+"/."+platform+".test.skip"
         onlyfilename = folderpath+"/."+platform+".test.only"
