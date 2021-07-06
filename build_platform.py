@@ -255,7 +255,10 @@ def test_examples_in_folder(folderpath):
             ColorPrint.print_warn("skipping")
             continue
 
-        cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, examplepath]
+        if BUILD_WARN:
+            cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, examplepath]
+        else:
+            cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--fqbn', fqbn, examplepath]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         r = proc.wait(timeout=60)
