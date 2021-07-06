@@ -7,9 +7,14 @@ import collections
 
 # optional wall option cause build failed if has warnings
 BUILD_WALL = False
+BUILD_WARN = True
 if "--wall" in sys.argv:
     BUILD_WALL = True
     sys.argv.remove("--wall")
+
+if "--no_warn" in sys.argv:
+    BUILD_WARN = False
+    sys.argv.remove("--no_warn")
 
 # add user bin to path!
 BUILD_DIR = ''
@@ -253,7 +258,7 @@ def test_examples_in_folder(folderpath):
         cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, examplepath]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
-        r = proc.wait()
+        r = proc.wait(timeout=60)
         out = proc.stdout.read()
         err = proc.stderr.read()
         if r == 0 and not (err and BUILD_WALL == True):
