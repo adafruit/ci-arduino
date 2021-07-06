@@ -102,7 +102,7 @@ ALL_PLATFORMS={
     "slidetrinkey_m0" : "adafruit:samd:adafruit_slidetrinkey_m0",
     "proxlighttrinkey_m0" : "adafruit:samd:adafruit_proxlighttrinkey_m0",
     # Arduino nRF
-    "microbit" : "sandeepmistry:nRF5:BBCmicrobit:softdevice=s130",
+    "microbit" : "sandeepmistry:nRF5:BBCmicrobit:softdevice=s110",
     # Adafruit nRF
     "nrf52832" : "adafruit:nrf52:feather52832:softdevice=s132v6,debug=l0",
     "nrf52840" : "adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0",
