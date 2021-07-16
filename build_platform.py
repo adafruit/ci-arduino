@@ -183,13 +183,6 @@ run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
            " > /dev/null", "FAILED to update core indecies")
 print()
 
-# link test library folder to the arduino libraries folder
-if not IS_LEARNING_SYS:
-    try:
-        os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/Adafruit_Test_Library')
-    except FileExistsError:
-        pass
-
 ################################ Install dependancies
 our_name=None
 try:
@@ -217,6 +210,13 @@ if our_name:
     run_or_die("arduino-cli lib uninstall \""+our_name+"\"", "Could not uninstall")
 
 print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/*'))
+
+# link our library folder to the arduino libraries folder
+if not IS_LEARNING_SYS:
+    try:
+        os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/' + os.path.basename(BUILD_DIR))
+    except FileExistsError:
+        pass
 
 ################################ Test platforms
 platforms = []
