@@ -211,12 +211,7 @@ if our_name:
 
 print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/*'))
 
-# link our library folder to the arduino libraries folder
-if not IS_LEARNING_SYS:
-    try:
-        os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/' + os.path.basename(BUILD_DIR))
-    except FileExistsError:
-        pass
+
 
 ################################ Test platforms
 platforms = []
@@ -248,15 +243,23 @@ def test_examples_in_folder(folderpath):
         # check if we should SKIP
         skipfilename = folderpath+"/."+platform+".test.skip"
         onlyfilename = folderpath+"/."+platform+".test.only"
+        # check if we should GENERATE UF2
+        gen_file_name = folderpath+"/."+platform+".test.generate"
         if os.path.exists(skipfilename):
             ColorPrint.print_warn("skipping")
             continue
         if glob.glob(folderpath+"/.*.test.only") and not os.path.exists(onlyfilename):
             ColorPrint.print_warn("skipping")
             continue
+        if os.path.exists(gen_file_name):
+            ColorPrint.print_warn("Generating UF2")
+
 
         if BUILD_WARN:
-            cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, examplepath]
+            if os.path.exists(gen_file_name):
+                cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, '-e', examplepath]
+            else:
+                cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, examplepath]
         else:
             cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--fqbn', fqbn, examplepath]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
@@ -269,6 +272,9 @@ def test_examples_in_folder(folderpath):
             if err:
                 # also print out warning message
                 ColorPrint.print_fail(err.decode("utf-8"))
+            # TODO
+            # Check if we're generating? Run uf2 script
+            # if os.path.exists(gen_file_name):
         else:
             ColorPrint.print_fail(CROSS)
             ColorPrint.print_fail(out.decode("utf-8"))
