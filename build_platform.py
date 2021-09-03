@@ -211,13 +211,16 @@ if our_name:
 
 print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/*'))
 
-################################ UF2 Utilities
+################################ UF2 Utils.
 
 def generate_uf2(example_path):
+    """Generates a .uf2 file from a .bin or .hex file.
+    :param str example_path: A path to the compiled .bin or .hex file.
+    """
     # TODO: Remove the hardcoding here, use dict ['test':[1,2,3]] instead
     SAMD51_FAMILY = '0x55114460'
     SAMD51_BASE = '0x4000'
-    # UF2 output file name match example name
+    # Generate UF2 output name, match example name
     uf2_name = os.path.split(example_path)[1]
     uf2_name = uf2_name.split('.ino')[0]
     uf2_name += ".uf2"
@@ -306,10 +309,7 @@ def test_examples_in_folder(folderpath):
             if err:
                 # also print out warning message
                 ColorPrint.print_fail(err.decode("utf-8"))
-            # TODO
-            # Check if we're generating? Run uf2 script
             if os.path.exists(gen_file_name):
-                # TODO: Make this another function!
                 ColorPrint.print_info("Generating UF2...")
                 success = generate_uf2(examplepath)
         else:
