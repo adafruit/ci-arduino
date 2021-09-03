@@ -211,6 +211,29 @@ if our_name:
 
 print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/*'))
 
+################################ UF2 Utilities
+
+def generate_uf2(example_path):
+    # TODO: Remove the hardcoding here, use dict ['test':[1,2,3]] instead
+    SAMD51_FAMILY = '0x55114460'
+    SAMD51_BASE = '0x4000'
+    # UF2 output file name match example name
+    uf2_name = example_path.split('examples/')[1]
+    uf2_name = uf2_name.split('.ino')[0] + ".uf2"
+    # Pack a .bin/.hex to .uf2
+    cmd = ['python3', 'uf2conv.py', example_path.split('examples')[1], '-c', '-b', SAMD51_BASE, '-f', SAMD51_FAMILY]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    r = proc.wait(timeout=60)
+    out = proc.stdout.read()
+    err = proc.stderr.read()
+    if r == 0 and not err:
+        ColorPrint.print_pass(CHECK)
+    else:
+        ColorPrint.print_fail(CROSS)
+        ColorPrint.print_fail(out.decode("utf-8"))
+        ColorPrint.print_fail(err.decode("utf-8"))
+        return False
+    return True
 
 
 ################################ Test platforms
@@ -286,27 +309,7 @@ def test_examples_in_folder(folderpath):
             if os.path.exists(gen_file_name):
                 # TODO: Make this another function!
                 ColorPrint.print_info("Generating UF2...")
-                # TODO
-                # Get family
-                # Get base
-                # TODO: Create the file name
-                # TODO: Remove the hardcoding here, use dict ['test':[1,2,3]] instead
-                SAMD51_FAMILY = '0x55114460'
-                SAMD51_BASE = '0x4000'
-                cmd = ['python3', 'uf2conv.py', examplepath, '-c', '-b', SAMD51_BASE, '-f', SAMD51_FAMILY]
-                proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-                                        stderr=subprocess.PIPE)
-                r = proc.wait(timeout=60)
-                out = proc.stdout.read()
-                err = proc.stderr.read()
-                if r == 0 and not err:
-                    ColorPrint.print_pass(CHECK)
-                    ColorPrint.print_info("Successfully Generated UF2!")
-                else:
-                    ColorPrint.print_fail(CROSS)
-                    ColorPrint.print_fail(out.decode("utf-8"))
-                    ColorPrint.print_fail(err.decode("utf-8"))
-                    success = 1
+                success = generate_uf2(examplepath)
         else:
             ColorPrint.print_fail(CROSS)
             ColorPrint.print_fail(out.decode("utf-8"))
