@@ -252,15 +252,17 @@ def test_examples_in_folder(folderpath):
             ColorPrint.print_warn("skipping")
             continue
         if os.path.exists(gen_file_name):
-            ColorPrint.print_warn("Generating UF2")
+            ColorPrint.print_info("Generating UF2 after build.")
+            # Download uf2conv.py and dependency if we don't already have it
             cmd = "wget -nc --no-check-certificate http://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2conv.py"
             proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             r = proc.wait(timeout=60)
             out = proc.stdout.read()
             if r != 0:
-                ColorPrint.print_fail("Failed to download uf2families.json")
+                ColorPrint.print_fail("Failed to download UF2 Utils!")
                 ColorPrint.print_fail(out.decode("utf-8"))
                 ColorPrint.print_fail(err.decode("utf-8"))
+                continue
 
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
@@ -281,7 +283,30 @@ def test_examples_in_folder(folderpath):
                 ColorPrint.print_fail(err.decode("utf-8"))
             # TODO
             # Check if we're generating? Run uf2 script
-            # if os.path.exists(gen_file_name):
+            if os.path.exists(gen_file_name):
+                # TODO: Make this another function!
+                ColorPrint.print_info("Generating UF2...")
+                # TODO
+                # Get family
+                # Get base
+                # TODO: Create the file name
+                # TODO: Remove the hardcoding here, use dict ['test':[1,2,3]] instead
+                SAMD51_FAMILY = 0x55114460
+                SAMD51_BASE = 0x4000
+                cmd = ['python3', 'uf2conv.py', '-c', '-b', SAMD51_BASE, '-f', SAMD51_FAMILY]
+                proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                                        stderr=subprocess.PIPE)
+                r = proc.wait(timeout=60)
+                out = proc.stdout.read()
+                err = proc.stderr.read()
+                if r == 0 and not err:
+                    ColorPrint.print_pass(CHECK)
+                    ColorPrint.print_info("Successfully Generated UF2!")
+                else:
+                    ColorPrint.print_fail(CROSS)
+                    ColorPrint.print_fail(out.decode("utf-8"))
+                    ColorPrint.print_fail(err.decode("utf-8"))
+                    success = 1
         else:
             ColorPrint.print_fail(CROSS)
             ColorPrint.print_fail(out.decode("utf-8"))
