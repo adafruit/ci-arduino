@@ -291,9 +291,9 @@ def test_examples_in_folder(folderpath):
                 # Get base
                 # TODO: Create the file name
                 # TODO: Remove the hardcoding here, use dict ['test':[1,2,3]] instead
-                SAMD51_FAMILY = 0x55114460
-                SAMD51_BASE = 0x4000
-                cmd = ['python3', 'uf2conv.py', '-c', '-b', SAMD51_BASE, '-f', SAMD51_FAMILY]
+                SAMD51_FAMILY = '0x55114460'
+                SAMD51_BASE = '0x4000'
+                cmd = ['python3', 'uf2conv.py', examplepath, '-c', '-b', SAMD51_BASE, '-f', SAMD51_FAMILY]
                 proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE)
                 r = proc.wait(timeout=60)
