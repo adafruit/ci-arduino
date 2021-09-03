@@ -218,7 +218,9 @@ def generate_uf2(example_path):
     SAMD51_FAMILY = '0x55114460'
     SAMD51_BASE = '0x4000'
     # UF2 output file name match example name
-    uf2_name = os.path.split(example_path)
+    uf2_name = os.path.split(example_path)[1]
+    uf2_name = uf2_name.split('.ino')[0]
+    uf2_name += ".uf2"
     print(uf2_name)
     # Pack a .bin/.hex to .uf2
     cmd = ['python3', 'uf2conv.py', example_path, '-c', '-b', SAMD51_BASE, '-f', SAMD51_FAMILY, '-o', uf2_name]
