@@ -244,7 +244,7 @@ def test_examples_in_folder(folderpath):
         skipfilename = folderpath+"/."+platform+".test.skip"
         onlyfilename = folderpath+"/."+platform+".test.only"
         # check if we should GENERATE UF2
-        gen_file_name = folderpath+"/."+platform+".test.generate"
+        gen_file_name = folderpath+"/."+platform+".generate"
         if os.path.exists(skipfilename):
             ColorPrint.print_warn("skipping")
             continue
@@ -253,7 +253,14 @@ def test_examples_in_folder(folderpath):
             continue
         if os.path.exists(gen_file_name):
             ColorPrint.print_warn("Generating UF2")
-
+            cmd = "wget -nc --no-check-certificate http://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2conv.py"
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            r = proc.wait(timeout=60)
+            out = proc.stdout.read()
+            if r != 0:
+                ColorPrint.print_fail("Failed to download uf2families.json")
+                ColorPrint.print_fail(out.decode("utf-8"))
+                ColorPrint.print_fail(err.decode("utf-8"))
 
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
