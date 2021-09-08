@@ -293,7 +293,8 @@ def test_examples_in_folder(folderpath):
                 ColorPrint.print_fail(err.decode("utf-8"))
                 continue
             # Create a uf2 directory if doesn't exist
-            os.mkdir("uf2")
+            if not os.path.isdir("uf2"):
+                os.mkdir("uf2")
 
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
