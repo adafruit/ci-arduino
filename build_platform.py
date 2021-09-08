@@ -82,7 +82,8 @@ ALL_PLATFORMS={
     "metro_m4" : "adafruit:samd:adafruit_metro_m4:speed=120",
     "metro_m4_tinyusb" : "adafruit:samd:adafruit_metro_m4:speed=120,usbstack=tinyusb",
     "metro_m4_airliftlite" : "adafruit:samd:adafruit_metro_m4_airliftlite:speed=120",
-    "metro_m4_airliftlite_tinyusb" : ["adafruit:samd:adafruit_metro_m4_airliftlite:speed=120,usbstack=tinyusb", "0x4000", "0x55114460"],
+    "metro_m4_airliftlite_tinyusb" : "adafruit:samd:adafruit_metro_m4_airliftlite:speed=120,usbstack=tinyusb",
+    #"metro_m4_airliftlite_tinyusb" : ["adafruit:samd:adafruit_metro_m4_airliftlite:speed=120,usbstack=tinyusb", "0x4000", "0x55114460"],
     "pybadge" : "adafruit:samd:adafruit_pybadge_m4:speed=120",
     "pybadge_tinyusb" : "adafruit:samd:adafruit_pybadge_m4:speed=120,usbstack=tinyusb",
     "pygamer" : "adafruit:samd:adafruit_pygamer_m4:speed=120",
@@ -220,13 +221,14 @@ def generate_uf2(example_path):
     # TODO: Remove the hardcoding here, use dict ['test':[1,2,3]] instead
     SAMD51_FAMILY = '0x55114460'
     SAMD51_BASE = '0x4000'
-    # Generate UF2 output name, match example name
-    uf2_name = os.path.split(example_path)[1]
-    uf2_name = uf2_name.split('.ino')[0]
-    uf2_name += ".uf2"
-    print(uf2_name)
-    # Pack a .bin/.hex to .uf2
-    cmd = ['python3', 'uf2conv.py', example_path, '-c', '-b', SAMD51_BASE, '-f', SAMD51_FAMILY, '-o', uf2_name]
+    # Generate UF2 output path and name
+    uf2_output_path = "uf2/" + os.path.split(example_path)[1]
+    uf2_output_path = uf2_output_path.split('.ino')[0] + "_"
+    # append platform string and file extension
+    uf2_output_path += platform
+    uf2_output_path += ".uf2"
+    # Pack the example into .uf2
+    cmd = ['python3', 'uf2conv.py', example_path, '-c', '-b', SAMD51_BASE, '-f', SAMD51_FAMILY, '-o', uf2_output_path]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     r = proc.wait(timeout=60)
     out = proc.stdout.read()
@@ -239,7 +241,6 @@ def generate_uf2(example_path):
         ColorPrint.print_fail(err.decode("utf-8"))
         return False
     return True
-
 
 ################################ Test platforms
 platforms = []
@@ -291,6 +292,8 @@ def test_examples_in_folder(folderpath):
                 ColorPrint.print_fail(out.decode("utf-8"))
                 ColorPrint.print_fail(err.decode("utf-8"))
                 continue
+            # Create a uf2 directory if doesn't exist
+            os.mkdir("uf2")
 
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
