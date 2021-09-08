@@ -252,11 +252,9 @@ success = 0
 # expand groups:
 for arg in sys.argv[1:]:
     platform = ALL_PLATFORMS.get(arg, None)
-    print("254 platform ", platform)
-    if isinstance(platform, str):
-        print('Platform append: ', platform)
-        platforms.append(platform)
-    elif isinstance(platform, collections.abc.Iterable):
+    if isinstance(platform, list):
+        platforms.append(arg)
+    elif isinstance(platform, tuple):
         for p in platform:
             platforms.append(p)
     else:
