@@ -130,6 +130,7 @@ ALL_PLATFORMS={
                         "esp8266", "esp32", "metro_m4", "trinket_m0"),
     "arcada_platforms" : ("pybadge", "pygamer", "hallowing_m4",
                           "cpb", "cpx_ada"),
+    "wippersnapper_platforms" : ("metro_m4_airliftlite_tinyusb", "pyportal_tinyusb"),
     "rp2040_platforms" : ("pico_rp2040", "feather_rp2040")
 }
 
@@ -227,7 +228,8 @@ def generate_uf2(example_path):
         return False
     # Convert .hex to .uf2
     family_id = ALL_PLATFORMS[platform][1]
-    input_file = glob1(os.path.join(example_path, "build/*/*.hex"))
+    cli_build_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
+    input_file = glob1(os.path.join(example_path, cli_build_path))
     output_file = os.path.splitext(input_file)[0] + ".uf2"
     cmd = ['python3', 'uf2conv.py', input_file, '-c', '-f', family_id, '-o', output_file]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -249,9 +251,11 @@ success = 0
 
 # expand groups:
 for arg in sys.argv[1:]:
-    platform = ALL_PLATFORMS.get(arg, None)[0]
+    platform = ALL_PLATFORMS.get(arg, None)
+    print("254 platform ", platform)
     if isinstance(platform, str):
-        platforms.append(arg)
+        print('Platform append: ', platform)
+        platforms.append(platform)
     elif isinstance(platform, collections.abc.Iterable):
         for p in platform:
             platforms.append(p)
