@@ -231,8 +231,8 @@ def generate_uf2(example_path):
     """Generates a .uf2 file from a .bin or .hex file.
     :param str example_path: A path to the compiled .bin or .hex file.
     """
-    if ALL_PLATFORMS[platform][1] == None:
-        return False
+    #if ALL_PLATFORMS[platform][1] == None:
+    #    return False
     # Convert .hex to .uf2
     family_id = ALL_PLATFORMS[platform][1]
     cli_build_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
