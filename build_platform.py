@@ -326,7 +326,8 @@ def test_examples_in_folder(folderpath):
                 ColorPrint.print_fail(err.decode("utf-8"))
             if os.path.exists(gen_file_name):
                 ColorPrint.print_info("Generating UF2...")
-                success = generate_uf2(folderpath)
+                #success = generate_uf2(folderpath)
+                generate_uf2(folderpath)
         else:
             ColorPrint.print_fail(CROSS)
             ColorPrint.print_fail(out.decode("utf-8"))
