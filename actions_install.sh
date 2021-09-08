@@ -18,6 +18,7 @@ mkdir ${HOME}/Arduino/libraries
 
 # install arduino IDE
 export PATH=$PATH:$GITHUB_WORKSPACE/bin
-curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh -s 0.11.0 2>&1
+#curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh -s 0.11.0 2>&1
+curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh
 arduino-cli config init > /dev/null
 arduino-cli core update-index > /dev/null
