@@ -213,20 +213,24 @@ print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/
 
 ################################ UF2 Utils.
 
+def glob1(pattern):
+    result = glob.glob(pattern)
+    if len(result) != 1:
+        raise RuntimeError(f"Required pattern {pattern} to match exactly 1 file, got {result}")
+    return result[0]
+
 def generate_uf2(example_path):
     """Generates a .uf2 file from a .bin or .hex file.
     :param str example_path: A path to the compiled .bin or .hex file.
     """
     if ALL_PLATFORMS[platform][1] == None:
         return False
+    # Convert .hex to .uf2
     family_id = ALL_PLATFORMS[platform][1]
-    input_file = os.path.join(example_path, "build/*/*.hex")
-    output_file = os.path.join(example_path, "build/*/*.uf2")
-    # Pack the example into .uf2
-    print("input_file: ", input_file)
-    print("output_file: ", output_file)
+    input_file = glob1(os.path.join(example_path, "build/*/*.hex"))
+    output_file = os.path.splitext(input_file)[0] + ".uf2"
     cmd = ['python3', 'uf2conv.py', input_file, '-c', '-f', family_id, '-o', output_file]
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     r = proc.wait(timeout=60)
     out = proc.stdout.read()
     err = proc.stderr.read()
