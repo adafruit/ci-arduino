@@ -50,9 +50,9 @@ CHECK = u'\N{check mark}'
 
 ALL_PLATFORMS={
     # classic Arduino AVR
-    "uno" : "arduino:avr:uno",
-    "leonardo" : "arduino:avr:leonardo",
-    "mega2560" : "arduino:avr:mega:cpu=atmega2560",
+    "uno" : ["arduino:avr:uno", None, None],
+    "leonardo" : ["arduino:avr:leonardo", None, None],
+    "mega2560" : ["arduino:avr:mega:cpu=atmega2560", None, None],
     # Arduino SAMD
     "zero" : "arduino:samd:arduino_zero_native",
     "cpx" : "arduino:samd:adafruit_circuitplayground_m0",
@@ -63,14 +63,14 @@ ALL_PLATFORMS={
     "funhouse" : "esp32:esp32:adafruit_funhouse_esp32s2",
     "metroesp32s2" : "esp32:esp32:adafruit_metro_esp32s2",
     # Adafruit AVR
-    "trinket_3v" : "adafruit:avr:trinket3",
-    "trinket_5v" : "adafruit:avr:trinket5",
-    "protrinket_3v" : "adafruit:avr:protrinket3",
-    "protrinket_5v" : "adafruit:avr:protrinket5",
-    "gemma" : "adafruit:avr:gemma",
-    "flora" : "adafruit:avr:flora8",
-    "feather32u4" : "adafruit:avr:feather32u4",
-    "cpc" : "arduino:avr:circuitplay32u4cat",
+    "trinket_3v" : ["adafruit:avr:trinket3", None, None],
+    "trinket_5v" : ["adafruit:avr:trinket5", None, None],
+    "protrinket_3v" : ["adafruit:avr:protrinket3", None, None],
+    "protrinket_5v" : ["adafruit:avr:protrinket5", None, None],
+    "gemma" : ["adafruit:avr:gemma", None, None],
+    "flora" : ["adafruit:avr:flora8", None, None],
+    "feather32u4" : ["adafruit:avr:feather32u4", None, None],
+    "cpc" : ["arduino:avr:circuitplay32u4cat", None, None],
     # Adafruit SAMD
     "gemma_m0" : "adafruit:samd:adafruit_gemma_m0",
     "trinket_m0" : "adafruit:samd:adafruit_trinket_m0",
@@ -82,7 +82,7 @@ ALL_PLATFORMS={
     "metro_m4" : "adafruit:samd:adafruit_metro_m4:speed=120",
     "metro_m4_tinyusb" : "adafruit:samd:adafruit_metro_m4:speed=120,usbstack=tinyusb",
     "metro_m4_airliftlite" : "adafruit:samd:adafruit_metro_m4_airliftlite:speed=120",
-    "metro_m4_airliftlite_tinyusb" : "adafruit:samd:adafruit_metro_m4_airliftlite:speed=120,usbstack=tinyusb",
+    "metro_m4_airliftlite_tinyusb" : ["adafruit:samd:adafruit_metro_m4_airliftlite:speed=120,usbstack=tinyusb", "0x4000", "0x55114460"],
     "pybadge" : "adafruit:samd:adafruit_pybadge_m4:speed=120",
     "pybadge_tinyusb" : "adafruit:samd:adafruit_pybadge_m4:speed=120,usbstack=tinyusb",
     "pygamer" : "adafruit:samd:adafruit_pygamer_m4:speed=120",
@@ -280,7 +280,7 @@ def test_examples_in_folder(folderpath):
             ColorPrint.print_warn("skipping")
             continue
         if os.path.exists(gen_file_name):
-            ColorPrint.print_info("Generating UF2 after build.")
+            ColorPrint.print_info("Generating UF2 after compile.")
             # Download uf2conv.py and dependency if we don't already have it
             cmd = "wget -nc --no-check-certificate http://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2conv.py"
             proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
