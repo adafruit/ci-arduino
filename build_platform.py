@@ -212,6 +212,13 @@ if our_name:
 
 print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/*'))
 
+# link our library folder to the arduino libraries folder
+if not IS_LEARNING_SYS:
+    try:
+        os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/' + os.path.basename(BUILD_DIR))
+    except FileExistsError:
+        pass
+
 ################################ UF2 Utils.
 
 def glob1(pattern):
