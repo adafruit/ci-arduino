@@ -50,9 +50,9 @@ CHECK = u'\N{check mark}'
 
 ALL_PLATFORMS={
     # classic Arduino AVR
-    "uno" : ["arduino:avr:uno", None, None],
-    "leonardo" : ["arduino:avr:leonardo", None, None],
-    "mega2560" : ["arduino:avr:mega:cpu=atmega2560", None, None],
+    "uno" : ["arduino:avr:uno", None],
+    "leonardo" : ["arduino:avr:leonardo", None],
+    "mega2560" : ["arduino:avr:mega:cpu=atmega2560", None],
     # Arduino SAMD
     "zero" : "arduino:samd:arduino_zero_native",
     "cpx" : "arduino:samd:adafruit_circuitplayground_m0",
@@ -63,14 +63,14 @@ ALL_PLATFORMS={
     "funhouse" : "esp32:esp32:adafruit_funhouse_esp32s2",
     "metroesp32s2" : "esp32:esp32:adafruit_metro_esp32s2",
     # Adafruit AVR
-    "trinket_3v" : ["adafruit:avr:trinket3", None, None],
-    "trinket_5v" : ["adafruit:avr:trinket5", None, None],
-    "protrinket_3v" : ["adafruit:avr:protrinket3", None, None],
-    "protrinket_5v" : ["adafruit:avr:protrinket5", None, None],
-    "gemma" : ["adafruit:avr:gemma", None, None],
-    "flora" : ["adafruit:avr:flora8", None, None],
-    "feather32u4" : ["adafruit:avr:feather32u4", None, None],
-    "cpc" : ["arduino:avr:circuitplay32u4cat", None, None],
+    "trinket_3v" : ["adafruit:avr:trinket3", None],
+    "trinket_5v" : ["adafruit:avr:trinket5", None],
+    "protrinket_3v" : ["adafruit:avr:protrinket3", None],
+    "protrinket_5v" : ["adafruit:avr:protrinket5", None],
+    "gemma" : ["adafruit:avr:gemma", None],
+    "flora" : ["adafruit:avr:flora8", None],
+    "feather32u4" : ["adafruit:avr:feather32u4", None],
+    "cpc" : ["arduino:avr:circuitplay32u4cat", None],
     # Adafruit SAMD
     "gemma_m0" : "adafruit:samd:adafruit_gemma_m0",
     "trinket_m0" : "adafruit:samd:adafruit_trinket_m0",
@@ -82,8 +82,7 @@ ALL_PLATFORMS={
     "metro_m4" : "adafruit:samd:adafruit_metro_m4:speed=120",
     "metro_m4_tinyusb" : "adafruit:samd:adafruit_metro_m4:speed=120,usbstack=tinyusb",
     "metro_m4_airliftlite" : "adafruit:samd:adafruit_metro_m4_airliftlite:speed=120",
-    "metro_m4_airliftlite_tinyusb" : "adafruit:samd:adafruit_metro_m4_airliftlite:speed=120,usbstack=tinyusb",
-    #"metro_m4_airliftlite_tinyusb" : ["adafruit:samd:adafruit_metro_m4_airliftlite:speed=120,usbstack=tinyusb", "0x4000", "0x55114460"],
+    "metro_m4_airliftlite_tinyusb" : ["adafruit:samd:adafruit_metro_m4_airliftlite:speed=120,usbstack=tinyusb", "0x55114460"],
     "pybadge" : "adafruit:samd:adafruit_pybadge_m4:speed=120",
     "pybadge_tinyusb" : "adafruit:samd:adafruit_pybadge_m4:speed=120,usbstack=tinyusb",
     "pygamer" : "adafruit:samd:adafruit_pygamer_m4:speed=120",
@@ -218,17 +217,13 @@ def generate_uf2(example_path):
     """Generates a .uf2 file from a .bin or .hex file.
     :param str example_path: A path to the compiled .bin or .hex file.
     """
-    # TODO: Remove the hardcoding here, use dict ['test':[1,2,3]] instead
-    SAMD51_FAMILY = '0x55114460'
-    SAMD51_BASE = '0x4000'
-    # Generate UF2 output path and name
-    uf2_output_path = "uf2/" + os.path.split(example_path)[1]
-    uf2_output_path = uf2_output_path.split('.ino')[0] + "_"
-    # append platform string and file extension
-    uf2_output_path += platform
-    uf2_output_path += ".uf2"
+    if ALL_PLATFORMS[platform][1] == None:
+        return False
+    family_id = ALL_PLATFORMS[platform][1]
+    input_file = example_path + "/build/*/*.hex"
+    output_file = example_path + "/build/*/*.uf2"
     # Pack the example into .uf2
-    cmd = ['python3', 'uf2conv.py', example_path, '-c', '-b', SAMD51_BASE, '-f', SAMD51_FAMILY, '-o', uf2_output_path]
+    cmd = ['python3', 'uf2conv.py', input_file, '-c', '-f', family_id, '-o', output_file]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     r = proc.wait(timeout=60)
     out = proc.stdout.read()
@@ -248,7 +243,7 @@ success = 0
 
 # expand groups:
 for arg in sys.argv[1:]:
-    platform = ALL_PLATFORMS.get(arg, None)
+    platform = ALL_PLATFORMS.get(arg, None)[0]
     if isinstance(platform, str):
         platforms.append(arg)
     elif isinstance(platform, collections.abc.Iterable):
@@ -315,7 +310,7 @@ def test_examples_in_folder(folderpath):
                 ColorPrint.print_fail(err.decode("utf-8"))
             if os.path.exists(gen_file_name):
                 ColorPrint.print_info("Generating UF2...")
-                success = generate_uf2(examplepath)
+                success = generate_uf2(folderpath)
         else:
             ColorPrint.print_fail(CROSS)
             ColorPrint.print_fail(out.decode("utf-8"))
@@ -362,7 +357,7 @@ def test_examples_in_learningrepo(folderpath):
 
 
 for platform in platforms:
-    fqbn = ALL_PLATFORMS[platform]
+    fqbn = ALL_PLATFORMS[platform][0]
     print('#'*80)
     ColorPrint.print_info("SWITCHING TO "+fqbn)
     install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
