@@ -220,13 +220,13 @@ def generate_uf2(example_path):
     if ALL_PLATFORMS[platform][1] == None:
         return False
     family_id = ALL_PLATFORMS[platform][1]
-    input_file = example_path + "/build/*/*.hex"
-    output_file = example_path + "/build/*/*.uf2"
+    input_file = os.path.join(example_path, "build/*/*.hex")
+    output_file = os.path.join(example_path, "build/*/*.uf2")
     # Pack the example into .uf2
     print("input_file: ", input_file)
     print("output_file: ", output_file)
     cmd = ['python3', 'uf2conv.py', input_file, '-c', '-f', family_id, '-o', output_file]
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
     r = proc.wait(timeout=60)
     out = proc.stdout.read()
     err = proc.stderr.read()
