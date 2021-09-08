@@ -234,6 +234,7 @@ def generate_uf2(example_path):
     #if ALL_PLATFORMS[platform][1] == None:
     #    return False
     # Convert .hex to .uf2
+    ColorPrint.print_bold("generate_uf2")
     family_id = ALL_PLATFORMS[platform][1]
     cli_build_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
     input_file = glob1(os.path.join(example_path, cli_build_path))
