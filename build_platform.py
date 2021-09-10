@@ -227,16 +227,28 @@ def glob1(pattern):
         raise RuntimeError(f"Required pattern {pattern} to match exactly 1 file, got {result}")
     return result[0]
 
+def download_uf2_utils():
+    """Downloads uf2conv tools if we don't already have them
+    """
+    cmd = "wget -nc --no-check-certificate http://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2conv.py"
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    r = proc.wait(timeout=60)
+    out = proc.stdout.read()
+    err = proc.stderr.read()
+    if r != 0:
+        ColorPrint.print_fail("Failed to download UF2 Utils!")
+        ColorPrint.print_fail(out.decode("utf-8"))
+        ColorPrint.print_fail(err.decode("utf-8"))
+        return False
+    return True
+
 def generate_uf2(example_path):
     """Generates a .uf2 file from a .bin or .hex file.
     :param str example_path: A path to the compiled .bin or .hex file.
 
     """
-    if ALL_PLATFORMS[platform][1] == None:
-        ColorPrint.print_fail(CROSS)
-        ColorPrint.print_fail("Platform does not support UF2 files, skipping generation...")
-        return
-    # Convert .hex to .uf2
+    if not download_uf2_utils():
+        return 1 # success = 1
     cli_build_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
     input_file = glob1(os.path.join(example_path, cli_build_path))
     output_file = os.path.splitext(input_file)[0] + ".uf2"
@@ -253,6 +265,7 @@ def generate_uf2(example_path):
         ColorPrint.print_fail(CROSS)
         ColorPrint.print_fail(out.decode("utf-8"))
         ColorPrint.print_fail(err.decode("utf-8"))
+    return 0
 
 ################################ Test platforms
 platforms = []
@@ -293,20 +306,7 @@ def test_examples_in_folder(folderpath):
             ColorPrint.print_warn("skipping")
             continue
         if os.path.exists(gen_file_name):
-            ColorPrint.print_info("Generate build artifacts.")
-            # Download uf2conv.py and dependency if we don't already have it
-            cmd = "wget -nc --no-check-certificate http://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2conv.py"
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-            r = proc.wait(timeout=60)
-            out = proc.stdout.read()
-            if r != 0:
-                ColorPrint.print_fail("Failed to download UF2 Utils!")
-                ColorPrint.print_fail(out.decode("utf-8"))
-                ColorPrint.print_fail(err.decode("utf-8"))
-                continue
-            # Create a uf2 directory if doesn't exist
-            if not os.path.isdir("uf2"):
-                os.mkdir("uf2")
+            ColorPrint.print_info("generating")
 
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
@@ -326,8 +326,11 @@ def test_examples_in_folder(folderpath):
                 # also print out warning message
                 ColorPrint.print_fail(err.decode("utf-8"))
             if os.path.exists(gen_file_name):
-                ColorPrint.print_info("Generating UF2...")
-                generate_uf2(folderpath)
+                if ALL_PLATFORMS[platform][1] == None:
+                    ColorPrint.print_info("Platform does not support UF2 files, skipping...")
+                else:
+                    ColorPrint.print_info("Generating UF2...")
+                    success = generate_uf2(folderpath)
         else:
             ColorPrint.print_fail(CROSS)
             ColorPrint.print_fail(out.decode("utf-8"))
