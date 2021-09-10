@@ -106,6 +106,7 @@ ALL_PLATFORMS={
     "neokeytrinkey_m0" : ["adafruit:samd:adafruit_neokeytrinkey_m0", "0x68ed2b88"],
     "slidetrinkey_m0" : ["adafruit:samd:adafruit_slidetrinkey_m0", "0x68ed2b88"],
     "proxlighttrinkey_m0" : ["adafruit:samd:adafruit_proxlighttrinkey_m0", "0x68ed2b88"],
+    "qtpy_m0" : ["adafruit:samd:adafruit_qtpy_m0", "0x68ed2b88"],
     # Arduino nRF
     "microbit" : ["sandeepmistry:nRF5:BBCmicrobit:softdevice=s110", None],
     # Adafruit nRF
