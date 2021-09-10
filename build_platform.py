@@ -233,7 +233,8 @@ def generate_uf2(example_path):
 
     """
     if ALL_PLATFORMS[platform][1] == None:
-        return 1
+        ColorPrint.print_fail(CROSS)
+        ColorPrint.print_fail("Platform does not support UF2 files, skipping generation...")
     # Convert .hex to .uf2
     cli_build_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
     input_file = glob1(os.path.join(example_path, cli_build_path))
@@ -251,8 +252,6 @@ def generate_uf2(example_path):
         ColorPrint.print_fail(CROSS)
         ColorPrint.print_fail(out.decode("utf-8"))
         ColorPrint.print_fail(err.decode("utf-8"))
-        return 1
-    return 0
 
 ################################ Test platforms
 platforms = []
@@ -293,7 +292,7 @@ def test_examples_in_folder(folderpath):
             ColorPrint.print_warn("skipping")
             continue
         if os.path.exists(gen_file_name):
-            ColorPrint.print_info("Generating UF2 after compile.")
+            ColorPrint.print_info("Generate build artifacts.")
             # Download uf2conv.py and dependency if we don't already have it
             cmd = "wget -nc --no-check-certificate http://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2conv.py"
             proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -327,7 +326,7 @@ def test_examples_in_folder(folderpath):
                 ColorPrint.print_fail(err.decode("utf-8"))
             if os.path.exists(gen_file_name):
                 ColorPrint.print_info("Generating UF2...")
-                success = generate_uf2(folderpath)
+                generate_uf2(folderpath)
         else:
             ColorPrint.print_fail(CROSS)
             ColorPrint.print_fail(out.decode("utf-8"))
