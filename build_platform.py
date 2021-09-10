@@ -57,8 +57,8 @@ ALL_PLATFORMS={
     "zero" : ["arduino:samd:arduino_zero_native", "0x68ed2b88"],
     "cpx" : ["arduino:samd:adafruit_circuitplayground_m0", "0x68ed2b88"],
     # Espressif
-    "esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", "0x7eab61ed"],
-    "esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", "0x1c5f21b0"],
+    "esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", None],
+    "esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None],
     "magtag" : ["esp32:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee"],
     "funhouse" : ["esp32:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee"],
     "metroesp32s2" : ["esp32:esp32:adafruit_metro_esp32s2", "0xbfdd4eee"],
