@@ -50,86 +50,88 @@ CHECK = u'\N{check mark}'
 
 ALL_PLATFORMS={
     # classic Arduino AVR
-    "uno" : "arduino:avr:uno",
-    "leonardo" : "arduino:avr:leonardo",
-    "mega2560" : "arduino:avr:mega:cpu=atmega2560",
+    "uno" : ["arduino:avr:uno", None],
+    "leonardo" : ["arduino:avr:leonardo", None],
+    "mega2560" : ["arduino:avr:mega:cpu=atmega2560", None],
     # Arduino SAMD
-    "zero" : "arduino:samd:arduino_zero_native",
-    "cpx" : "arduino:samd:adafruit_circuitplayground_m0",
+    "zero" : ["arduino:samd:arduino_zero_native", "0x68ed2b88"],
+    "cpx" : ["arduino:samd:adafruit_circuitplayground_m0", "0x68ed2b88"],
     # Espressif
-    "esp8266" : "esp8266:esp8266:huzzah:eesz=4M3M,xtal=80",
-    "esp32" : "esp32:esp32:featheresp32:FlashFreq=80",
-    "magtag" : "esp32:esp32:adafruit_magtag29_esp32s2",
-    "funhouse" : "esp32:esp32:adafruit_funhouse_esp32s2",
-    "metroesp32s2" : "esp32:esp32:adafruit_metro_esp32s2",
+    "esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", None],
+    "esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None],
+    "magtag" : ["esp32:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee"],
+    "funhouse" : ["esp32:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee"],
+    "metroesp32s2" : ["esp32:esp32:adafruit_metro_esp32s2", "0xbfdd4eee"],
     # Adafruit AVR
-    "trinket_3v" : "adafruit:avr:trinket3",
-    "trinket_5v" : "adafruit:avr:trinket5",
-    "protrinket_3v" : "adafruit:avr:protrinket3",
-    "protrinket_5v" : "adafruit:avr:protrinket5",
-    "gemma" : "adafruit:avr:gemma",
-    "flora" : "adafruit:avr:flora8",
-    "feather32u4" : "adafruit:avr:feather32u4",
-    "cpc" : "arduino:avr:circuitplay32u4cat",
+    "trinket_3v" : ["adafruit:avr:trinket3", None],
+    "trinket_5v" : ["adafruit:avr:trinket5", None],
+    "protrinket_3v" : ["adafruit:avr:protrinket3", None],
+    "protrinket_5v" : ["adafruit:avr:protrinket5", None],
+    "gemma" : ["adafruit:avr:gemma", None],
+    "flora" : ["adafruit:avr:flora8", None],
+    "feather32u4" : ["adafruit:avr:feather32u4", None],
+    "cpc" : ["arduino:avr:circuitplay32u4cat", None],
     # Adafruit SAMD
-    "gemma_m0" : "adafruit:samd:adafruit_gemma_m0",
-    "trinket_m0" : "adafruit:samd:adafruit_trinket_m0",
-    "feather_m0_express" : "adafruit:samd:adafruit_feather_m0_express",
-    "feather_m4_can" : "adafruit:samd:adafruit_feather_m4_can:speed=120",
-    "feather_m4_can_tinyusb" : "adafruit:samd:adafruit_feather_m4_can:speed=120,usbstack=tinyusb",
-    "metro_m0" : "adafruit:samd:adafruit_metro_m0",
-    "metro_m0_tinyusb" : "adafruit:samd:adafruit_metro_m0:usbstack=tinyusb",
-    "metro_m4" : "adafruit:samd:adafruit_metro_m4:speed=120",
-    "metro_m4_tinyusb" : "adafruit:samd:adafruit_metro_m4:speed=120,usbstack=tinyusb",
-    "metro_m4_airliftlite" : "adafruit:samd:adafruit_metro_m4_airliftlite:speed=120",
-    "metro_m4_airliftlite_tinyusb" : "adafruit:samd:adafruit_metro_m4_airliftlite:speed=120,usbstack=tinyusb",
-    "pybadge" : "adafruit:samd:adafruit_pybadge_m4:speed=120",
-    "pybadge_tinyusb" : "adafruit:samd:adafruit_pybadge_m4:speed=120,usbstack=tinyusb",
-    "pygamer" : "adafruit:samd:adafruit_pygamer_m4:speed=120",
+    "gemma_m0" : ["adafruit:samd:adafruit_gemma_m0", "0x68ed2b88"],
+    "trinket_m0" : ["adafruit:samd:adafruit_trinket_m0", "0x68ed2b88"],
+    "feather_m0_express" : ["adafruit:samd:adafruit_feather_m0_express", "0x68ed2b88"],
+    "feather_m4_can" : ["adafruit:samd:adafruit_feather_m4_can:speed=120", "0x68ed2b88"],
+    "feather_m4_can_tinyusb" : ["adafruit:samd:adafruit_feather_m4_can:speed=120,usbstack=tinyusb", "0x68ed2b88"],
+    "metro_m0" : ["adafruit:samd:adafruit_metro_m0", "0x68ed2b88"],
+    "metro_m0_tinyusb" : ["adafruit:samd:adafruit_metro_m0:usbstack=tinyusb", "0x68ed2b88"],
+    "metro_m4" : ["adafruit:samd:adafruit_metro_m4:speed=120", "0x55114460"],
+    "metro_m4_tinyusb" : ["adafruit:samd:adafruit_metro_m4:speed=120,usbstack=tinyusb", "0x55114460"],
+    "metro_m4_airliftlite" : ["adafruit:samd:adafruit_metro_m4_airliftlite:speed=120", "0x55114460"],
+    "metro_m4_airliftlite_tinyusb" : ["adafruit:samd:adafruit_metro_m4_airliftlite:speed=120,usbstack=tinyusb", "0x55114460"],
+    "pybadge" : ["adafruit:samd:adafruit_pybadge_m4:speed=120", "0x55114460"],
+    "pybadge_tinyusb" : ["adafruit:samd:adafruit_pybadge_m4:speed=120,usbstack=tinyusb", "0x55114460"],
+    "pygamer" : ["adafruit:samd:adafruit_pygamer_m4:speed=120", "0x55114460"],
     "hallowing_m0" : "adafruit:samd:adafruit_hallowing",
-    "hallowing_m4" : "adafruit:samd:adafruit_hallowing_m4:speed=120",
-    "hallowing_m4_tinyusb" : "adafruit:samd:adafruit_hallowing_m4:speed=120,usbstack=tinyusb",
-    "neotrellis_m4" : "adafruit:samd:adafruit_trellis_m4:speed=120",
-    "monster_m4sk" : "adafruit:samd:adafruit_monster_m4sk:speed=120",
-    "monster_m4sk_tinyusb" : "adafruit:samd:adafruit_monster_m4sk:speed=120,usbstack=tinyusb",
-    "pyportal" : "adafruit:samd:adafruit_pyportal_m4:speed=120",
-    "pyportal_tinyusb" : "adafruit:samd:adafruit_pyportal_m4:speed=120,usbstack=tinyusb",
-    "pyportal_titano" : "adafruit:samd:adafruit_pyportal_m4_titano:speed=120",
-    "pyportal_titano_tinyusb" : "adafruit:samd:adafruit_pyportal_m4_titano:speed=120,usbstack=tinyusb",
-    "cpx_ada" : "adafruit:samd:adafruit_circuitplayground_m0",
-    "grand_central" : "adafruit:samd:adafruit_grandcentral_m4:speed=120",
-    "grand_central_tinyusb" : "adafruit:samd:adafruit_grandcentral_m4:speed=120,usbstack=tinyusb",
-    "matrixportal" : "adafruit:samd:adafruit_matrixportal_m4:speed=120",
-    "matrixportal_tinyusb" : "adafruit:samd:adafruit_matrixportal_m4:speed=120,usbstack=tinyusb",
-    "neotrinkey_m0" : "adafruit:samd:adafruit_neotrinkey_m0",
-    "rotarytrinkey_m0" : "adafruit:samd:adafruit_rotarytrinkey_m0",
-    "neokeytrinkey_m0" : "adafruit:samd:adafruit_neokeytrinkey_m0",
-    "slidetrinkey_m0" : "adafruit:samd:adafruit_slidetrinkey_m0",
-    "proxlighttrinkey_m0" : "adafruit:samd:adafruit_proxlighttrinkey_m0",
+    "hallowing_m4" : ["adafruit:samd:adafruit_hallowing_m4:speed=120", "0x55114460"],
+    "hallowing_m4_tinyusb" : ["adafruit:samd:adafruit_hallowing_m4:speed=120,usbstack=tinyusb", "0x55114460"],
+    "neotrellis_m4" : ["adafruit:samd:adafruit_trellis_m4:speed=120", "0x55114460"],
+    "monster_m4sk" : ["adafruit:samd:adafruit_monster_m4sk:speed=120", "0x55114460"],
+    "monster_m4sk_tinyusb" : ["adafruit:samd:adafruit_monster_m4sk:speed=120,usbstack=tinyusb", "0x55114460"],
+    "pyportal" : ["adafruit:samd:adafruit_pyportal_m4:speed=120", "0x55114460"],
+    "pyportal_tinyusb" : ["adafruit:samd:adafruit_pyportal_m4:speed=120,usbstack=tinyusb", "0x55114460"],
+    "pyportal_titano" : ["adafruit:samd:adafruit_pyportal_m4_titano:speed=120", "0x55114460"],
+    "pyportal_titano_tinyusb" : ["adafruit:samd:adafruit_pyportal_m4_titano:speed=120,usbstack=tinyusb", "0x55114460"],
+    "cpx_ada" : ["adafruit:samd:adafruit_circuitplayground_m0", "0x68ed2b88"],
+    "grand_central" : ["adafruit:samd:adafruit_grandcentral_m4:speed=120", "0x55114460"],
+    "grand_central_tinyusb" : ["adafruit:samd:adafruit_grandcentral_m4:speed=120,usbstack=tinyusb", "0x55114460"],
+    "matrixportal" : ["adafruit:samd:adafruit_matrixportal_m4:speed=120", "0x55114460"],
+    "matrixportal_tinyusb" : ["adafruit:samd:adafruit_matrixportal_m4:speed=120,usbstack=tinyusb", "0x55114460"],
+    "neotrinkey_m0" : ["adafruit:samd:adafruit_neotrinkey_m0", "0x68ed2b88"],
+    "rotarytrinkey_m0" : ["adafruit:samd:adafruit_rotarytrinkey_m0", "0x68ed2b88"],
+    "neokeytrinkey_m0" : ["adafruit:samd:adafruit_neokeytrinkey_m0", "0x68ed2b88"],
+    "slidetrinkey_m0" : ["adafruit:samd:adafruit_slidetrinkey_m0", "0x68ed2b88"],
+    "proxlighttrinkey_m0" : ["adafruit:samd:adafruit_proxlighttrinkey_m0", "0x68ed2b88"],
+    "qtpy_m0" : ["adafruit:samd:adafruit_qtpy_m0", "0x68ed2b88"],
     # Arduino nRF
-    "microbit" : "sandeepmistry:nRF5:BBCmicrobit:softdevice=s110",
+    "microbit" : ["sandeepmistry:nRF5:BBCmicrobit:softdevice=s110", None],
     # Adafruit nRF
-    "nrf52832" : "adafruit:nrf52:feather52832:softdevice=s132v6,debug=l0",
-    "nrf52840" : "adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0",
-    "cpb" : "adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0",
-    "clue" : "adafruit:nrf52:cluenrf52840:softdevice=s140v6,debug=l0",
+    "nrf52832" : ["adafruit:nrf52:feather52832:softdevice=s132v6,debug=l0", None],
+    "nrf52840" : ["adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0", "0xada52840"],
+    "cpb" : ["adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0", "0xada52840"],
+    "clue" : ["adafruit:nrf52:cluenrf52840:softdevice=s140v6,debug=l0", "0xada52840"],
     # RP2040 (Philhower)
-    "pico_rp2040" : "rp2040:rp2040:rpipico:freq=125,flash=2097152_0",
-    "pico_rp2040_tinyusb" : "rp2040:rp2040:rpipico:flash=2097152_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb",
-    "feather_rp2040" : "rp2040:rp2040:adafruitfeather:freq=125,flash=8388608_0",
-    "feather_rp2040_tinyusb" : "rp2040:rp2040:adafruit_feather:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb",
-    "qt2040_trinkey" : "rp2040:rp2040:adafruit_trinkeyrp2040qt:freq=125,flash=8388608_0",
-    "qt2040_trinkey_tinyusb" : "rp2040:rp2040:adafruit_trinkeyrp2040qt:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb",
+    "pico_rp2040" : ["rp2040:rp2040:rpipico:freq=125,flash=2097152_0", "0xe48bff56"],
+    "pico_rp2040_tinyusb" : ["rp2040:rp2040:rpipico:flash=2097152_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56"],
+    "feather_rp2040" : ["rp2040:rp2040:adafruitfeather:freq=125,flash=8388608_0", "0xe48bff56"],
+    "feather_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_feather:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56"],
+    "qt2040_trinkey" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:freq=125,flash=8388608_0", "0xe48bff56"],
+    "qt2040_trinkey_tinyusb" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56"],
     # Attiny8xy (SpenceKonde)
-    "attiny817" : "megaTinyCore:megaavr:atxy7:chip=817",
-    "attiny816" : "megaTinyCore:megaavr:atxy6:chip=816",
-    "attiny807" : "megaTinyCore:megaavr:atxy7:chip=807",
-    "attiny806" : "megaTinyCore:megaavr:atxy6:chip=806",
+    "attiny817" : ["megaTinyCore:megaavr:atxy7:chip=817", None],
+    "attiny816" : ["megaTinyCore:megaavr:atxy6:chip=816", None],
+    "attiny807" : ["megaTinyCore:megaavr:atxy7:chip=807", None],
+    "attiny806" : ["megaTinyCore:megaavr:atxy6:chip=806", None],
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
                         "esp8266", "esp32", "metro_m4", "trinket_m0"),
     "arcada_platforms" : ("pybadge", "pygamer", "hallowing_m4",
                           "cpb", "cpx_ada"),
+    "wippersnapper_platforms" : ("metro_m4_airliftlite_tinyusb", "pyportal_tinyusb"),
     "rp2040_platforms" : ("pico_rp2040", "feather_rp2040")
 }
 
@@ -218,6 +220,54 @@ if not IS_LEARNING_SYS:
     except FileExistsError:
         pass
 
+################################ UF2 Utils.
+
+def glob1(pattern):
+    result = glob.glob(pattern)
+    if len(result) != 1:
+        raise RuntimeError(f"Required pattern {pattern} to match exactly 1 file, got {result}")
+    return result[0]
+
+def download_uf2_utils():
+    """Downloads uf2conv tools if we don't already have them
+    """
+    cmd = "wget -nc --no-check-certificate http://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2conv.py"
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    r = proc.wait(timeout=60)
+    out = proc.stdout.read()
+    err = proc.stderr.read()
+    if r != 0:
+        ColorPrint.print_fail("Failed to download UF2 Utils!")
+        ColorPrint.print_fail(out.decode("utf-8"))
+        ColorPrint.print_fail(err.decode("utf-8"))
+        return False
+    return True
+
+def generate_uf2(example_path):
+    """Generates a .uf2 file from a .bin or .hex file.
+    :param str example_path: A path to the compiled .bin or .hex file.
+
+    """
+    if not download_uf2_utils():
+        return 1 # success = 1
+    cli_build_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
+    input_file = glob1(os.path.join(example_path, cli_build_path))
+    output_file = os.path.splitext(input_file)[0] + ".uf2"
+    family_id = ALL_PLATFORMS[platform][1]
+    cmd = ['python3', 'uf2conv.py', input_file, '-c', '-f', family_id, '-o', output_file]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    r = proc.wait(timeout=60)
+    out = proc.stdout.read()
+    err = proc.stderr.read()
+    if r == 0 and not err:
+        ColorPrint.print_pass(CHECK)
+        ColorPrint.print_info(out.decode("utf-8"))
+    else:
+        ColorPrint.print_fail(CROSS)
+        ColorPrint.print_fail(out.decode("utf-8"))
+        ColorPrint.print_fail(err.decode("utf-8"))
+    return 0
+
 ################################ Test platforms
 platforms = []
 success = 0
@@ -225,9 +275,9 @@ success = 0
 # expand groups:
 for arg in sys.argv[1:]:
     platform = ALL_PLATFORMS.get(arg, None)
-    if isinstance(platform, str):
+    if isinstance(platform, list):
         platforms.append(arg)
-    elif isinstance(platform, collections.abc.Iterable):
+    elif isinstance(platform, tuple):
         for p in platform:
             platforms.append(p)
     else:
@@ -248,17 +298,24 @@ def test_examples_in_folder(folderpath):
         # check if we should SKIP
         skipfilename = folderpath+"/."+platform+".test.skip"
         onlyfilename = folderpath+"/."+platform+".test.only"
+        # check if we should GENERATE UF2
+        gen_file_name = folderpath+"/."+platform+".generate"
         if os.path.exists(skipfilename):
             ColorPrint.print_warn("skipping")
             continue
         if glob.glob(folderpath+"/.*.test.only") and not os.path.exists(onlyfilename):
             ColorPrint.print_warn("skipping")
             continue
+        if os.path.exists(gen_file_name):
+            ColorPrint.print_info("generating")
 
         if BUILD_WARN:
-            cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, examplepath]
+            if os.path.exists(gen_file_name):
+                cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, '-e', examplepath]
+            else:
+                cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, examplepath]
         else:
-            cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--fqbn', fqbn, examplepath]
+            cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--export-binaries', '--fqbn', fqbn, examplepath]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         r = proc.wait(timeout=60)
@@ -269,6 +326,12 @@ def test_examples_in_folder(folderpath):
             if err:
                 # also print out warning message
                 ColorPrint.print_fail(err.decode("utf-8"))
+            if os.path.exists(gen_file_name):
+                if ALL_PLATFORMS[platform][1] == None:
+                    ColorPrint.print_info("Platform does not support UF2 files, skipping...")
+                else:
+                    ColorPrint.print_info("Generating UF2...")
+                    success = generate_uf2(folderpath)
         else:
             ColorPrint.print_fail(CROSS)
             ColorPrint.print_fail(out.decode("utf-8"))
@@ -315,7 +378,7 @@ def test_examples_in_learningrepo(folderpath):
 
 
 for platform in platforms:
-    fqbn = ALL_PLATFORMS[platform]
+    fqbn = ALL_PLATFORMS[platform][0]
     print('#'*80)
     ColorPrint.print_info("SWITCHING TO "+fqbn)
     install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
