@@ -230,15 +230,15 @@ def glob1(pattern):
 def generate_uf2(example_path):
     """Generates a .uf2 file from a .bin or .hex file.
     :param str example_path: A path to the compiled .bin or .hex file.
+
     """
-    #if ALL_PLATFORMS[platform][1] == None:
-    #    return False
+    if ALL_PLATFORMS[platform][1] == None:
+        return 1
     # Convert .hex to .uf2
-    ColorPrint.print_bold("generate_uf2")
-    family_id = ALL_PLATFORMS[platform][1]
     cli_build_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
     input_file = glob1(os.path.join(example_path, cli_build_path))
     output_file = os.path.splitext(input_file)[0] + ".uf2"
+    family_id = ALL_PLATFORMS[platform][1]
     cmd = ['python3', 'uf2conv.py', input_file, '-c', '-f', family_id, '-o', output_file]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     r = proc.wait(timeout=60)
@@ -246,12 +246,13 @@ def generate_uf2(example_path):
     err = proc.stderr.read()
     if r == 0 and not err:
         ColorPrint.print_pass(CHECK)
+        ColorPrint.print_info(out.decode("utf-8"))
     else:
         ColorPrint.print_fail(CROSS)
         ColorPrint.print_fail(out.decode("utf-8"))
         ColorPrint.print_fail(err.decode("utf-8"))
-        return False
-    return True
+        return 1
+    return 0
 
 ################################ Test platforms
 platforms = []
@@ -326,8 +327,7 @@ def test_examples_in_folder(folderpath):
                 ColorPrint.print_fail(err.decode("utf-8"))
             if os.path.exists(gen_file_name):
                 ColorPrint.print_info("Generating UF2...")
-                #success = generate_uf2(folderpath)
-                generate_uf2(folderpath)
+                success = generate_uf2(folderpath)
         else:
             ColorPrint.print_fail(CROSS)
             ColorPrint.print_fail(out.decode("utf-8"))
