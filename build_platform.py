@@ -235,6 +235,7 @@ def generate_uf2(example_path):
     if ALL_PLATFORMS[platform][1] == None:
         ColorPrint.print_fail(CROSS)
         ColorPrint.print_fail("Platform does not support UF2 files, skipping generation...")
+        return
     # Convert .hex to .uf2
     cli_build_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
     input_file = glob1(os.path.join(example_path, cli_build_path))
