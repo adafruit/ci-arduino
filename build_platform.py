@@ -127,7 +127,7 @@ ALL_PLATFORMS={
     "attiny807" : ["megaTinyCore:megaavr:atxy7:chip=807", None],
     "attiny806" : ["megaTinyCore:megaavr:atxy6:chip=806", None],
     # groupings
-    "main_platforms" : ("uno", "leonardo", "mega2560", "zero",
+    "main_platforms" : ("uno", "leonardo", "mega2560", "zero", "qtpy_m0",
                         "esp8266", "esp32", "metro_m4", "trinket_m0"),
     "arcada_platforms" : ("pybadge", "pygamer", "hallowing_m4",
                           "cpb", "cpx_ada"),
