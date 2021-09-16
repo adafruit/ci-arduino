@@ -86,7 +86,7 @@ ALL_PLATFORMS={
     "pybadge" : ["adafruit:samd:adafruit_pybadge_m4:speed=120", "0x55114460"],
     "pybadge_tinyusb" : ["adafruit:samd:adafruit_pybadge_m4:speed=120,usbstack=tinyusb", "0x55114460"],
     "pygamer" : ["adafruit:samd:adafruit_pygamer_m4:speed=120", "0x55114460"],
-    "hallowing_m0" : "adafruit:samd:adafruit_hallowing",
+    "hallowing_m0" : ["adafruit:samd:adafruit_hallowing", "0x68ed2b88"],
     "hallowing_m4" : ["adafruit:samd:adafruit_hallowing_m4:speed=120", "0x55114460"],
     "hallowing_m4_tinyusb" : ["adafruit:samd:adafruit_hallowing_m4:speed=120,usbstack=tinyusb", "0x55114460"],
     "neotrellis_m4" : ["adafruit:samd:adafruit_trellis_m4:speed=120", "0x55114460"],
