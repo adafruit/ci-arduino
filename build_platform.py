@@ -318,7 +318,7 @@ def test_examples_in_folder(folderpath):
             cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--export-binaries', '--fqbn', fqbn, examplepath]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
-        r = proc.wait(timeout=60)
+        r = proc.wait(timeout=60*3)
         out = proc.stdout.read()
         err = proc.stderr.read()
         if r == 0 and not (err and BUILD_WALL == True):
