@@ -6,7 +6,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-python@v1
@@ -16,5 +16,4 @@ jobs:
       run: bash ./actions_install.sh
     - name: test platforms
       run: |
-        python3 build_platform.py uno leonardo mega2560 zero esp8266 esp32 pico_rp2040
-
+        python3 build_platform.py metroesp32s2
