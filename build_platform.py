@@ -61,7 +61,7 @@ ALL_PLATFORMS={
     "esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None],
     "magtag" : ["esp32:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee"],
     "funhouse" : ["esp32:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee"],
-    "metroesp32s2" : ["esp32:esp32:adafruit_metro_esp32s2:CDCOnBoot=cdc,MSCOnBoot=default,DFUOnBoot=default,UploadMode=cdc,PSRAM=enabled,PartitionScheme=default,CPUFreq=240,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,DebugLevel=none", "0xbfdd4eee"],
+    "metroesp32s2" : ["esp32:esp32:adafruit_metro_esp32s2:CDCOnBoot=cdc,MSCOnBoot=default,DFUOnBoot=default", "0xbfdd4eee"],
     # Adafruit AVR
     "trinket_3v" : ["adafruit:avr:trinket3", None],
     "trinket_5v" : ["adafruit:avr:trinket5", None],
