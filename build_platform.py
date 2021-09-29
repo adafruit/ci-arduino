@@ -311,12 +311,12 @@ def test_examples_in_folder(folderpath):
 
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
-                cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, '-e', examplepath]
+                cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, '-e', folderpath]
             else:
-                cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, examplepath]
+                cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, folderpath]
         else:
-            cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--export-binaries', '--fqbn', fqbn, examplepath]
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+            cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--export-binaries', '--fqbn', fqbn, folderpath]
+        proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         r = proc.wait(timeout=60)
         out = proc.stdout.read()
