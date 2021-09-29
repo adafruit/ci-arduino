@@ -61,7 +61,7 @@ ALL_PLATFORMS={
     "esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None],
     "magtag" : ["esp32:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee"],
     "funhouse" : ["esp32:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee"],
-    "metroesp32s2" : ["esp32:esp32:adafruit_metro_esp32s2", "0xbfdd4eee"],
+    "metroesp32s2" : ["esp32:esp32:adafruit_metro_esp32s2:CDCOnBoot=cdc,MSCOnBoot=default,DFUOnBoot=default,UploadMode=cdc,PSRAM=enabled,PartitionScheme=default,CPUFreq=240,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,DebugLevel=none", "0xbfdd4eee"],
     # Adafruit AVR
     "trinket_3v" : ["adafruit:avr:trinket3", None],
     "trinket_5v" : ["adafruit:avr:trinket5", None],
@@ -169,7 +169,7 @@ def install_platform(platform):
         exit(-1)
     ColorPrint.print_pass(CHECK)
     # print installed core version
-    print( os.popen('arduino-cli core list | grep {}'.format(platform)).read() )
+    print( os.popen('arduino-cli core list | grep {}'.format(platform)).read(), end='' )
 
 def run_or_die(cmd, error):
     print(cmd)
@@ -320,7 +320,7 @@ def test_examples_in_folder(folderpath):
             cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--export-binaries', '--fqbn', fqbn, examplepath]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
-        r = proc.wait(timeout=60*10)
+        r = proc.wait(timeout=60*5)
         out = proc.stdout.read()
         err = proc.stderr.read()
         if r == 0 and not (err and BUILD_WALL == True):
