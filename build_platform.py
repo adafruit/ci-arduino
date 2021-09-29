@@ -168,6 +168,8 @@ def install_platform(platform):
         ColorPrint.print_fail("FAILED to install "+platform)
         exit(-1)
     ColorPrint.print_pass(CHECK)
+    # print installed core version
+    print(os.popen('arduino-cli core list | grep {}'.format(platform)).read(), end='')
 
 def run_or_die(cmd, error):
     print(cmd)
