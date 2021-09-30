@@ -307,8 +307,14 @@ def test_examples_in_folder(folderpath):
         if os.path.exists(skipfilename):
             ColorPrint.print_warn("skipping")
             continue
-        if glob.glob(folderpath+"/.*.test.only") and not os.path.exists(onlyfilename):
-            ColorPrint.print_warn("skipping")
+        if glob.glob(folderpath+"/.*.test.only"):
+            if not glob.glob(".*.test.only")[0].split('.')[1] in ALL_PLATFORMS:
+                # uh oh, this isnt a valid testonly!
+                ColorPrint.print_fail("This example does not have a valid platform.test.skip file")
+                success = 1
+                break
+            if not os.path.exists(onlyfilename):
+                ColorPrint.print_warn("skipping")
             continue
         if os.path.exists(gen_file_name):
             ColorPrint.print_info("generating")
