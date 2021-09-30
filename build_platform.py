@@ -311,7 +311,7 @@ def test_examples_in_folder(folderpath):
             if not glob.glob(folderpath+"/.*.test.only")[0].split('.')[1] in ALL_PLATFORMS:
                 # uh oh, this isnt a valid testonly!
                 ColorPrint.print_fail(CROSS)
-                ColorPrint.print_fail("This example does not have a valid platform.test.skip file")
+                ColorPrint.print_fail("This example does not have a valid .platform.test.only file")
                 success = 1
                 continue
             if not os.path.exists(onlyfilename):
