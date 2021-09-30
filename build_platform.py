@@ -75,6 +75,8 @@ ALL_PLATFORMS={
     "gemma_m0" : ["adafruit:samd:adafruit_gemma_m0", "0x68ed2b88"],
     "trinket_m0" : ["adafruit:samd:adafruit_trinket_m0", "0x68ed2b88"],
     "feather_m0_express" : ["adafruit:samd:adafruit_feather_m0_express", "0x68ed2b88"],
+    "feather_m4_express" : ["adafruit:samd:adafruit_feather_m4_express:speed=120", "0x68ed2b88"],
+    "feather_m4_express_tinyusb" : ["adafruit:samd:adafruit_feather_m4_express:speed=120,usbstack=tinyusb", "0x68ed2b88"],
     "feather_m4_can" : ["adafruit:samd:adafruit_feather_m4_can:speed=120", "0x68ed2b88"],
     "feather_m4_can_tinyusb" : ["adafruit:samd:adafruit_feather_m4_can:speed=120,usbstack=tinyusb", "0x68ed2b88"],
     "metro_m0" : ["adafruit:samd:adafruit_metro_m0", "0x68ed2b88"],
