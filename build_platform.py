@@ -38,7 +38,6 @@ IS_LEARNING_SYS = False
 if "Adafruit_Learning_System_Guides" in BUILD_DIR:
     print("Found learning system repo")
     IS_LEARNING_SYS = True
-    /home/runner/work/Adafruit_Learning_System_Guides/Adafruit_Learning_System_Guides
     os.rm(BUILD_DIR + "/ci/examples/Blink/Blink.ino")
     os.rmdir(BUILD_DIR + "/ci/examples/Blink")
 elif "METROX-Examples-and-Project-Sketches" in BUILD_DIR:
@@ -112,6 +111,7 @@ ALL_PLATFORMS={
     "slidetrinkey_m0" : ["adafruit:samd:adafruit_slidetrinkey_m0", "0x68ed2b88"],
     "proxlighttrinkey_m0" : ["adafruit:samd:adafruit_proxlighttrinkey_m0", "0x68ed2b88"],
     "qtpy_m0" : ["adafruit:samd:adafruit_qtpy_m0", "0x68ed2b88"],
+    "qtpy_m0_tinyusb" : ["adafruit:samd:adafruit_qtpy_m0:usbstack=tinyusb", "0x68ed2b88"],
     # Arduino nRF
     "microbit" : ["sandeepmistry:nRF5:BBCmicrobit:softdevice=s110", None],
     # Adafruit nRF
