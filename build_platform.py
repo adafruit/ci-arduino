@@ -334,7 +334,7 @@ def test_examples_in_folder(folderpath):
         r = proc.wait(timeout=60)
         out = proc.stdout.read()
         err = proc.stderr.read()
-        ColorPrint.print_info(str(r))
+        ColorPrint.print_info(bytes(str(r)))
         ColorPrint.print_info(out)
         ColorPrint.print_info(err)
         if r == 0 and not (err and BUILD_WALL == True):
