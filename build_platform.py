@@ -38,6 +38,9 @@ IS_LEARNING_SYS = False
 if "Adafruit_Learning_System_Guides" in BUILD_DIR:
     print("Found learning system repo")
     IS_LEARNING_SYS = True
+    /home/runner/work/Adafruit_Learning_System_Guides/Adafruit_Learning_System_Guides
+    os.rm(BUILD_DIR + "/ci/examples/Blink/Blink.ino")
+    os.rmdir(BUILD_DIR + "/ci/examples/Blink")
 elif "METROX-Examples-and-Project-Sketches" in BUILD_DIR:
     print("Found MetroX Examples Repo")
     IS_LEARNING_SYS = True
@@ -75,7 +78,7 @@ ALL_PLATFORMS={
     "gemma_m0" : ["adafruit:samd:adafruit_gemma_m0", "0x68ed2b88"],
     "trinket_m0" : ["adafruit:samd:adafruit_trinket_m0", "0x68ed2b88"],
     "feather_m0_express" : ["adafruit:samd:adafruit_feather_m0_express", "0x68ed2b88"],
-    "feather_m4_express" : ["adafruit:samd:adafruit_feather_m4_express:speed=120", "0x68ed2b88"],
+    "feather_m4_express" : ["adafruit:samd:adafruit_feather_m4:speed=120", "0x68ed2b88"],
     "feather_m4_express_tinyusb" : ["adafruit:samd:adafruit_feather_m4_express:speed=120,usbstack=tinyusb", "0x68ed2b88"],
     "feather_m4_can" : ["adafruit:samd:adafruit_feather_m4_can:speed=120", "0x68ed2b88"],
     "feather_m4_can_tinyusb" : ["adafruit:samd:adafruit_feather_m4_can:speed=120,usbstack=tinyusb", "0x68ed2b88"],
@@ -119,7 +122,7 @@ ALL_PLATFORMS={
     # RP2040 (Philhower)
     "pico_rp2040" : ["rp2040:rp2040:rpipico:freq=125,flash=2097152_0", "0xe48bff56"],
     "pico_rp2040_tinyusb" : ["rp2040:rp2040:rpipico:flash=2097152_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56"],
-    "feather_rp2040" : ["rp2040:rp2040:adafruitfeather:freq=125,flash=8388608_0", "0xe48bff56"],
+    "feather_rp2040" : ["rp2040:rp2040:adafruit_feather:freq=125,flash=8388608_0", "0xe48bff56"],
     "feather_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_feather:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56"],
     "qt2040_trinkey" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:freq=125,flash=8388608_0", "0xe48bff56"],
     "qt2040_trinkey_tinyusb" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56"],
