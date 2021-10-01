@@ -334,10 +334,10 @@ def test_examples_in_folder(folderpath):
         r = proc.wait(timeout=60)
         out = proc.stdout.read()
         err = proc.stderr.read()
-        print(cmd)
-        print(r)
-        ColorPrint.print_info(out.decode("utf-8"))
-        ColorPrint.print_info(err.decode("utf-8"))
+        #print(cmd)
+        #print(r)
+        #ColorPrint.print_info(out.decode("utf-8"))
+        #ColorPrint.print_info(err.decode("utf-8"))
         if r == 0 and not (err and BUILD_WALL == True):
             ColorPrint.print_pass(CHECK)
             if err:
