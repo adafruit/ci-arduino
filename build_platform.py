@@ -328,11 +328,15 @@ def test_examples_in_folder(folderpath):
                 cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, folderpath]
         else:
             cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--export-binaries', '--fqbn', fqbn, folderpath]
+
         proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         r = proc.wait(timeout=60)
         out = proc.stdout.read()
         err = proc.stderr.read()
+        ColorPrint.print_info(r)
+        ColorPrint.print_info(out)
+        ColorPrint.print_info(err)
         if r == 0 and not (err and BUILD_WALL == True):
             ColorPrint.print_pass(CHECK)
             if err:
