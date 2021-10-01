@@ -38,7 +38,7 @@ IS_LEARNING_SYS = False
 if "Adafruit_Learning_System_Guides" in BUILD_DIR:
     print("Found learning system repo")
     IS_LEARNING_SYS = True
-    os.rm(BUILD_DIR + "/ci/examples/Blink/Blink.ino")
+    os.remove(BUILD_DIR + "/ci/examples/Blink/Blink.ino")
     os.rmdir(BUILD_DIR + "/ci/examples/Blink")
 elif "METROX-Examples-and-Project-Sketches" in BUILD_DIR:
     print("Found MetroX Examples Repo")
