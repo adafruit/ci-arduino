@@ -335,13 +335,14 @@ def test_examples_in_folder(folderpath):
 
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
-        r = proc.wait(timeout=60)
-        out = proc.stdout.read()
-        err = proc.stderr.read()
-        #print(cmd)
-        #print(r)
-        #ColorPrint.print_info(out.decode("utf-8"))
-        #ColorPrint.print_info(err.decode("utf-8"))
+        try:
+            out, err = proc.communicate(timeout=60)
+            r = proc.returncode
+        except:
+            proc.kill()
+            out, err = proc.communicate()
+            r = 1
+
         if r == 0 and not (err and BUILD_WALL == True):
             ColorPrint.print_pass(CHECK)
             if err:
