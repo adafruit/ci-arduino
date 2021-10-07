@@ -337,7 +337,7 @@ def test_examples_in_folder(folderpath):
                                 stderr=subprocess.PIPE)
         try:
             out, err = proc.communicate(timeout=60)
-            r = 0
+            r = proc.returncode
         except:
             proc.kill()
             out, err = proc.communicate()
