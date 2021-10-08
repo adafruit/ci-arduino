@@ -179,9 +179,15 @@ def install_platform(platform):
 
 def run_or_die(cmd, error):
     print(cmd)
-    if os.system(cmd) != 0:
-        ColorPrint.print_fail(error)
-        exit(-1)
+    attempt = 0
+    while attempt < 3:
+        if os.system(cmd) == 0:
+            return
+        attempt += 1
+        print('attempt {} failed, {} retry left'.format(attempt, 3-attempt))
+        time.sleep(5)
+    ColorPrint.print_fail(error)
+    exit(-1)
 
 ################################ Install Arduino IDE
 print()
