@@ -185,6 +185,7 @@ def run_or_die(cmd, error):
             return
         attempt += 1
         print('attempt {} failed, {} retry left'.format(attempt, 3-attempt))
+        time.sleep(5)
     ColorPrint.print_fail(error)
     exit(-1)
 
