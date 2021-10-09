@@ -362,7 +362,8 @@ def test_examples_in_folder(folderpath):
                     ColorPrint.print_info("Generating UF2...")
                     success = generate_uf2(folderpath)
                     if IS_LEARNING_SYS:
-                        shutil.move(folderpath+"/build", BUILD_DIR)
+                        for filePath in glob.glob(folderpath+"/build" + '/*'):
+                            shutil.move(filePath, BUILD_DIR);
                         files = [f for f in glob.glob(BUILD_DIR+"/build" + "**/*", recursive=True)]
                         for f in files:
                             print(f)
