@@ -265,10 +265,14 @@ def generate_uf2(example_path):
     if not download_uf2_utils():
         return 1 # success = 1
     cli_build_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
+    print(cli_build_path)
     input_file = glob1(os.path.join(example_path, cli_build_path))
+    print(input_file)
     output_file = os.path.splitext(input_file)[0] + ".uf2"
+    print(output_file)
     family_id = ALL_PLATFORMS[platform][1]
     cmd = ['python3', 'uf2conv.py', input_file, '-c', '-f', family_id, '-o', output_file]
+    print(cmd)
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     r = proc.wait(timeout=60)
     out = proc.stdout.read()
