@@ -366,10 +366,7 @@ def test_examples_in_folder(folderpath):
                         print(folderpath)
                         print(BUILD_DIR)
                         copy_tree(folderpath+"/build", BUILD_DIR)
-                        os.system("ls -lAR "+folderpath)
-                        files = [f for f in glob.glob(BUILD_DIR+"/build" + "**/*", recursive=True)]
-                        for f in files:
-                            print(f)
+                        os.system("ls -lR "+BUILD_DIR+"/build")
         else:
             ColorPrint.print_fail(CROSS)
             ColorPrint.print_fail(out.decode("utf-8"))
