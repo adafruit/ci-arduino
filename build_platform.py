@@ -3,6 +3,7 @@ import glob
 import time
 import os
 import shutil
+from distutils.dir_util import copy_tree
 import subprocess
 import collections
 
@@ -362,7 +363,9 @@ def test_examples_in_folder(folderpath):
                     ColorPrint.print_info("Generating UF2...")
                     success = generate_uf2(folderpath)
                     if IS_LEARNING_SYS:
-                        os.system("cp -Rf "+folderpath+"/build "+BUILD_DIR_)
+                        print(folderpath)
+                        print(BUILD_DIR)
+                        copy_tree(folderpath+"/build", BUILD_DIR)
                         files = [f for f in glob.glob(BUILD_DIR+"/build" + "**/*", recursive=True)]
                         for f in files:
                             print(f)
