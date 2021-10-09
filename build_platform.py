@@ -369,8 +369,10 @@ def test_examples_in_folder(folderpath):
                         print(filename)
                         print(folderpath)
                         print(BUILD_DIR)
+                        fqbnpath, uf2file = filename.split("/")[-2:]
                         os.makedirs(BUILD_DIR+"/build", exist_ok=True)
-                        copy_tree(folderpath+"/build", BUILD_DIR+"/build")
+                        os.makedirs(BUILD_DIR+"/build/"+fqbnpath, exist_ok=True)
+                        shutil.copy(filename, BUILD_DIR+"/build/"+fqbnpath+"/"+uf2file)
                         os.system("ls -lR "+folderpath+"/build")
                         os.system("ls -lR "+BUILD_DIR+"/build")
         else:
