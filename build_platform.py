@@ -365,7 +365,7 @@ def test_examples_in_folder(folderpath):
                     filename = generate_uf2(folderpath)
                     if filename is None:
                         success = 1  # failure
-                    else if IS_LEARNING_SYS:
+                    elif IS_LEARNING_SYS:
                         fqbnpath, uf2file = filename.split("/")[-2:]
                         os.makedirs(BUILD_DIR+"/build", exist_ok=True)
                         os.makedirs(BUILD_DIR+"/build/"+fqbnpath, exist_ok=True)
