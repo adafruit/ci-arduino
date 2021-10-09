@@ -365,7 +365,9 @@ def test_examples_in_folder(folderpath):
                     if IS_LEARNING_SYS:
                         print(folderpath)
                         print(BUILD_DIR)
-                        copy_tree(folderpath+"/build", BUILD_DIR)
+                        os.makedirs(BUILD_DIR+"/build", exist_ok=True)
+                        copy_tree(folderpath+"/build", BUILD_DIR+"/build")
+                        os.system("ls -lR "+folderpath+"/build")
                         os.system("ls -lR "+BUILD_DIR+"/build")
         else:
             ColorPrint.print_fail(CROSS)
