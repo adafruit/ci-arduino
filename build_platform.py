@@ -365,15 +365,11 @@ def test_examples_in_folder(folderpath):
                     filename = generate_uf2(folderpath)
                     if filename is None:
                         success = 1  # failure
-                    if IS_LEARNING_SYS:
-                        print(filename)
-                        print(folderpath)
-                        print(BUILD_DIR)
+                    else if IS_LEARNING_SYS:
                         fqbnpath, uf2file = filename.split("/")[-2:]
                         os.makedirs(BUILD_DIR+"/build", exist_ok=True)
                         os.makedirs(BUILD_DIR+"/build/"+fqbnpath, exist_ok=True)
-                        shutil.copy(filename, BUILD_DIR+"/build/"+fqbnpath+"/"+uf2file)
-                        os.system("ls -lR "+folderpath+"/build")
+                        shutil.copy(filename, BUILD_DIR+"/build/"+fqbnpath+"-"+uf2file)
                         os.system("ls -lR "+BUILD_DIR+"/build")
         else:
             ColorPrint.print_fail(CROSS)
