@@ -265,7 +265,7 @@ def generate_uf2(example_path):
 
     """
     if not download_uf2_utils():
-        return 1 # success = 1
+        return None
     cli_build_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
     input_file = glob1(os.path.join(example_path, cli_build_path))
     output_file = os.path.splitext(input_file)[0] + ".uf2"
@@ -282,7 +282,8 @@ def generate_uf2(example_path):
         ColorPrint.print_fail(CROSS)
         ColorPrint.print_fail(out.decode("utf-8"))
         ColorPrint.print_fail(err.decode("utf-8"))
-    return 0
+        return None
+    return output_file
 
 ################################ Test platforms
 platforms = []
@@ -361,8 +362,11 @@ def test_examples_in_folder(folderpath):
                     ColorPrint.print_info("Platform does not support UF2 files, skipping...")
                 else:
                     ColorPrint.print_info("Generating UF2...")
-                    success = generate_uf2(folderpath)
+                    filename = generate_uf2(folderpath)
+                    if filename is None:
+                        success = 1  # failure
                     if IS_LEARNING_SYS:
+                        print(filename)
                         print(folderpath)
                         print(BUILD_DIR)
                         os.makedirs(BUILD_DIR+"/build", exist_ok=True)
