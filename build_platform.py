@@ -130,8 +130,13 @@ ALL_PLATFORMS={
     "feather_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_feather:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56"],
     "qt2040_trinkey" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:freq=125,flash=8388608_0", "0xe48bff56"],
     "qt2040_trinkey_tinyusb" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56"],
-    # Attiny8xy and 16xy (SpenceKonde)
+    # Attiny8xy, 16xy, 32xy (SpenceKonde)
+    "attiny3217" : ["megaTinyCore:megaavr:atxy7:chip=3217", None],
+    "attiny3216" : ["megaTinyCore:megaavr:atxy6:chip=3216", None],
     "attiny1617" : ["megaTinyCore:megaavr:atxy7:chip=1617", None],
+    "attiny1616" : ["megaTinyCore:megaavr:atxy6:chip=1616", None],
+    "attiny1607" : ["megaTinyCore:megaavr:atxy7:chip=1607", None],
+    "attiny1606" : ["megaTinyCore:megaavr:atxy6:chip=1606", None],
     "attiny817" : ["megaTinyCore:megaavr:atxy7:chip=817", None],
     "attiny816" : ["megaTinyCore:megaavr:atxy6:chip=816", None],
     "attiny807" : ["megaTinyCore:megaavr:atxy7:chip=807", None],
