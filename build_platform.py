@@ -66,6 +66,9 @@ ALL_PLATFORMS={
     "magtag" : ["esp32:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee"],
     "funhouse" : ["esp32:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee"],
     "metroesp32s2" : ["esp32:esp32:adafruit_metro_esp32s2", "0xbfdd4eee"],
+    "qtpy_esp32s2" : ["esp32:esp32:adafruit_qtpy_esp32s2", "0xbfdd4eee"],
+    "feather_esp32s2" : ["esp32:esp32:adafruit_feather_esp32s2", "0xbfdd4eee"],
+    "feather_esp32s2_tft" : ["esp32:esp32:adafruit_feather_esp32s2_tft", "0xbfdd4eee"],
     # Adafruit AVR
     "trinket_3v" : ["adafruit:avr:trinket3", None],
     "trinket_5v" : ["adafruit:avr:trinket5", None],
