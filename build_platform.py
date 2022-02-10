@@ -208,10 +208,10 @@ print("INSTALLING ARDUINO BOARDS")
 ColorPrint.print_info('#'*40)
 
 run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
-           " > /dev/null", "FAILED to update core indecies")
+           " > /dev/null", "FAILED to update core indices")
 print()
 
-################################ Install dependancies
+################################ Install dependencies
 our_name=None
 try:
     if IS_LEARNING_SYS:
@@ -227,13 +227,13 @@ try:
                 dep = dep.strip()
                 print("Installing "+dep)
                 run_or_die('arduino-cli lib install "'+dep+'" > /dev/null',
-                           "FAILED to install dependancy "+dep)
+                           "FAILED to install dependency "+dep)
 except OSError:
     print("No library dep or properties found!")
     pass  # no library properties
 
 # Delete the existing library if we somehow downloaded
-# due to dependancies
+# due to dependencies
 if our_name:
     run_or_die("arduino-cli lib uninstall \""+our_name+"\"", "Could not uninstall")
 
