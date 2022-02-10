@@ -5,6 +5,7 @@ import os
 import shutil
 import subprocess
 import collections
+from contextlib import contextmanager
 
 # optional wall option cause build failed if has warnings
 BUILD_WALL = False
@@ -310,6 +311,20 @@ for arg in sys.argv[1:]:
         print("Unknown platform: ", arg)
         exit(-1)
 
+@contextmanager
+def group_output(title):
+    sys.stdout.flush()
+    sys.stderr.flush()
+    print(f"::group::{title}")
+    try:
+        yield
+    finally:
+        sys.stdout.flush()
+        sys.stderr.flush()
+        print(f"::endgroup::")
+        sys.stdout.flush()
+
+
 def test_examples_in_folder(folderpath):
     global success
     for example in sorted(os.listdir(folderpath)):
@@ -365,7 +380,8 @@ def test_examples_in_folder(folderpath):
             ColorPrint.print_pass(CHECK)
             if err:
                 # also print out warning message
-                ColorPrint.print_fail(err.decode("utf-8"))
+                with group_output(f"{example} {fqbn} build output"):
+                    ColorPrint.print_fail(err.decode("utf-8"))
             if os.path.exists(gen_file_name):
                 if ALL_PLATFORMS[platform][1] == None:
                     ColorPrint.print_info("Platform does not support UF2 files, skipping...")
@@ -382,8 +398,9 @@ def test_examples_in_folder(folderpath):
                         os.system("ls -lR "+BUILD_DIR+"/build")
         else:
             ColorPrint.print_fail(CROSS)
-            ColorPrint.print_fail(out.decode("utf-8"))
-            ColorPrint.print_fail(err.decode("utf-8"))
+            with group_output(f"{example} {fqbn} built output"):
+                ColorPrint.print_fail(out.decode("utf-8"))
+                ColorPrint.print_fail(err.decode("utf-8"))
             success = 1
 
 def test_examples_in_learningrepo(folderpath):
