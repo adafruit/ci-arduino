@@ -1,3 +1,9 @@
+---
+# DEPRECATION WARNING
+**This repo has been deprecated and is no longer used.**
+
+---
+
 # Travis CI Arduino Init Script [![Build Status](https://travis-ci.com/adafruit/travis-ci-arduino.svg?branch=master)](https://travis-ci.com/adafruit/travis-ci-arduino)
 
 The purpose of this repo is to create a centrally managed dependency
