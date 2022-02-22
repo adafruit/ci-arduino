@@ -180,7 +180,7 @@ if [ -d "html" ] && [ -f "html/index.html" ]; then
       -m "Commit: ${COMMIT_SHA1}"$'\n'"${BUILD_ID}"
 
     # Force push to the remote gh-pages branch.
-    # The ouput is redirected to /dev/null to hide any sensitive credential data
+    # The output is redirected to /dev/null to hide any sensitive credential data
     # that might otherwise be exposed.
     echo 'Git pushing'
     git push --force "https://${AUTH}@github.com/${REPO_SLUG}.git" > /dev/null 2>&1
