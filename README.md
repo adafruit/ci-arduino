@@ -33,6 +33,7 @@ Replace `YOUR_PLATFORM_HERE` in the name with exact text from `ALL_PLATFORMS`.
 
 * To **skip** testing on ESP8266, add a file named `.esp8266.test.skip`
 * To test **only** the Arduino UNO, add a file named `.uno.test.only`
+* To skip all and test **nothing**, add a file named `.none.test.only`
 * To generate UF2s for PyPortal, add a file named `.pyportal.generate`
 
 ## Formatting Check with Clang
