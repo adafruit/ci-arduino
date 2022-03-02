@@ -124,6 +124,9 @@ ALL_PLATFORMS={
     "proxlighttrinkey_m0" : ["adafruit:samd:adafruit_proxlighttrinkey_m0", "0x68ed2b88"],
     "qtpy_m0" : ["adafruit:samd:adafruit_qtpy_m0", "0x68ed2b88"],
     "qtpy_m0_tinyusb" : ["adafruit:samd:adafruit_qtpy_m0:usbstack=tinyusb", "0x68ed2b88"],
+    # Arduino SAMD
+    "mkrwifi1010" : ["arduino:samd:mkrwifi1010", "0x8054"],
+    "nano_33_iot" : ["arduino:samd:nano_33_iot", "0x8057"],
     # Arduino nRF
     "microbit" : ["sandeepmistry:nRF5:BBCmicrobit:softdevice=s110", None],
     # Adafruit nRF
