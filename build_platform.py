@@ -62,7 +62,7 @@ ALL_PLATFORMS={
     # Espressif
     "esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", None],
     "esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None],
-    "feather_esp32_v2" : ["espressif:esp32:adafruit_feather_esp32_v2", None],
+    "feather_esp32_v2_daily" : ["espressif:esp32:adafruit_feather_esp32_v2", None],
     "magtag" : ["esp32:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee"],
     "funhouse" : ["esp32:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee"],
     "metroesp32s2" : ["esp32:esp32:adafruit_metro_esp32s2", "0xbfdd4eee"],
@@ -218,18 +218,20 @@ def manually_install_esp32_bsp():
         exit(-1)
     print(out)
 
-def install_platform(platform):
-    print("Installing", platform, end=" ")
-    if platform == "adafruit:avr":   # we have a platform dep
+def install_platform(fqbn, platform_name):
+    print("Platform full name: ", platform_name)
+
+    print("Installing", fqbn, end=" ")
+    if fqbn == "adafruit:avr":   # we have a platform dep
         install_platform("arduino:avr")
-    if platform == "espressif:esp32":  # use "espressif:" prefix in arduino-cli rather than "esp32:" to manually install for a platform
+    if "daily" in platform_name: # manually install ESP32 BSP from latest source
         manually_install_esp32_bsp()
-    elif os.system("arduino-cli core install "+platform+" --additional-urls "+BSP_URLS+" > /dev/null") != 0:
-        ColorPrint.print_fail("FAILED to install "+platform)
+    elif os.system("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS+" > /dev/null") != 0:
+        ColorPrint.print_fail("FAILED to install "+fqbn)
         exit(-1)
     ColorPrint.print_pass(CHECK)
     # print installed core version
-    print(os.popen('arduino-cli core list | grep {}'.format(platform)).read(), end='')
+    print(os.popen('arduino-cli core list | grep {}'.format(fqbn)).read(), end='')
 
 def run_or_die(cmd, error):
     print(cmd)
@@ -506,7 +508,7 @@ for platform in platforms:
     fqbn = ALL_PLATFORMS[platform][0]
     print('#'*80)
     ColorPrint.print_info("SWITCHING TO "+fqbn)
-    install_platform(":".join(fqbn.split(':', 2)[0:2])) # take only first two elements
+    install_platform(":".join(fqbn.split(':', 2)[0:2]), platform) # take only first two elements
     print('#'*80)
     if not IS_LEARNING_SYS:
         test_examples_in_folder(BUILD_DIR+"/examples")
