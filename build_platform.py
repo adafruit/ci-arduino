@@ -62,7 +62,7 @@ ALL_PLATFORMS={
     # Espressif
     "esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", None],
     "esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None],
-    "feather_esp32_v2" : ["espressif:esp32:adafruit_feather_esp32_v2", None],
+    "feather_esp32_v2" : ["manual:esp32:adafruit_feather_esp32_v2", None],
     "magtag" : ["esp32:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee"],
     "funhouse" : ["esp32:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee"],
     "metroesp32s2" : ["esp32:esp32:adafruit_metro_esp32s2", "0xbfdd4eee"],
@@ -183,12 +183,45 @@ class ColorPrint:
     def print_bold(message, end = '\n'):
         sys.stdout.write('\x1b[1;37m' + message.strip() + '\x1b[0m' + end)
 
+def manually_install_esp32_bsp():
+    # see - https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html#linux
+    print("Manually installing latest ESP32 BSP...")
+    os.system("mkdir -p /home/runner/Arduino/hardware/espressif")
+    # Locally clone repo
+    print("Cloning github.com/espressif/arduino-esp32..")
+    cmd = "cd /home/runner/Arduino/hardware/espressif && git clone https://github.com/espressif/arduino-esp32.git esp32"
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    r = proc.wait(timeout=1000)
+    out = proc.stdout.read()
+    err = proc.stderr.read()
+    if r != 0:
+        ColorPrint.print_fail("Failed to download ESP32 Arduino BSP!")
+        ColorPrint.print_fail(out.decode("utf-8"))
+        ColorPrint.print_fail(err.decode("utf-8"))
+        exit(-1)
+    print(out)
+    print("Cloned repository!")
+
+    print("Installing ESP32 Arduino BSP...")
+    cmd = "cd /home/runner/Arduino/hardware/espressif/esp32/tools && python3 get.py"
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    r = proc.wait(timeout=1000)
+    out = proc.stdout.read()
+    err = proc.stderr.read()
+    if r != 0:
+        ColorPrint.print_fail("Failed to install ESP32 Arduino BSP!")
+        ColorPrint.print_fail(out.decode("utf-8"))
+        ColorPrint.print_fail(err.decode("utf-8"))
+        exit(-1)
+    print(out)
 
 def install_platform(platform):
     print("Installing", platform, end=" ")
     if platform == "adafruit:avr":   # we have a platform dep
         install_platform("arduino:avr")
-    if os.system("arduino-cli core install "+platform+" --additional-urls "+BSP_URLS+" > /dev/null") != 0:
+    if platform == "manual:esp32":
+        manually_install_esp32_bsp()
+    elif os.system("arduino-cli core install "+platform+" --additional-urls "+BSP_URLS+" > /dev/null") != 0:
         ColorPrint.print_fail("FAILED to install "+platform)
         exit(-1)
     ColorPrint.print_pass(CHECK)
