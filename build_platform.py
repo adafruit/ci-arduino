@@ -275,12 +275,14 @@ if our_name:
     run_or_die("arduino-cli lib uninstall \""+our_name+"\"", "Could not uninstall")
 
 print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/*'))
+
 # link our library folder to the arduino libraries folder
 if not IS_LEARNING_SYS:
     try:
         os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/' + os.path.basename(BUILD_DIR))
     except FileExistsError:
         pass
+
 ################################ UF2 Utils.
 
 def glob01(pattern):
@@ -421,12 +423,11 @@ def test_examples_in_folder(folderpath):
 
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
-                cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, '-v', '-e', folderpath]
+                cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, '-e', folderpath]
             else:
                 cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, folderpath]
         else:
-            cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--v', '--fqbn', fqbn, '--export-binaries', folderpath]
-        print(cmd)
+            cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--export-binaries', '--fqbn', fqbn, folderpath]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         try:
