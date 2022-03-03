@@ -214,8 +214,6 @@ def manually_install_esp32_bsp():
     print("Installed ESP32 BSP from source!")
 
 def install_platform(fqbn, platform_name):
-    print("Platform full name: ", platform_name)
-
     print("Installing", fqbn, end=" ")
     if fqbn == "adafruit:avr":   # we have a platform dep
         install_platform("arduino:avr")
@@ -277,6 +275,7 @@ if our_name:
     run_or_die("arduino-cli lib uninstall \""+our_name+"\"", "Could not uninstall")
 
 print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/*'))
+
 # link our library folder to the arduino libraries folder
 if not IS_LEARNING_SYS:
     try:
@@ -429,7 +428,7 @@ def test_examples_in_folder(folderpath):
                 cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, folderpath]
         else:
             cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--export-binaries', '--fqbn', fqbn, folderpath]
-
+        print(cmd)
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         try:
