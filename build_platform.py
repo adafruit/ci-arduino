@@ -421,9 +421,9 @@ def test_examples_in_folder(folderpath):
 
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
-                cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, '-v', '-e', folderpath]
+                cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--fqbn', fqbn, '-v', '-e', folderpath]
             else:
-                cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, folderpath]
+                cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--fqbn', fqbn, folderpath]
         else:
             cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--v', '--fqbn', fqbn, '--export-binaries', folderpath]
         print(cmd)
