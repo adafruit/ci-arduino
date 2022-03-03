@@ -425,7 +425,7 @@ def test_examples_in_folder(folderpath):
             else:
                 cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, folderpath]
         else:
-            cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--export-binaries', '--fqbn', fqbn, folderpath]
+            cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--v', '--fqbn', fqbn, '--export-binaries', folderpath]
         print(cmd)
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
@@ -460,8 +460,6 @@ def test_examples_in_folder(folderpath):
         else:
             ColorPrint.print_fail(CROSS)
             with group_output(f"{example} {fqbn} built output"):
-                print(out)
-                print(err)
                 ColorPrint.print_fail(out.decode("utf-8"))
                 ColorPrint.print_fail(err.decode("utf-8"))
             success = 1
