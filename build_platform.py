@@ -213,7 +213,7 @@ def manually_install_esp32_bsp():
     print(out)
     print("Installed ESP32 BSP from source!")
 
-def install_platform(fqbn, platform_name):
+def install_platform(fqbn, platform_name=None):
     print("Installing", fqbn, end=" ")
     if fqbn == "adafruit:avr":   # we have a platform dep
         install_platform("arduino:avr")
