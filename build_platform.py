@@ -217,8 +217,9 @@ def install_platform(fqbn, platform_name=None):
     print("Installing", fqbn, end=" ")
     if fqbn == "adafruit:avr":   # we have a platform dep
         install_platform("arduino:avr")
-    if "daily" in platform_name: # manually install ESP32 BSP from latest source
-        manually_install_esp32_bsp()
+    if platform_name is not None:
+        if "daily" in platform_name: # manually install ESP32 BSP from latest source
+            manually_install_esp32_bsp()
     if os.system("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS+" > /dev/null") != 0:
         ColorPrint.print_fail("FAILED to install "+fqbn)
         exit(-1)
