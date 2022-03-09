@@ -62,7 +62,7 @@ ALL_PLATFORMS={
     # Espressif
     "esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", None],
     "esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None],
-    "feather_esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", None],
+    "feather_esp8266" : ["esp8266:esp8266:huzzah:xtal=80,vt=flash,exception=disabled,stacksmash=disabled,ssl=all,mmu=3232,non32xfer=fast,eesz=4M2M,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200", None],
     "feather_esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None],
     "feather_esp32_v2_daily" : ["espressif:esp32:adafruit_feather_esp32_v2", None],
     "magtag" : ["esp32:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee"],
