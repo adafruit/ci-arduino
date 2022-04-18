@@ -157,33 +157,39 @@ cd code_docs/${REPO_NAME}
 # both exist. This is a good indication that Doxygen did it's work.
 if [ -d "html" ] && [ -f "html/index.html" ]; then
 
-    echo 'Uploading documentation to the gh-pages branch...'
-    # Add everything in this directory (the Doxygen code documentation) to the
-    # gh-pages branch.
-    # GitHub is smart enough to know which files have changed and which files have
-    # stayed the same and will only update the changed files.
-    echo 'Adding all files'
-    git add --all
+    case "$GITHUB_REF_NAME" in
+    (main|master)
+        echo 'Uploading documentation to the gh-pages branch...'
+        # Add everything in this directory (the Doxygen code documentation) to the
+        # gh-pages branch.
+        # GitHub is smart enough to know which files have changed and which files have
+        # stayed the same and will only update the changed files.
+        echo 'Adding all files'
+        git add --all
 
-    if [ -n "$(git status --porcelain)" ]; then
-    echo "Changes to commit"
-    else
-    echo "No changes to commit"
-    exit 0
-    fi
+        if [ -n "$(git status --porcelain)" ]; then
+        echo "Changes to commit"
+        else
+        echo "No changes to commit"
+        exit 0
+        fi
 
-    # Commit the added files with a title and description containing the Travis CI
-    # build number and the GitHub commit reference that issued this build.
-    echo 'Git committing'
-    git commit \
-      -m "Deploy docs to GitHub Pages from commit ${COMMIT_SHA1:0:10}" \
-      -m "Commit: ${COMMIT_SHA1}"$'\n'"${BUILD_ID}"
+        # Commit the added files with a title and description containing the Travis CI
+        # build number and the GitHub commit reference that issued this build.
+        echo 'Git committing'
+        git commit \
+          -m "Deploy docs to GitHub Pages from commit ${COMMIT_SHA1:0:10}" \
+          -m "Commit: ${COMMIT_SHA1}"$'\n'"${BUILD_ID}"
 
-    # Force push to the remote gh-pages branch.
-    # The output is redirected to /dev/null to hide any sensitive credential data
-    # that might otherwise be exposed.
-    echo 'Git pushing'
-    git push --force "https://${AUTH}@github.com/${REPO_SLUG}.git" > /dev/null 2>&1
+        # Force push to the remote gh-pages branch.
+        # The output is redirected to /dev/null to hide any sensitive credential data
+        # that might otherwise be exposed.
+        echo 'Git pushing'
+        git push --force "https://${AUTH}@github.com/${REPO_SLUG}.git" > /dev/null 2>&1
+        ;;
+    (*)
+        echo 'Not the main branch, not pushing documentation'
+    esac
 else
     echo '' >&2
     echo 'Warning: No documentation (html) files have been found!' >&2
