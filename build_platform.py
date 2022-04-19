@@ -286,7 +286,7 @@ print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/
 # link our library folder to the arduino libraries folder
 if not IS_LEARNING_SYS:
     try:
-        os.symlink(BUILD_DIR, '/Users/brentrubell/Documents/Arduino/libraries' + os.path.basename(BUILD_DIR))
+        os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/' + os.path.basename(BUILD_DIR))
     except FileExistsError:
         pass
 
