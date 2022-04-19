@@ -336,9 +336,7 @@ def generate_uf2(example_path):
         return output_file
 
     # Generate using a hex file for all platforms except for ESP32-S2, ESP32-S3 (exports as .bin files)
-    print("GENERATING FOR FQBN: ", fqbn)
     if not any (x in fqbn for x in ["esp32s2", "esp32s3"]):
-        print("GENERATE HEX")
         cli_build_hex_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
         hex_input_file = glob1(os.path.join(example_path, cli_build_hex_path))
         output_file = os.path.splitext(hex_input_file)[0] + ".uf2"
