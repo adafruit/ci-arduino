@@ -53,104 +53,104 @@ CHECK = u'\N{check mark}'
 
 ALL_PLATFORMS={
     # classic Arduino AVR
-    "uno" : ["arduino:avr:uno", None],
-    "leonardo" : ["arduino:avr:leonardo", None],
-    "mega2560" : ["arduino:avr:mega:cpu=atmega2560", None],
+    "uno" : ["arduino:avr:uno", None, None],
+    "leonardo" : ["arduino:avr:leonardo", None, None],
+    "mega2560" : ["arduino:avr:mega:cpu=atmega2560", None, None],
     # Arduino SAMD
-    "zero" : ["arduino:samd:arduino_zero_native", "0x68ed2b88"],
-    "cpx" : ["arduino:samd:adafruit_circuitplayground_m0", "0x68ed2b88"],
+    "zero" : ["arduino:samd:arduino_zero_native", "0x68ed2b88", None, None],
+    "cpx" : ["arduino:samd:adafruit_circuitplayground_m0", "0x68ed2b88", None],
     # Espressif
-    "esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", None],
-    "esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None],
-    "feather_esp8266" : ["esp8266:esp8266:huzzah:xtal=80,vt=flash,exception=disabled,stacksmash=disabled,ssl=all,mmu=3232,non32xfer=fast,eesz=4M2M,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200", None],
-    "feather_esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None],
-    "feather_esp32_v2" : ["esp32:esp32:adafruit_feather_esp32_v2", None],
-    "magtag" : ["esp32:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee"],
-    "funhouse" : ["esp32:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee"],
-    "metroesp32s2" : ["esp32:esp32:adafruit_metro_esp32s2", "0xbfdd4eee"],
-    "qtpy_esp32s2" : ["esp32:esp32:adafruit_qtpy_esp32s2", "0xbfdd4eee"],
-    "feather_esp32s2" : ["esp32:esp32:adafruit_feather_esp32s2", "0xbfdd4eee"],
-    "feather_esp32s2_tft" : ["esp32:esp32:adafruit_feather_esp32s2_tft", "0xbfdd4eee"],
-    "feather_esp32s3" : ["esp32:esp32:adafruit_feather_esp32s3", "0xc47e5767"],
-    "qtpy_esp32s3" : ["esp32:esp32:adafruit_qtpy_esp32s3", "0xc47e5767"],
+    "esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", None, None],
+    "esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None, None],
+    "feather_esp8266" : ["esp8266:esp8266:huzzah:xtal=80,vt=flash,exception=disabled,stacksmash=disabled,ssl=all,mmu=3232,non32xfer=fast,eesz=4M2M,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200", None, None],
+    "feather_esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None, None],
+    "feather_esp32_v2" : ["esp32:esp32:adafruit_feather_esp32_v2", None, None],
+    "magtag" : ["esp32:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee", None],
+    "funhouse" : ["esp32:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee", None],
+    "metroesp32s2" : ["esp32:esp32:adafruit_metro_esp32s2", "0xbfdd4eee", None],
+    "qtpy_esp32s2" : ["esp32:esp32:adafruit_qtpy_esp32s2", "0xbfdd4eee", None],
+    "feather_esp32s2" : ["esp32:esp32:adafruit_feather_esp32s2", "0xbfdd4eee", None],
+    "feather_esp32s2_tft" : ["esp32:esp32:adafruit_feather_esp32s2_tft", "0xbfdd4eee", None],
+    "feather_esp32s3" : ["esp32:esp32:adafruit_feather_esp32s3", "0xc47e5767", None],
+    "qtpy_esp32s3" : ["esp32:esp32:adafruit_qtpy_esp32s3", "0xc47e5767", None],
     # Adafruit AVR
-    "trinket_3v" : ["adafruit:avr:trinket3", None],
-    "trinket_5v" : ["adafruit:avr:trinket5", None],
-    "protrinket_3v" : ["adafruit:avr:protrinket3", None],
-    "protrinket_5v" : ["adafruit:avr:protrinket5", None],
-    "gemma" : ["adafruit:avr:gemma", None],
-    "flora" : ["adafruit:avr:flora8", None],
-    "feather32u4" : ["adafruit:avr:feather32u4", None],
-    "cpc" : ["arduino:avr:circuitplay32u4cat", None],
+    "trinket_3v" : ["adafruit:avr:trinket3", None, None],
+    "trinket_5v" : ["adafruit:avr:trinket5", None, None],
+    "protrinket_3v" : ["adafruit:avr:protrinket3", None, None],
+    "protrinket_5v" : ["adafruit:avr:protrinket5", None, None],
+    "gemma" : ["adafruit:avr:gemma", None, None],
+    "flora" : ["adafruit:avr:flora8", None, None],
+    "feather32u4" : ["adafruit:avr:feather32u4", None, None],
+    "cpc" : ["arduino:avr:circuitplay32u4cat", None, None],
     # Adafruit SAMD
-    "gemma_m0" : ["adafruit:samd:adafruit_gemma_m0", "0x68ed2b88"],
-    "trinket_m0" : ["adafruit:samd:adafruit_trinket_m0", "0x68ed2b88"],
-    "feather_m0_express" : ["adafruit:samd:adafruit_feather_m0_express", "0x68ed2b88"],
-    "feather_m4_express" : ["adafruit:samd:adafruit_feather_m4:speed=120", "0x55114460"],
-    "feather_m4_express_tinyusb" : ["adafruit:samd:adafruit_feather_m4:speed=120,usbstack=tinyusb", "0x55114460"],
-    "feather_m4_can" : ["adafruit:samd:adafruit_feather_m4_can:speed=120", "0x55114460"],
-    "feather_m4_can_tinyusb" : ["adafruit:samd:adafruit_feather_m4_can:speed=120,usbstack=tinyusb", "0x55114460"],
-    "metro_m0" : ["adafruit:samd:adafruit_metro_m0", "0x68ed2b88"],
-    "metro_m0_tinyusb" : ["adafruit:samd:adafruit_metro_m0:usbstack=tinyusb", "0x68ed2b88"],
-    "metro_m4" : ["adafruit:samd:adafruit_metro_m4:speed=120", "0x55114460"],
-    "metro_m4_tinyusb" : ["adafruit:samd:adafruit_metro_m4:speed=120,usbstack=tinyusb", "0x55114460"],
-    "metro_m4_airliftlite" : ["adafruit:samd:adafruit_metro_m4_airliftlite:speed=120", "0x55114460"],
-    "metro_m4_airliftlite_tinyusb" : ["adafruit:samd:adafruit_metro_m4_airliftlite:speed=120,usbstack=tinyusb", "0x55114460"],
-    "pybadge" : ["adafruit:samd:adafruit_pybadge_m4:speed=120", "0x55114460"],
-    "pybadge_tinyusb" : ["adafruit:samd:adafruit_pybadge_m4:speed=120,usbstack=tinyusb", "0x55114460"],
-    "pygamer" : ["adafruit:samd:adafruit_pygamer_m4:speed=120", "0x55114460"],
-    "pygamer_tinyusb" : ["adafruit:samd:adafruit_pygamer_m4:speed=120,usbstack=tinyusb", "0x55114460"],
-    "hallowing_m0" : ["adafruit:samd:adafruit_hallowing", "0x68ed2b88"],
-    "hallowing_m4" : ["adafruit:samd:adafruit_hallowing_m4:speed=120", "0x55114460"],
-    "hallowing_m4_tinyusb" : ["adafruit:samd:adafruit_hallowing_m4:speed=120,usbstack=tinyusb", "0x55114460"],
-    "neotrellis_m4" : ["adafruit:samd:adafruit_trellis_m4:speed=120", "0x55114460"],
-    "monster_m4sk" : ["adafruit:samd:adafruit_monster_m4sk:speed=120", "0x55114460"],
-    "monster_m4sk_tinyusb" : ["adafruit:samd:adafruit_monster_m4sk:speed=120,usbstack=tinyusb", "0x55114460"],
-    "pyportal" : ["adafruit:samd:adafruit_pyportal_m4:speed=120", "0x55114460"],
-    "pyportal_tinyusb" : ["adafruit:samd:adafruit_pyportal_m4:speed=120,usbstack=tinyusb", "0x55114460"],
-    "pyportal_titano" : ["adafruit:samd:adafruit_pyportal_m4_titano:speed=120", "0x55114460"],
-    "pyportal_titano_tinyusb" : ["adafruit:samd:adafruit_pyportal_m4_titano:speed=120,usbstack=tinyusb", "0x55114460"],
-    "cpx_ada" : ["adafruit:samd:adafruit_circuitplayground_m0", "0x68ed2b88"],
-    "grand_central" : ["adafruit:samd:adafruit_grandcentral_m4:speed=120", "0x55114460"],
-    "grand_central_tinyusb" : ["adafruit:samd:adafruit_grandcentral_m4:speed=120,usbstack=tinyusb", "0x55114460"],
-    "matrixportal" : ["adafruit:samd:adafruit_matrixportal_m4:speed=120", "0x55114460"],
-    "matrixportal_tinyusb" : ["adafruit:samd:adafruit_matrixportal_m4:speed=120,usbstack=tinyusb", "0x55114460"],
-    "neotrinkey_m0" : ["adafruit:samd:adafruit_neotrinkey_m0", "0x68ed2b88"],
-    "rotarytrinkey_m0" : ["adafruit:samd:adafruit_rotarytrinkey_m0", "0x68ed2b88"],
-    "neokeytrinkey_m0" : ["adafruit:samd:adafruit_neokeytrinkey_m0", "0x68ed2b88"],
-    "slidetrinkey_m0" : ["adafruit:samd:adafruit_slidetrinkey_m0", "0x68ed2b88"],
-    "proxlighttrinkey_m0" : ["adafruit:samd:adafruit_proxlighttrinkey_m0", "0x68ed2b88"],
-    "qtpy_m0" : ["adafruit:samd:adafruit_qtpy_m0", "0x68ed2b88"],
-    "qtpy_m0_tinyusb" : ["adafruit:samd:adafruit_qtpy_m0:usbstack=tinyusb", "0x68ed2b88"],
+    "gemma_m0" : ["adafruit:samd:adafruit_gemma_m0", "0x68ed2b88", None],
+    "trinket_m0" : ["adafruit:samd:adafruit_trinket_m0", "0x68ed2b88", None],
+    "feather_m0_express" : ["adafruit:samd:adafruit_feather_m0_express", "0x68ed2b88", None],
+    "feather_m4_express" : ["adafruit:samd:adafruit_feather_m4:speed=120", "0x55114460", None],
+    "feather_m4_express_tinyusb" : ["adafruit:samd:adafruit_feather_m4:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "feather_m4_can" : ["adafruit:samd:adafruit_feather_m4_can:speed=120", "0x55114460", None],
+    "feather_m4_can_tinyusb" : ["adafruit:samd:adafruit_feather_m4_can:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "metro_m0" : ["adafruit:samd:adafruit_metro_m0", "0x68ed2b88", None],
+    "metro_m0_tinyusb" : ["adafruit:samd:adafruit_metro_m0:usbstack=tinyusb", "0x68ed2b88", None],
+    "metro_m4" : ["adafruit:samd:adafruit_metro_m4:speed=120", "0x55114460", None],
+    "metro_m4_tinyusb" : ["adafruit:samd:adafruit_metro_m4:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "metro_m4_airliftlite" : ["adafruit:samd:adafruit_metro_m4_airliftlite:speed=120", "0x55114460", None],
+    "metro_m4_airliftlite_tinyusb" : ["adafruit:samd:adafruit_metro_m4_airliftlite:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "pybadge" : ["adafruit:samd:adafruit_pybadge_m4:speed=120", "0x55114460", None],
+    "pybadge_tinyusb" : ["adafruit:samd:adafruit_pybadge_m4:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "pygamer" : ["adafruit:samd:adafruit_pygamer_m4:speed=120", "0x55114460", None],
+    "pygamer_tinyusb" : ["adafruit:samd:adafruit_pygamer_m4:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "hallowing_m0" : ["adafruit:samd:adafruit_hallowing", "0x68ed2b88", None],
+    "hallowing_m4" : ["adafruit:samd:adafruit_hallowing_m4:speed=120", "0x55114460", None],
+    "hallowing_m4_tinyusb" : ["adafruit:samd:adafruit_hallowing_m4:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "neotrellis_m4" : ["adafruit:samd:adafruit_trellis_m4:speed=120", "0x55114460", None],
+    "monster_m4sk" : ["adafruit:samd:adafruit_monster_m4sk:speed=120", "0x55114460", None],
+    "monster_m4sk_tinyusb" : ["adafruit:samd:adafruit_monster_m4sk:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "pyportal" : ["adafruit:samd:adafruit_pyportal_m4:speed=120", "0x55114460", None],
+    "pyportal_tinyusb" : ["adafruit:samd:adafruit_pyportal_m4:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "pyportal_titano" : ["adafruit:samd:adafruit_pyportal_m4_titano:speed=120", "0x55114460", None],
+    "pyportal_titano_tinyusb" : ["adafruit:samd:adafruit_pyportal_m4_titano:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "cpx_ada" : ["adafruit:samd:adafruit_circuitplayground_m0", "0x68ed2b88", None],
+    "grand_central" : ["adafruit:samd:adafruit_grandcentral_m4:speed=120", "0x55114460", None],
+    "grand_central_tinyusb" : ["adafruit:samd:adafruit_grandcentral_m4:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "matrixportal" : ["adafruit:samd:adafruit_matrixportal_m4:speed=120", "0x55114460", None],
+    "matrixportal_tinyusb" : ["adafruit:samd:adafruit_matrixportal_m4:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "neotrinkey_m0" : ["adafruit:samd:adafruit_neotrinkey_m0", "0x68ed2b88", None],
+    "rotarytrinkey_m0" : ["adafruit:samd:adafruit_rotarytrinkey_m0", "0x68ed2b88", None],
+    "neokeytrinkey_m0" : ["adafruit:samd:adafruit_neokeytrinkey_m0", "0x68ed2b88", None],
+    "slidetrinkey_m0" : ["adafruit:samd:adafruit_slidetrinkey_m0", "0x68ed2b88", None],
+    "proxlighttrinkey_m0" : ["adafruit:samd:adafruit_proxlighttrinkey_m0", "0x68ed2b88", None],
+    "qtpy_m0" : ["adafruit:samd:adafruit_qtpy_m0", "0x68ed2b88", None],
+    "qtpy_m0_tinyusb" : ["adafruit:samd:adafruit_qtpy_m0:usbstack=tinyusb", "0x68ed2b88", None],
     # Arduino SAMD
-    "mkrwifi1010" : ["arduino:samd:mkrwifi1010", "0x8054"],
-    "nano_33_iot" : ["arduino:samd:nano_33_iot", "0x8057"],
+    "mkrwifi1010" : ["arduino:samd:mkrwifi1010", "0x8054", None],
+    "nano_33_iot" : ["arduino:samd:nano_33_iot", "0x8057", None],
     # Arduino nRF
-    "microbit" : ["sandeepmistry:nRF5:BBCmicrobit:softdevice=s110", None],
+    "microbit" : ["sandeepmistry:nRF5:BBCmicrobit:softdevice=s110", None, None],
     # Adafruit nRF
-    "nrf52832" : ["adafruit:nrf52:feather52832:softdevice=s132v6,debug=l0", None],
-    "nrf52840" : ["adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0", "0xada52840"],
-    "cpb" : ["adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0", "0xada52840"],
-    "clue" : ["adafruit:nrf52:cluenrf52840:softdevice=s140v6,debug=l0", "0xada52840"],
-    "ledglasses_nrf52840" : ["adafruit:nrf52:ledglasses_nrf52840:softdevice=s140v6,debug=l0", "0xada52840"],
+    "nrf52832" : ["adafruit:nrf52:feather52832:softdevice=s132v6,debug=l0", None, None],
+    "nrf52840" : ["adafruit:nrf52:feather52840:softdevice=s140v6,debug=l0", "0xada52840", None],
+    "cpb" : ["adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0", "0xada52840", None],
+    "clue" : ["adafruit:nrf52:cluenrf52840:softdevice=s140v6,debug=l0", "0xada52840", None],
+    "ledglasses_nrf52840" : ["adafruit:nrf52:ledglasses_nrf52840:softdevice=s140v6,debug=l0", "0xada52840", None],
     # RP2040 (Philhower)
-    "pico_rp2040" : ["rp2040:rp2040:rpipico:freq=125,flash=2097152_0", "0xe48bff56"],
-    "pico_rp2040_tinyusb" : ["rp2040:rp2040:rpipico:flash=2097152_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56"],
-    "feather_rp2040" : ["rp2040:rp2040:adafruit_feather:freq=125,flash=8388608_0", "0xe48bff56"],
-    "feather_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_feather:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56"],
-    "qt2040_trinkey" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:freq=125,flash=8388608_0", "0xe48bff56"],
-    "qt2040_trinkey_tinyusb" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56"],
+    "pico_rp2040" : ["rp2040:rp2040:rpipico:freq=125,flash=2097152_0", "0xe48bff56", None],
+    "pico_rp2040_tinyusb" : ["rp2040:rp2040:rpipico:flash=2097152_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "feather_rp2040" : ["rp2040:rp2040:adafruit_feather:freq=125,flash=8388608_0", "0xe48bff56", None],
+    "feather_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_feather:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "qt2040_trinkey" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:freq=125,flash=8388608_0", "0xe48bff56", None],
+    "qt2040_trinkey_tinyusb" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:flash=8388608_0,freq=125,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     # Attiny8xy, 16xy, 32xy (SpenceKonde)
-    "attiny3217" : ["megaTinyCore:megaavr:atxy7:chip=3217", None],
-    "attiny3216" : ["megaTinyCore:megaavr:atxy6:chip=3216", None],
-    "attiny1617" : ["megaTinyCore:megaavr:atxy7:chip=1617", None],
-    "attiny1616" : ["megaTinyCore:megaavr:atxy6:chip=1616", None],
-    "attiny1607" : ["megaTinyCore:megaavr:atxy7:chip=1607", None],
-    "attiny1606" : ["megaTinyCore:megaavr:atxy6:chip=1606", None],
-    "attiny817" : ["megaTinyCore:megaavr:atxy7:chip=817", None],
-    "attiny816" : ["megaTinyCore:megaavr:atxy6:chip=816", None],
-    "attiny807" : ["megaTinyCore:megaavr:atxy7:chip=807", None],
-    "attiny806" : ["megaTinyCore:megaavr:atxy6:chip=806", None],
+    "attiny3217" : ["megaTinyCore:megaavr:atxy7:chip=3217", None, None],
+    "attiny3216" : ["megaTinyCore:megaavr:atxy6:chip=3216", None, None],
+    "attiny1617" : ["megaTinyCore:megaavr:atxy7:chip=1617", None, None],
+    "attiny1616" : ["megaTinyCore:megaavr:atxy6:chip=1616", None, None],
+    "attiny1607" : ["megaTinyCore:megaavr:atxy7:chip=1607", None, None],
+    "attiny1606" : ["megaTinyCore:megaavr:atxy6:chip=1606", None, None],
+    "attiny817" : ["megaTinyCore:megaavr:atxy7:chip=817", None, None],
+    "attiny816" : ["megaTinyCore:megaavr:atxy6:chip=816", None, None],
+    "attiny807" : ["megaTinyCore:megaavr:atxy7:chip=807", None, None],
+    "attiny806" : ["megaTinyCore:megaavr:atxy6:chip=806", None, None],
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero", "qtpy_m0",
                         "esp8266", "esp32", "metro_m4", "trinket_m0"),
@@ -184,13 +184,14 @@ class ColorPrint:
     def print_bold(message, end = '\n'):
         sys.stdout.write('\x1b[1;37m' + message.strip() + '\x1b[0m' + end)
 
-def manually_install_esp32_bsp():
-    # see - https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html#linux
+def manually_install_esp32_bsp(repo_info):
     print("Manually installing latest ESP32 BSP...")
+    # Assemble git url
+    repo_url = "git clone -b {0} https://github.com/{1}/arduino-esp32.git esp32".format(repo_info.split("/")[1], repo_info.split("/")[0])
+    # Locally clone repo (https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html#linux)
     os.system("mkdir -p /home/runner/Arduino/hardware/espressif")
-    # Locally clone repo
-    print("Cloning github.com/espressif/arduino-esp32..")
-    cmd = "cd /home/runner/Arduino/hardware/espressif && git clone https://github.com/espressif/arduino-esp32.git esp32"
+    print("Cloning %s"%repo_url)
+    cmd = "cd /home/runner/Arduino/hardware/espressif && " + repo_url
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     r = proc.wait(timeout=1000)
     out = proc.stdout.read()
@@ -217,13 +218,12 @@ def manually_install_esp32_bsp():
     print(out)
     print("Installed ESP32 BSP from source!")
 
-def install_platform(fqbn, platform_name=None):
+def install_platform(fqbn, full_platform_name=None):
     print("Installing", fqbn, end=" ")
     if fqbn == "adafruit:avr":   # we have a platform dep
         install_platform("arduino:avr")
-    if platform_name is not None:
-        if "daily" in platform_name: # manually install ESP32 BSP from latest source
-            manually_install_esp32_bsp()
+    if full_platform_name[2] is not None:
+        manually_install_esp32_bsp(full_platform_name[2]) # build esp32 bsp from desired source and branch
     if os.system("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS+" > /dev/null") != 0:
         ColorPrint.print_fail("FAILED to install "+fqbn)
         exit(-1)
@@ -336,7 +336,7 @@ def generate_uf2(example_path):
         return output_file
 
     # Generate using a hex file for all platforms except for ESP32-S2, ESP32-S3 (exports as .bin files)
-    if not "esp32s2" or not "esp32s3" in fqbn:
+    if not any (x in fqbn for x in ["esp32s2", "esp32s3"]):
         cli_build_hex_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
         hex_input_file = glob1(os.path.join(example_path, cli_build_hex_path))
         output_file = os.path.splitext(hex_input_file)[0] + ".uf2"
@@ -513,7 +513,7 @@ for platform in platforms:
     fqbn = ALL_PLATFORMS[platform][0]
     print('#'*80)
     ColorPrint.print_info("SWITCHING TO "+fqbn)
-    install_platform(":".join(fqbn.split(':', 2)[0:2]), platform) # take only first two elements
+    install_platform(":".join(fqbn.split(':', 2)[0:2]), ALL_PLATFORMS[platform]) # take only first two elements
     print('#'*80)
     if not IS_LEARNING_SYS:
         test_examples_in_folder(BUILD_DIR+"/examples")
