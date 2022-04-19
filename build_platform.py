@@ -220,8 +220,6 @@ def manually_install_esp32_bsp(repo_info):
 
 def install_platform(fqbn, full_platform_name=None):
     print("Installing", fqbn, end=" ")
-    print("FQBN: ", fqbn)
-    print("platform_name: ", full_platform_name)
     if fqbn == "adafruit:avr":   # we have a platform dep
         install_platform("arduino:avr")
     if full_platform_name[2] is not None:
@@ -338,7 +336,9 @@ def generate_uf2(example_path):
         return output_file
 
     # Generate using a hex file for all platforms except for ESP32-S2, ESP32-S3 (exports as .bin files)
+    print("GENERATING FOR FQBN: ", fqbn)
     if not "esp32s2" or not "esp32s3" in fqbn:
+        print("GENERATE HEX")
         cli_build_hex_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
         hex_input_file = glob1(os.path.join(example_path, cli_build_hex_path))
         output_file = os.path.splitext(hex_input_file)[0] + ".uf2"
