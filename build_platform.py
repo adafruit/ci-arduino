@@ -221,7 +221,7 @@ def manually_install_esp32_bsp(repo_info):
 def install_platform(fqbn, full_platform_name=None):
     print("Installing", fqbn, end=" ")
     if fqbn == "adafruit:avr":   # we have a platform dep
-        install_platform("arduino:avr")
+        install_platform("arduino:avr", full_platform_name)
     if full_platform_name[2] is not None:
         manually_install_esp32_bsp(full_platform_name[2]) # build esp32 bsp from desired source and branch
     if os.system("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS+" > /dev/null") != 0:
