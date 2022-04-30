@@ -3,13 +3,6 @@
 set -e
 
 pip3 install clint pyserial setuptools adafruit-nrfutil
-sudo gem install apt-spy2
-sudo apt-spy2 check
-sudo apt-spy2 fix --commit
-
-# after selecting a specific mirror, we need to run 'apt-get update'
-sudo apt-get -o Acquire::Retries=3 update
-
 sudo apt-get -o Acquire::Retries=3 install -y libllvm8 -V
 
 sudo apt install -fy cppcheck clang-format-8
