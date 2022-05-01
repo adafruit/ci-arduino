@@ -3,17 +3,20 @@
 set -e
 
 pip3 install clint pyserial setuptools adafruit-nrfutil
-sudo gem install apt-spy2
-sudo apt-spy2 check
-sudo apt-spy2 fix --commit
 
-# after selecting a specific mirror, we need to run 'apt-get update'
-sudo apt-get -o Acquire::Retries=3 update
-
-sudo apt-get -o Acquire::Retries=3 install -y libllvm8 -V
-
-sudo apt install -fy cppcheck clang-format-8
+# Only install stuff if it is really missing. This should never be executed,
+# as the default image contains clang-format v10, v11 (default) and v12.
+# https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-Readme.md#language-and-runtime
 if [ ! -f /usr/bin/clang-format ]; then
+    sudo gem install apt-spy2
+    sudo apt-spy2 check
+    sudo apt-spy2 fix --commit
+
+    # after selecting a specific mirror, we need to run 'apt-get update'
+    sudo apt-get -o Acquire::Retries=3 update
+
+    sudo apt-get -o Acquire::Retries=3 install -y clang-format-8 libllvm8
+
     sudo ln -s /usr/bin/clang-format-8 /usr/bin/clang-format
 fi
 
