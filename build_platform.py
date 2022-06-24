@@ -76,6 +76,7 @@ ALL_PLATFORMS={
     "feather_esp32s3_tft" : ["espressif:esp32:adafruit_feather_esp32s3_tft", "0xc47e5767", "adafruit/master"],
     "qtpy_esp32s3" : ["esp32:esp32:adafruit_qtpy_esp32s3", "0xc47e5767", None],
     "qtpy_esp32" : ["esp32:esp32:adafruit_qtpy_esp32_pico", None, None],
+    "qtpy_esp32c3" : ["esp32:esp32:adafruit_qtpy_esp32c3:FlashMode=qio", None, None],
     # Adafruit AVR
     "trinket_3v" : ["adafruit:avr:trinket3", None, None],
     "trinket_5v" : ["adafruit:avr:trinket5", None, None],
