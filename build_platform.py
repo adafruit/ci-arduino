@@ -74,7 +74,7 @@ ALL_PLATFORMS={
     "feather_esp32s3" : ["esp32:esp32:adafruit_feather_esp32s3_nopsram", "0xc47e5767", None],
     "feather_esp32s3_4mbflash_2mbpsram" : ["esp32:esp32:adafruit_feather_esp32s3", "0xc47e5767", None],
     "feather_esp32s3_tft" : ["esp32:esp32:adafruit_feather_esp32s3_tft", "0xc47e5767", None],
-    "qtpy_esp32s3" : ["esp32:esp32:adafruit_qtpy_esp32s3", "0xc47e5767", None],
+    "qtpy_esp32s3" : ["esp32:esp32:adafruit_qtpy_esp32s3_nopsram", "0xc47e5767", None],
     "qtpy_esp32" : ["esp32:esp32:adafruit_qtpy_esp32_pico", None, None],
     "qtpy_esp32c3" : ["esp32:esp32:adafruit_qtpy_esp32c3:FlashMode=qio", None, None],
     # Adafruit AVR
