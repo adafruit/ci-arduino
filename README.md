@@ -8,7 +8,7 @@ https://learn.adafruit.com/the-well-automated-arduino-library/
 
 ## Adding GitHub Actions to Repo
 
-* Create a folder named `.github/worflows` in the root of the repo.
+* Create a folder named `.github/workflows` in the root of the repo.
 * Copy `example_actions.yml` into the above directory and rename it `githubci.yml`.
 * Edit `githubci.yml` and change `PRETTYNAME` to the library repo name.
 * Here's an example: [Adafruit_BME280_Library](https://github.com/adafruit/Adafruit_BME280_Library/blob/master/.github/workflows/githubci.yml)
