@@ -59,6 +59,8 @@ ALL_PLATFORMS={
     # Arduino SAMD
     "zero" : ["arduino:samd:arduino_zero_native", "0x68ed2b88", None, None],
     "cpx" : ["arduino:samd:adafruit_circuitplayground_m0", "0x68ed2b88", None],
+    # Arduino mbed
+    "pi_pico" : ["arduino:mbed_rp2040:pico", None, None],
     # Espressif
     "esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", None, None],
     "esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None, None],
@@ -165,7 +167,7 @@ ALL_PLATFORMS={
     "attiny806" : ["megaTinyCore:megaavr:atxy6:chip=806", None, None],
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero", "qtpy_m0",
-                        "esp8266", "esp32", "metro_m4", "trinket_m0"),
+                        "esp8266", "esp32", "metro_m4", "trinket_m0", "pi_pico"),
     "arcada_platforms" : ("pybadge", "pygamer", "hallowing_m4",
                           "cpb", "cpx_ada"),
     "wippersnapper_platforms" : ("metro_m4_airliftlite_tinyusb", "pyportal_tinyusb"),
