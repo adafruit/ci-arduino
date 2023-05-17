@@ -28,11 +28,17 @@ Additionally, [UF2 files](https://github.com/microsoft/uf2) of the compiled sket
 
 The script behavior can be controlled using special filenames: 
 
-* `.YOUR_PLATFORM_HERE.test.skip` - Skip the specified platform. All others are tested.
-* `.YOUR_PLATFORM_HERE.test.only` - Test the specified platform. All others are skipped.
-* `.YOUR_PLATFORM_HERE.generate` - Generate UF2 of sketch for specified platform (if supported).
+* `.PLATFORM_ID.test.skip` - Skip the specified platform. All others are tested.
+* `.PLATFORM_ID.test.only` - Test the specified platform. All others are skipped.
+* `.PLATFORM_ID.generate` - Generate UF2 of sketch for specified platform (if supported).
 
-These are just empty files placed in an example folder. Replace `YOUR_PLATFORM_HERE` in the name with exact text from `ALL_PLATFORMS`. You can use several `.PLATFORM.test.skip` or `.PLATFORM.test.only` to exclude or include multiple platforms. For example:
+These are just empty files placed in an example folder. Replace `PLATFORM_ID` in the name with the key from [`ALL_PLATFORMS`](ci-arduino/blob/master/build_platform.py#L54). `metro_m0` from the following line in `build_platform.py`, for example:
+
+```python
+"metro_m0" : ["adafruit:samd:adafruit_metro_m0", "0x68ed2b88", None],
+```
+
+You can use several `.PLATFORM_ID.test.skip` or `.PLATFORM_ID.test.only` to exclude or include multiple platforms. For example:
 
 * To **skip** testing on ESP8266, add a file named `.esp8266.test.skip`
 * To test **only** the Arduino UNO, add a file named `.uno.test.only`
