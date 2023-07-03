@@ -167,7 +167,7 @@ ALL_PLATFORMS={
     "attiny806" : ["megaTinyCore:megaavr:atxy6:chip=806", None, None],
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero", "qtpy_m0",
-                        "esp8266", "esp32", "metro_m4", "trinket_m0", "pi_pico"),
+                        "esp8266", "esp32", "metro_m4", "trinket_m0"),
     "arcada_platforms" : ("pybadge", "pygamer", "hallowing_m4",
                           "cpb", "cpx_ada"),
     "wippersnapper_platforms" : ("metro_m4_airliftlite_tinyusb", "pyportal_tinyusb"),
