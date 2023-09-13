@@ -474,7 +474,7 @@ def test_examples_in_folder(folderpath):
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         try:
-           if BUILD_TIMEOUT:
+            if BUILD_TIMEOUT:
                 out, err = proc.communicate(timeout=popen_timeout)
             else:
                 out, err = proc.communicate(timeout=120)
