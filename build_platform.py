@@ -23,7 +23,7 @@ if "--no_warn" in sys.argv:
 BUILD_TIMEOUT = False
 if "--build_timeout" in sys.argv:
     BUILD_TIMEOUT = True
-    popen_timeout = sys.argv[sys.argv.index("--build_timeout") + 1]
+    popen_timeout = int(sys.argv[sys.argv.index("--build_timeout") + 1])
     sys.argv.pop(sys.argv.index("--build_timeout") + 1)
     sys.argv.remove("--build_timeout")
 
