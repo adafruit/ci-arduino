@@ -27,8 +27,6 @@ if "--build_timeout" in sys.argv:
     sys.argv.pop(sys.argv.index("--build_timeout") + 1)
     sys.argv.remove("--build_timeout")
 
-
-
 # add user bin to path!
 BUILD_DIR = ''
 # add user bin to path!
