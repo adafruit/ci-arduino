@@ -285,6 +285,12 @@ ColorPrint.print_info('#'*40)
 
 run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
            " > /dev/null", "FAILED to update core indices")
+##### HACK !!!!!!!!!!!!!!!!!!!
+# manual fix for megatinycore URL truncation issue
+# see: https://github.com/arduino/arduino-cli/issues/2345
+#      https://github.com/SpenceKonde/megaTinyCore/issues/1005
+os.system("mv ~/.arduino15/package_drazzy.json ~/.arduino15/package_drazzy.com_index.json")
+##### HACK !!!!!!!!!!!!!!!!!!!!
 print()
 
 ################################ Install dependencies
