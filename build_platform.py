@@ -19,6 +19,15 @@ if "--no_warn" in sys.argv:
     BUILD_WARN = False
     sys.argv.remove("--no_warn")
 
+# optional timeout argument to extend build time
+# for larger sketches or firmware builds
+BUILD_TIMEOUT = False
+if "--build_timeout" in sys.argv:
+    BUILD_TIMEOUT = True
+    popen_timeout = int(sys.argv[sys.argv.index("--build_timeout") + 1])
+    sys.argv.pop(sys.argv.index("--build_timeout") + 1)
+    sys.argv.remove("--build_timeout")
+
 # add user bin to path!
 BUILD_DIR = ''
 # add user bin to path!
@@ -150,6 +159,12 @@ ColorPrint.print_info('#'*40)
 
 run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
            " > /dev/null", "FAILED to update core indices")
+##### HACK !!!!!!!!!!!!!!!!!!!
+# manual fix for megatinycore URL truncation issue
+# see: https://github.com/arduino/arduino-cli/issues/2345
+#      https://github.com/SpenceKonde/megaTinyCore/issues/1005
+os.system("mv ~/.arduino15/package_drazzy.json ~/.arduino15/package_drazzy.com_index.json")
+##### HACK !!!!!!!!!!!!!!!!!!!!
 print()
 
 ################################ Install dependencies
@@ -249,7 +264,10 @@ def generate_uf2(example_path):
         cmd = ['python3', 'uf2conv.py', input_file, '-c', '-f', family_id, '-b', "0x0000", '-o', output_file]
 
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    r = proc.wait(timeout=60)
+    if BUILD_TIMEOUT:
+        r = proc.wait(timeout=popen_timeout)
+    else:
+        r = proc.wait(timeout=60)
     out = proc.stdout.read()
     err = proc.stderr.read()
     if r == 0 and not err:
@@ -335,7 +353,10 @@ def test_examples_in_folder(folderpath):
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         try:
-            out, err = proc.communicate(timeout=120)
+            if BUILD_TIMEOUT:
+                out, err = proc.communicate(timeout=popen_timeout)
+            else:
+                out, err = proc.communicate(timeout=120)
             r = proc.returncode
         except:
             proc.kill()
