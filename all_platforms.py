@@ -24,6 +24,7 @@ ALL_PLATFORMS={
     "feather_esp32s3_tft" : ["esp32:esp32:adafruit_feather_esp32s3_tft", "0xc47e5767", None],
     "feather_esp32s3_reverse_tft" : ["esp32:esp32:adafruit_feather_esp32s3_reversetft", "0xc47e5767", None],
     "matrixportal_s3" : ["esp32:esp32:adafruit_matrixportal_esp32s3", "0xc47e5767", None],
+    "qualia_s3_rgb666" : ["esp32:esp32:adafruit_qualia_s3_rgb666", "0xc47e5767", None],
     "qtpy_esp32s3" : ["esp32:esp32:adafruit_qtpy_esp32s3_nopsram", "0xc47e5767", None],
     "qtpy_esp32s3_n4r2" : ["esp32:esp32:adafruit_qtpy_esp32s3_n4r2", "0xc47e5767", None],
     "qtpy_esp32" : ["esp32:esp32:adafruit_qtpy_esp32_pico", None, None],
