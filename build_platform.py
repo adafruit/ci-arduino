@@ -265,7 +265,7 @@ def generate_uf2(example_path):
         r = proc.wait(timeout=60)
     out = proc.stdout.read()
     err = proc.stderr.read()
-    if r == 0 and not err:
+    if r == 0: # and not err:  # we might get warnings that do not affect the result
         ColorPrint.print_pass(CHECK)
         ColorPrint.print_info(out.decode("utf-8"))
     else:
