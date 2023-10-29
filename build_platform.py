@@ -270,8 +270,9 @@ def generate_uf2(example_path):
         ColorPrint.print_info(out.decode("utf-8"))
     else:
         ColorPrint.print_fail(CROSS)
-        ColorPrint.print_fail(out.decode("utf-8"))
-        ColorPrint.print_fail(err.decode("utf-8"))
+        ColorPrint.print_fail("\n\rERRCODE:", r)
+        ColorPrint.print_fail("\n\rOUTPUT: ", out.decode("utf-8"))
+        ColorPrint.print_fail("\n\rERROR: ", err.decode("utf-8"))
         return None
     return output_file
 
