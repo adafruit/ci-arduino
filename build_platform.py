@@ -309,6 +309,7 @@ def test_examples_in_folder(folderpath):
     global success
     for example in sorted(os.listdir(folderpath)):
         examplepath = folderpath+"/"+example
+        ColorPrint.print_info(folderpath, examplepath)
         if os.path.isdir(examplepath):
             test_examples_in_folder(examplepath)
             continue
@@ -358,6 +359,9 @@ def test_examples_in_folder(folderpath):
             out, err = proc.communicate()
             r = 1
 
+        os.system("ls -lR "+BUILD_DIR+"/build")
+        os.system("ls -lR "+folderpath)
+
         if r == 0 and not (err and BUILD_WALL == True):
             ColorPrint.print_pass(CHECK)
             if err:
@@ -373,6 +377,7 @@ def test_examples_in_folder(folderpath):
                     if filename is None:
                         success = 1  # failure
                     if IS_LEARNING_SYS:
+                        ColorPrint.print_info(filename.split, filename.split("/"))
                         fqbnpath, uf2file = filename.split("/")[-2:]
                         os.makedirs(BUILD_DIR+"/build", exist_ok=True)
                         os.makedirs(BUILD_DIR+"/build/"+fqbnpath, exist_ok=True)
