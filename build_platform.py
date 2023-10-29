@@ -265,13 +265,14 @@ def generate_uf2(example_path):
         r = proc.wait(timeout=60)
     out = proc.stdout.read()
     err = proc.stderr.read()
-    if r == 0 and not err:
+    if r == 0: # and not err:  # we might get warnings that do not affect the result
         ColorPrint.print_pass(CHECK)
         ColorPrint.print_info(out.decode("utf-8"))
     else:
         ColorPrint.print_fail(CROSS)
-        ColorPrint.print_fail(out.decode("utf-8"))
-        ColorPrint.print_fail(err.decode("utf-8"))
+        ColorPrint.print_fail("\n\rERRCODE:", str(r))
+        ColorPrint.print_fail("\n\rOUTPUT: ", out.decode("utf-8"))
+        ColorPrint.print_fail("\n\rERROR: ", err.decode("utf-8"))
         return None
     return output_file
 
@@ -309,6 +310,7 @@ def test_examples_in_folder(folderpath):
     global success
     for example in sorted(os.listdir(folderpath)):
         examplepath = folderpath+"/"+example
+        ColorPrint.print_info(folderpath, examplepath)
         if os.path.isdir(examplepath):
             test_examples_in_folder(examplepath)
             continue
@@ -358,6 +360,9 @@ def test_examples_in_folder(folderpath):
             out, err = proc.communicate()
             r = 1
 
+        os.system("ls -lR "+BUILD_DIR+"/build")
+        os.system("ls -lR "+folderpath)
+
         if r == 0 and not (err and BUILD_WALL == True):
             ColorPrint.print_pass(CHECK)
             if err:
@@ -373,6 +378,7 @@ def test_examples_in_folder(folderpath):
                     if filename is None:
                         success = 1  # failure
                     if IS_LEARNING_SYS:
+                        ColorPrint.print_info(filename.split, filename.split("/"))
                         fqbnpath, uf2file = filename.split("/")[-2:]
                         os.makedirs(BUILD_DIR+"/build", exist_ok=True)
                         os.makedirs(BUILD_DIR+"/build/"+fqbnpath, exist_ok=True)
