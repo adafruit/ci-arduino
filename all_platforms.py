@@ -12,6 +12,7 @@ ALL_PLATFORMS={
     "feather_esp8266" : ["esp8266:esp8266:huzzah:xtal=80,vt=flash,exception=disabled,stacksmash=disabled,ssl=all,mmu=3232,non32xfer=fast,eesz=4M2M,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200", None, None],
     "feather_esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None, None],
     "feather_esp32_v2" : ["esp32:esp32:adafruit_feather_esp32_v2", None, None],
+    ## ESP32-S2
     "magtag" : ["esp32:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee", None],
     "funhouse" : ["esp32:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee", None],
     "metroesp32s2" : ["esp32:esp32:adafruit_metro_esp32s2", "0xbfdd4eee", None],
@@ -19,11 +20,13 @@ ALL_PLATFORMS={
     "feather_esp32s2" : ["esp32:esp32:adafruit_feather_esp32s2", "0xbfdd4eee", None],
     "feather_esp32s2_tft" : ["esp32:esp32:adafruit_feather_esp32s2_tft", "0xbfdd4eee", None],
     "feather_esp32s2_reverse_tft" : ["esp32:esp32:adafruit_feather_esp32s2_reversetft", "0xbfdd4eee", None],
+    ## ESP32-S3
     "feather_esp32s3" : ["esp32:esp32:adafruit_feather_esp32s3_nopsram", "0xc47e5767", None],
     "feather_esp32s3_4mbflash_2mbpsram" : ["esp32:esp32:adafruit_feather_esp32s3", "0xc47e5767", None],
     "feather_esp32s3_tft" : ["esp32:esp32:adafruit_feather_esp32s3_tft", "0xc47e5767", None],
     "feather_esp32s3_reverse_tft" : ["esp32:esp32:adafruit_feather_esp32s3_reversetft", "0xc47e5767", None],
     "matrixportal_s3" : ["esp32:esp32:adafruit_matrixportal_esp32s3", "0xc47e5767", None],
+    "metro_esp32s3" : ["esp32:esp32:adafruit_metro_esp32s3", "0xc47e5767", None],
     "qualia_s3_rgb666" : ["esp32:esp32:adafruit_qualia_s3_rgb666", "0xc47e5767", None],
     "qtpy_esp32s3" : ["esp32:esp32:adafruit_qtpy_esp32s3_nopsram", "0xc47e5767", None],
     "qtpy_esp32s3_n4r2" : ["esp32:esp32:adafruit_qtpy_esp32s3_n4r2", "0xc47e5767", None],
