@@ -131,6 +131,9 @@ def install_platform(fqbn, full_platform_name=None):
         if os.system("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS+" > /dev/null") == 0:
             break
         print("...retrying...", end=" ")
+        if os.path.exists(".arduino15/package_drazzy.json"):
+            shutil.move(".arduino15/package_drazzy.json", ".arduino15/package_drazzy.com_index.json")
+
         time.sleep(10) # wait 10 seconds then try again?
     else:
         # tried 3 times to no avail
