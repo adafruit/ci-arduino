@@ -2,6 +2,7 @@ import sys
 import glob
 import time
 import os
+import re
 import shutil
 import subprocess
 import collections
@@ -166,6 +167,14 @@ run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
 
 print()
 
+def is_library_installed(lib_name):
+    try:
+        installed_libs = subprocess.check_output(["arduino-cli", "lib", "list"]).decode("utf-8")
+        return not all(not item for item in [re.match('^'+dep+'\\s*\\d+\\.', line) for line in installed_libs.split('\n')])
+    except subprocess.CalledProcessError as e:
+        print("Error checking installed libraries:", e)
+        return False
+
 ################################ Install dependencies
 our_name=None
 try:
@@ -180,9 +189,12 @@ try:
             deps = line.replace("depends=", "").split(",")
             for dep in deps:
                 dep = dep.strip()
-                print("Installing "+dep)
-                run_or_die('arduino-cli lib install "'+dep+'" > /dev/null',
-                           "FAILED to install dependency "+dep)
+                if not is_library_installed(dep):
+                    print("Installing "+dep)
+                    run_or_die('arduino-cli lib install "'+dep+'" > /dev/null',
+                               "FAILED to install dependency "+dep)
+                else:
+                    print("Skipping already installed lib: "+dep)
 except OSError:
     print("No library dep or properties found!")
     pass  # no library properties
