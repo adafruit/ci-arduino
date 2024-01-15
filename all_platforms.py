@@ -133,6 +133,6 @@ ALL_PLATFORMS={
                         "esp8266", "esp32", "metro_m4", "trinket_m0"),
     "arcada_platforms" : ("pybadge", "pygamer", "hallowing_m4",
                           "cpb", "cpx_ada"),
-    "wippersnapper_platforms" : ("metro_m4_airliftlite_tinyusb", "pyportal_tinyusb"),
+    "wippersnapper_platforms" : ("metro_m4_airliftlite_tinyusb", "pyportal_tinyusb", "pyportal_titano_tinyusb"),
     "rp2040_platforms" : ("pico_rp2040", "feather_rp2040")
 }
