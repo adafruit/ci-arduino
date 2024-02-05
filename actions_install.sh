@@ -37,9 +37,14 @@ arduino-cli core update-index > /dev/null
 case "$GITHUB_REPOSITORY" in
 (*/ci-arduino|*/Adafruit_Learning_System_Guides) ;;
 (*)
-  repo_topics=$($(curl --request GET --url "https://api.github.com/repos/$GITHUB_REPOSITORY" || []) | jq -r '.topics[]')
-  if [[ ! $repo_topics =~ "arduino-library" ]]; then
-    echo "::warning::arduino-library is not found in this repo topics. Please add this tag in repo About"
+  tmp_file=$(mktemp)
+  http_code=$(curl --silent --write-out "%{http_code}" --output "$tmp_file" --request GET --url "https://api.github.com/repos/$GITHUB_REPOSITORY")
+  if [[ ${http_code} -eq 200 ]]; then
+    repo_topics=$(< "$tmp_file" jq -r '.topics[]')
+    if [[ ! $repo_topics =~ "arduino-library" ]]; then
+      echo "::warning::arduino-library is not found in this repo topics. Please add this tag in repo About"
+    fi
   fi
+  rm "$tmp_file"
 esac
 
