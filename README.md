@@ -1,9 +1,9 @@
 # Arduino CI Scripts
 
-This repos contains various scripts and tools related to running continuous integration (CI) checks on Arduino Library Repos. The operations include:
+This repo contains various scripts and tools related to running continuous integration (CI) checks on Arduino Library Repos. The operations include:
 
-* checking formatting using using [clang-format](https://clang.llvm.org/docs/ClangFormat.html),
-* generating documentation from source comments using using [Doxygen](https://www.doxygen.nl/), and
+* checking formatting using [clang-format](https://clang.llvm.org/docs/ClangFormat.html),
+* generating documentation from source comments using [Doxygen](https://www.doxygen.nl/), and
 * building each example in the library for selected targets.
 
 There is an associated guide available here:
@@ -74,5 +74,5 @@ clang-format -i File_To_Format.cpp
 
 The `doxy_gen_and_deploy.sh` script uses [Doxygen](https://www.doxygen.nl/) to generate and deploy documentation
 for the library. Any issues, like missing documentation, will cause the CI to fail.
-See the [the guide](https://learn.adafruit.com/the-well-automated-arduino-library/doxygen) for details on installing and running doxygen locally. The guide also has some
-[tips](https://learn.adafruit.com/the-well-automated-arduino-library/doxygen-tips) on basic usage of doxygen markup within your code.
+See the [guide](https://learn.adafruit.com/the-well-automated-arduino-library/doxygen) for details on installing and running Doxygen locally. The guide also has some
+[tips](https://learn.adafruit.com/the-well-automated-arduino-library/doxygen-tips) on basic usage of Doxygen markup within your code.
