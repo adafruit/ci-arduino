@@ -31,6 +31,7 @@ ALL_PLATFORMS={
     "feather_esp32s3_tft" : ["esp32:esp32:adafruit_feather_esp32s3_tft", "0xc47e5767", None],
     "feather_esp32s3_tft_debug" : ["esp32:esp32:adafruit_feather_esp32s3_tft:DebugLevel=verbose", "0xc47e5767", None],
     "feather_esp32s3_reverse_tft" : ["esp32:esp32:adafruit_feather_esp32s3_reversetft", "0xc47e5767", None],
+    "feather_esp32s3_reverse_tft_debug" : ["esp32:esp32:adafruit_feather_esp32s3_reversetft:DebugLevel=verbose", "0xc47e5767", None],
     "matrixportal_s3" : ["esp32:esp32:adafruit_matrixportal_esp32s3", "0xc47e5767", None],
     "metro_esp32s3" : ["esp32:esp32:adafruit_metro_esp32s3", "0xc47e5767", None],
     "pycamera_s3" : ["espressif:esp32:adafruit_camera_esp32s3", "0xc47e5767", "espressif/master"],
