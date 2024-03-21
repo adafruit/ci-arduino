@@ -77,6 +77,7 @@ ALL_PLATFORMS={
     "pyportal_tinyusb" : ["adafruit:samd:adafruit_pyportal_m4:speed=120,usbstack=tinyusb", "0x55114460", None],
     "pyportal_titano" : ["adafruit:samd:adafruit_pyportal_m4_titano:speed=120", "0x55114460", None],
     "pyportal_titano_tinyusb" : ["adafruit:samd:adafruit_pyportal_m4_titano:speed=120,usbstack=tinyusb", "0x55114460", None],
+    "pyportal_titano_tinyusb_debug" : ["adafruit:samd:adafruit_pyportal_m4_titano:speed=120,usbstack=tinyusb,debug=on", "0x55114460", None],
     "cpx_ada" : ["adafruit:samd:adafruit_circuitplayground_m0", "0x68ed2b88", None],
     "grand_central" : ["adafruit:samd:adafruit_grandcentral_m4:speed=120", "0x55114460", None],
     "grand_central_tinyusb" : ["adafruit:samd:adafruit_grandcentral_m4:speed=120,usbstack=tinyusb", "0x55114460", None],
