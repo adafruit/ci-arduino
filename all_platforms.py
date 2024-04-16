@@ -12,7 +12,11 @@ ALL_PLATFORMS={
     "itsybitsy_esp32" : ["esp32:esp32:adafruit_itsybitsy_esp32:FlashFreq=80", None, None],
     "feather_esp8266" : ["esp8266:esp8266:huzzah:xtal=80,vt=flash,exception=disabled,stacksmash=disabled,ssl=all,mmu=3232,non32xfer=fast,eesz=4M2M,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200", None, None],
     "feather_esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None, None],
+    "wippersnapper_feather_esp32" : ["esp32:esp32:featheresp32:FlashFreq=80,PartitionScheme=min_spiffs", None, None],
     "feather_esp32_v2" : ["esp32:esp32:adafruit_feather_esp32_v2", None, None],
+    "qtpy_esp32" : ["esp32:esp32:adafruit_qtpy_esp32_pico", None, None],
+    "qtpy_esp32c3" : ["esp32:esp32:adafruit_qtpy_esp32c3:FlashMode=qio", None, None],
+    "wippersnapper_qtpy_esp32c3" : ["esp32:esp32:adafruit_qtpy_esp32c3:FlashMode=qio,PartitionScheme=min_spiffs", None, None],
     ## ESP32-S2
     "magtag" : ["esp32:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee", None],
     "funhouse" : ["esp32:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee", None],
@@ -39,8 +43,6 @@ ALL_PLATFORMS={
     "qualia_s3_rgb666" : ["esp32:esp32:adafruit_qualia_s3_rgb666", "0xc47e5767", None],
     "qtpy_esp32s3" : ["esp32:esp32:adafruit_qtpy_esp32s3_nopsram", "0xc47e5767", None],
     "qtpy_esp32s3_n4r2" : ["esp32:esp32:adafruit_qtpy_esp32s3_n4r2", "0xc47e5767", None],
-    "qtpy_esp32" : ["esp32:esp32:adafruit_qtpy_esp32_pico", None, None],
-    "qtpy_esp32c3" : ["esp32:esp32:adafruit_qtpy_esp32c3:FlashMode=qio", None, None],
     # Adafruit AVR
     "trinket_3v" : ["adafruit:avr:trinket3", None, None],
     "trinket_5v" : ["adafruit:avr:trinket5", None, None],
