@@ -185,7 +185,7 @@ def install_library_deps():
     print()
 
     # Install dependencies
-    our_name=None
+    our_name = None
     try:
         if IS_LEARNING_SYS:
             libprop = open(BUILD_DIR+'/library.deps')
@@ -406,7 +406,6 @@ def main():
 
     # expand groups:
     for arg in sys.argv[1:]:
-
         platform = ALL_PLATFORMS.get(arg, None)
         if isinstance(platform, list):
             platforms.append(arg)
