@@ -62,8 +62,17 @@ elif "METROX-Examples-and-Project-Sketches" in BUILD_DIR:
 CROSS = u'\N{cross mark}'
 CHECK = u'\N{check mark}'
 
+BSP_URLS = (
+    "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,"
+    "http://arduino.esp8266.com/stable/package_esp8266com_index.json,"
+    "https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json,"
+    "https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json,"
+    "https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json,"
+    "https://drazzy.good-enough.cloud/package_drazzy.com_index.json"
+)
 
-BSP_URLS = "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json,https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json,https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json,https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json,https://drazzy.good-enough.cloud/package_drazzy.com_index.json"
+# global exit code
+success = 0
 
 class ColorPrint:
 
@@ -156,62 +165,63 @@ def run_or_die(cmd, error):
     ColorPrint.print_fail(error)
     exit(-1)
 
-################################ Install Arduino IDE
-print()
-ColorPrint.print_info('#'*40)
-print("INSTALLING ARDUINO BOARDS")
-ColorPrint.print_info('#'*40)
-
-run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
-           " > /dev/null", "FAILED to update core indices")
-
-print()
 
 def is_library_installed(lib_name):
     try:
         installed_libs = subprocess.check_output(["arduino-cli", "lib", "list"]).decode("utf-8")
-        return not all(not item for item in [re.match('^'+dep+'\\s*\\d+\\.', line) for line in installed_libs.split('\n')])
+        return not all(not item for item in [re.match('^'+lib_name+'\\s*\\d+\\.', line) for line in installed_libs.split('\n')])
     except subprocess.CalledProcessError as e:
         print("Error checking installed libraries:", e)
         return False
 
-################################ Install dependencies
-our_name=None
-try:
-    if IS_LEARNING_SYS:
-        libprop = open(BUILD_DIR+'/library.deps')
-    else:
-        libprop = open(BUILD_DIR+'/library.properties')
-    for line in libprop:
-        if line.startswith("name="):
-            our_name = line.replace("name=", "").strip()
-        if line.startswith("depends="):
-            deps = line.replace("depends=", "").split(",")
-            for dep in deps:
-                dep = dep.strip()
-                if not is_library_installed(dep):
-                    print("Installing "+dep)
-                    run_or_die('arduino-cli lib install "'+dep+'" > /dev/null',
-                               "FAILED to install dependency "+dep)
-                else:
-                    print("Skipping already installed lib: "+dep)
-except OSError:
-    print("No library dep or properties found!")
-    pass  # no library properties
 
-# Delete the existing library if we somehow downloaded
-# due to dependencies
-if our_name:
-    run_or_die("arduino-cli lib uninstall \""+our_name+"\"", "Could not uninstall")
+def install_library_deps():
+    print()
+    ColorPrint.print_info('#'*40)
+    print("INSTALLING ARDUINO LIBRARIES")
+    ColorPrint.print_info('#'*40)
 
-print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/*'))
+    run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
+               " > /dev/null", "FAILED to update core indices")
+    print()
 
-# link our library folder to the arduino libraries folder
-if not IS_LEARNING_SYS:
+    # Install dependencies
+    our_name = None
     try:
-        os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/' + os.path.basename(BUILD_DIR))
-    except FileExistsError:
-        pass
+        if IS_LEARNING_SYS:
+            libprop = open(BUILD_DIR+'/library.deps')
+        else:
+            libprop = open(BUILD_DIR+'/library.properties')
+        for line in libprop:
+            if line.startswith("name="):
+                our_name = line.replace("name=", "").strip()
+            if line.startswith("depends="):
+                deps = line.replace("depends=", "").split(",")
+                for dep in deps:
+                    dep = dep.strip()
+                    if not is_library_installed(dep):
+                        print("Installing "+dep)
+                        run_or_die('arduino-cli lib install "'+dep+'" > /dev/null',
+                                   "FAILED to install dependency "+dep)
+                    else:
+                        print("Skipping already installed lib: "+dep)
+    except OSError:
+        print("No library dep or properties found!")
+        pass  # no library properties
+
+    # Delete the existing library if we somehow downloaded
+    # due to dependencies
+    if our_name:
+        run_or_die("arduino-cli lib uninstall \""+our_name+"\"", "Could not uninstall")
+
+    print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/*'))
+
+    # link our library folder to the arduino libraries folder
+    if not IS_LEARNING_SYS:
+        try:
+            os.symlink(BUILD_DIR, os.environ['HOME']+'/Arduino/libraries/' + os.path.basename(BUILD_DIR))
+        except FileExistsError:
+            pass
 
 ################################ UF2 Utils.
 
@@ -242,10 +252,12 @@ def download_uf2_utils():
         return False
     return True
 
-def generate_uf2(example_path):
-    """Generates a .uf2 file from a .bin or .hex file.
-    :param str example_path: A path to the compiled .bin or .hex file.
 
+def generate_uf2(platform, fqbn, example_path):
+    """Generates a .uf2 file from a .bin or .hex file.
+    :param str platform: The platform name.
+    :param str fqbn: The fully qualified board name.
+    :param str example_path: A path to the compiled .bin or .hex file.
     """
     if not download_uf2_utils():
         return None
@@ -292,21 +304,6 @@ def generate_uf2(example_path):
         return None
     return output_file
 
-################################ Test platforms
-platforms = []
-success = 0
-
-# expand groups:
-for arg in sys.argv[1:]:
-    platform = ALL_PLATFORMS.get(arg, None)
-    if isinstance(platform, list):
-        platforms.append(arg)
-    elif isinstance(platform, tuple):
-        for p in platform:
-            platforms.append(p)
-    else:
-        print("Unknown platform: ", arg)
-        exit(-1)
 
 @contextmanager
 def group_output(title):
@@ -322,12 +319,13 @@ def group_output(title):
         sys.stdout.flush()
 
 
-def test_examples_in_folder(folderpath):
+def test_examples_in_folder(platform, folderpath):
     global success
+    fqbn = ALL_PLATFORMS[platform][0]
     for example in sorted(os.listdir(folderpath)):
         examplepath = folderpath+"/"+example
         if os.path.isdir(examplepath):
-            test_examples_in_folder(examplepath)
+            test_examples_in_folder(platform, examplepath)
             continue
         if not examplepath.endswith(".ino"):
             continue
@@ -382,11 +380,11 @@ def test_examples_in_folder(folderpath):
                 with group_output(f"{example} {fqbn} build output"):
                     ColorPrint.print_fail(err.decode("utf-8"))
             if os.path.exists(gen_file_name):
-                if ALL_PLATFORMS[platform][1] == None:
+                if ALL_PLATFORMS[platform][1] is None:
                     ColorPrint.print_info("Platform does not support UF2 files, skipping...")
                 else:
                     ColorPrint.print_info("Generating UF2...")
-                    filename = generate_uf2(folderpath)
+                    filename = generate_uf2(platform, fqbn, folderpath)
                     if filename is None:
                         success = 1  # failure
                     if IS_LEARNING_SYS:
@@ -402,53 +400,38 @@ def test_examples_in_folder(folderpath):
                 ColorPrint.print_fail(err.decode("utf-8"))
             success = 1
 
-def test_examples_in_learningrepo(folderpath):
-    global success
-    for project in os.listdir(folderpath):
-        projectpath = folderpath+"/"+project
-        if os.path.isdir(learningrepo):
-            test_examples_in_learningrepo(projectpath)
-            continue
-        if not projectpath.endswith(".ino"):
-            continue
-	    # found an INO!
-        print('\t'+projectpath, end=' ', flush=True)
-        # check if we should SKIP
-        skipfilename = folderpath+"/."+platform+".test.skip"
-        onlyfilename = folderpath+"/."+platform+".test.only"
-        if os.path.exists(skipfilename):
-            ColorPrint.print_warn("skipping")
-            continue
-        elif glob.glob(folderpath+"/.*.test.only") and not os.path.exists(onlyfilename):
-            ColorPrint.print_warn("skipping")
-            continue
 
-        cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, projectpath]
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        r = proc.wait()
-        out = proc.stdout.read()
-        err = proc.stderr.read()
-        if r == 0:
-            ColorPrint.print_pass(CHECK)
-            if err:
-                # also print out warning message
-                ColorPrint.print_fail(err.decode("utf-8"))
+def main():
+    # Test platforms
+    platforms = []
+
+    # expand groups:
+    for arg in sys.argv[1:]:
+        platform = ALL_PLATFORMS.get(arg, None)
+        if isinstance(platform, list):
+            platforms.append(arg)
+        elif isinstance(platform, tuple):
+            for p in platform:
+                platforms.append(p)
         else:
-            ColorPrint.print_fail(CROSS)
-            ColorPrint.print_fail(out.decode("utf-8"))
-            ColorPrint.print_fail(err.decode("utf-8"))
-            success = 1
+            print("Unknown platform: ", arg)
+            exit(-1)
+
+    # Install libraries deps
+    install_library_deps()
+
+    for platform in platforms:
+        fqbn = ALL_PLATFORMS[platform][0]
+        print('#'*80)
+        ColorPrint.print_info("SWITCHING TO "+fqbn)
+        install_platform(":".join(fqbn.split(':', 2)[0:2]), ALL_PLATFORMS[platform]) # take only first two elements
+        print('#'*80)
+        if not IS_LEARNING_SYS:
+            test_examples_in_folder(platform, BUILD_DIR+"/examples")
+        else:
+            test_examples_in_folder(platform, BUILD_DIR)
 
 
-for platform in platforms:
-    fqbn = ALL_PLATFORMS[platform][0]
-    print('#'*80)
-    ColorPrint.print_info("SWITCHING TO "+fqbn)
-    install_platform(":".join(fqbn.split(':', 2)[0:2]), ALL_PLATFORMS[platform]) # take only first two elements
-    print('#'*80)
-    if not IS_LEARNING_SYS:
-        test_examples_in_folder(BUILD_DIR+"/examples")
-    else:
-        test_examples_in_folder(BUILD_DIR)
-exit(success)
+if __name__ == "__main__":
+    main()
+    exit(success)
