@@ -68,11 +68,13 @@ BSP_URLS = (
     "https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json,"
     "https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json,"
     "https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json,"
-    "https://drazzy.good-enough.cloud/package_drazzy.com_index.json"
+    "https://drazzy.good-enough.cloud/package_drazzy.com_index.json,"
+    "https://github.com/openwch/board_manager_files/raw/main/package_ch32v_index.json"
 )
 
 # global exit code
 success = 0
+
 
 class ColorPrint:
 
@@ -95,6 +97,7 @@ class ColorPrint:
     @staticmethod
     def print_bold(message, end = '\n'):
         sys.stdout.write('\x1b[1;37m' + message.strip() + '\x1b[0m' + end)
+
 
 def manually_install_esp32_bsp(repo_info):
     print("Manually installing latest ESP32 BSP...")
@@ -130,6 +133,7 @@ def manually_install_esp32_bsp(repo_info):
     print(out)
     print("Installed ESP32 BSP from source!")
 
+
 def install_platform(fqbn, full_platform_name=None):
     if os.path.exists("/home/runner/.arduino15/package_drazzy.json"):
         print("Moving drazzy.json")
@@ -152,6 +156,7 @@ def install_platform(fqbn, full_platform_name=None):
     ColorPrint.print_pass(CHECK)
     # print installed core version
     print(os.popen('arduino-cli core list | grep {}'.format(fqbn)).read(), end='')
+
 
 def run_or_die(cmd, error):
     print(cmd)
@@ -225,17 +230,20 @@ def install_library_deps():
 
 ################################ UF2 Utils.
 
+
 def glob01(pattern):
     result = glob.glob(pattern)
     if len(result) > 1:
         raise RuntimeError(f"Required pattern {pattern} to match at most 1 file, got {result}")
     return result[0] if result else None
 
+
 def glob1(pattern):
     result = glob.glob(pattern)
     if len(result) != 1:
         raise RuntimeError(f"Required pattern {pattern} to match exactly 1 file, got {result}")
     return result[0]
+
 
 def download_uf2_utils():
     """Downloads uf2conv tools if we don't already have them

@@ -1,3 +1,4 @@
+# board: [ platform, uf2_family, manual core URL]
 ALL_PLATFORMS={
     # classic Arduino AVR
     "uno" : ["arduino:avr:uno", None, None],
@@ -135,6 +136,10 @@ ALL_PLATFORMS={
     "attiny816" : ["megaTinyCore:megaavr:atxy6:chip=816", None, None],
     "attiny807" : ["megaTinyCore:megaavr:atxy7:chip=807", None, None],
     "attiny806" : ["megaTinyCore:megaavr:atxy6:chip=806", None, None],
+
+    # CH32v2 (openwch)
+    "CH32V20x_EVT": ["WCH:ch32v:CH32V20x_EVT", None, None],
+
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero", "qtpy_m0",
                         "esp8266", "esp32", "metro_m4", "trinket_m0"),
