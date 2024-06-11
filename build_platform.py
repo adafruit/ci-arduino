@@ -352,8 +352,6 @@ def test_examples_in_folder(platform, folderpath):
         is_skip = False
         if os.path.exists(skipfilename):
             is_skip = True
-            ColorPrint.print_warn("skipping")
-            continue
         if os.path.exists(skip_txt):
             with open(skip_txt) as f:
                 lines = f.readlines()
