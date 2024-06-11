@@ -339,14 +339,30 @@ def test_examples_in_folder(platform, folderpath):
             continue
 
         print('\t'+example, end=' ')
+
         # check if we should SKIP
         skipfilename = folderpath+"/."+platform+".test.skip"
         onlyfilename = folderpath+"/."+platform+".test.only"
         # check if we should GENERATE UF2
         gen_file_name = folderpath+"/."+platform+".generate"
+
+        # .skip txt include all skipped platforms, one per line
+        skip_txt = folderpath+"/.skip.txt"
+
+        is_skip = False
         if os.path.exists(skipfilename):
+            is_skip = True
+        if os.path.exists(skip_txt):
+            with open(skip_txt) as f:
+                lines = f.readlines()
+                for line in lines:
+                    if line.strip() == platform:
+                        is_skip = True
+                        break
+        if is_skip:
             ColorPrint.print_warn("skipping")
             continue
+
         if glob.glob(folderpath+"/.*.test.only"):
             platformname = glob.glob(folderpath+"/.*.test.only")[0].split('.')[1]
             if platformname != "none" and not platformname in ALL_PLATFORMS:
