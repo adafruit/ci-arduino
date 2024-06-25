@@ -92,7 +92,7 @@ ALL_PLATFORMS={
     "neokeytrinkey_m0" : ["adafruit:samd:adafruit_neokeytrinkey_m0", "0x68ed2b88", None],
     "slidetrinkey_m0" : ["adafruit:samd:adafruit_slidetrinkey_m0", "0x68ed2b88", None],
     "proxlighttrinkey_m0" : ["adafruit:samd:adafruit_proxlighttrinkey_m0", "0x68ed2b88", None],
-    "trrstrinkey_m0" : ["adafruit:samd:adafruit_TRRStrinkey_m0", "0x68ed2b88", None],
+    "trrstrinkey_m0" : ["adafruit:samd:adafruit_trrstrinkey_m0", "0x68ed2b88", None],
     "thumbsticktrinkey_m0" : ["adafruit:samd:adafruit_thumbsticktrinkey_m0", "0x68ed2b88", None],
     "sht4xtrinkey_m0" : ["adafruit:samd:adafruit_sht4xtrinkey_m0", "0x68ed2b88", None],
     "pixeltrinkey_m0" : ["adafruit:samd:adafruit_pixeltrinkey_m0", "0x68ed2b88", None],
