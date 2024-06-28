@@ -118,6 +118,8 @@ ALL_PLATFORMS={
     "picow_rp2040_tinyusb" : ["rp2040:rp2040:rpipicow:flash=2097152_131072,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "feather_rp2040" : ["rp2040:rp2040:adafruit_feather:freq=125,flash=8388608_0", "0xe48bff56", None],
     "feather_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_feather:flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "feather_rp2040_adalogger" : ["rp2040:rp2040:adafruit_feather_adalogger:freq=125,flash=8388608_0", "0xe48bff56", None],
+    "feather_rp2040_adalogger_tinyusb" : ["rp2040:rp2040:adafruit_feather_adalogger:flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "feather_rp2040_rfm" : ["rp2040:rp2040:adafruit_feather_rfm:freq=125,flash=8388608_0", "0xe48bff56", None],
     "feather_rp2040_rfm_tinyusb" : ["rp2040:rp2040:adafruit_feather_rfm:flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "feather_rp2040_dvi" : ["rp2040:rp2040:adafruit_feather_dvi:freq=125,flash=8388608_0", "0xe48bff56", None],
