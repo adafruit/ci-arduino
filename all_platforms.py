@@ -16,6 +16,9 @@ ALL_PLATFORMS={
     "wippersnapper_feather_esp32" : ["esp32:esp32:featheresp32:FlashFreq=80,PartitionScheme=min_spiffs", None, None],
     "feather_esp32_v2" : ["esp32:esp32:adafruit_feather_esp32_v2", None, None],
     "qtpy_esp32" : ["esp32:esp32:adafruit_qtpy_esp32_pico", None, None],
+    ## ESP32-C3/C6
+    "feather_esp32c6" : ["esp32:esp32:adafruit_feather_esp32c6:FlashMode=qio", None, None],
+    "wippersnapper_feather_esp32c6" : ["esp32:esp32:adafruit_feather_esp32c6:FlashMode=qio,PartitionScheme=min_spiffs", None, None],
     "qtpy_esp32c3" : ["esp32:esp32:adafruit_qtpy_esp32c3:FlashMode=qio", None, None],
     "wippersnapper_qtpy_esp32c3" : ["esp32:esp32:adafruit_qtpy_esp32c3:FlashMode=qio,PartitionScheme=min_spiffs", None, None],
     ## ESP32-S2
