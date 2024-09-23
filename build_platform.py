@@ -144,6 +144,8 @@ def install_platform(fqbn, full_platform_name=None):
         install_platform("arduino:avr", full_platform_name)
     if full_platform_name[2] is not None:
         manually_install_esp32_bsp(full_platform_name[2]) # build esp32 bsp from desired source and branch
+        print(os.popen('arduino-cli core list | grep {}'.format(fqbn)).read(), end='')
+        return # bail out
     for retry in range(0, 3):
         print("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS)
         if os.system("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS+" > /dev/null") == 0:
