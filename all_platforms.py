@@ -18,8 +18,8 @@ ALL_PLATFORMS={
     "qtpy_esp32" : ["espressif:esp32:adafruit_qtpy_esp32_pico", None, "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
     ## ESP32-C3/C6
     "feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:FlashMode=qio", None, "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
-    "wippersnapper_feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
-    "wippersnapper_feather_esp32c6_debug" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,DebugLevel=verbose,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
+    "wippersnapper_feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/master"],
+    "wippersnapper_feather_esp32c6_debug" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,DebugLevel=verbose,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/master"],
     "qtpy_esp32c3" : ["espressif:esp32:adafruit_qtpy_esp32c3:FlashMode=qio", None, "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
     "wippersnapper_qtpy_esp32c3" : ["espressif:esp32:adafruit_qtpy_esp32c3:FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
     ## ESP32-S2
