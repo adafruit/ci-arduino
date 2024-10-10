@@ -29,6 +29,19 @@ if "--build_timeout" in sys.argv:
     sys.argv.pop(sys.argv.index("--build_timeout") + 1)
     sys.argv.remove("--build_timeout")
 
+# optional wippersnapper argument to generate a dependencies header file
+PRINT_DEPENDENCIES_AS_HEADER = False
+INCLUDE_PRINT_DEPENDENCIES_HEADER = False
+PRINT_DEPENDENCIES_AS_HEADER_FILENAME = None
+if "--include_print_dependencies_header" in sys.argv:
+    # check argument not null and folder path exists
+    PRINT_DEPENDENCIES_AS_HEADER_FILENAME = sys.argv[sys.argv.index("--include_print_dependencies_header") + 1] if len(sys.argv) > sys.argv.index("--include_print_dependencies_header") + 1 else None
+    if PRINT_DEPENDENCIES_AS_HEADER_FILENAME is None or not os.path.exists(PRINT_DEPENDENCIES_AS_HEADER_FILENAME):
+        raise AttributeError("Header file path not found or not provided to --include_print_dependencies_header argument")
+    INCLUDE_PRINT_DEPENDENCIES_HEADER = True
+    sys.argv.pop(sys.argv.index("--include_print_dependencies_header") + 1)
+    sys.argv.remove("--include_print_dependencies_header")
+
 # add user bin to path!
 BUILD_DIR = ''
 # add user bin to path!
@@ -55,9 +68,6 @@ if "Adafruit_Learning_System_Guides" in BUILD_DIR:
 elif "METROX-Examples-and-Project-Sketches" in BUILD_DIR:
     print("Found MetroX Examples Repo")
     IS_LEARNING_SYS = True
-
-#os.system('pwd')
-#os.system('ls -lA')
 
 CROSS = u'\N{cross mark}'
 CHECK = u'\N{check mark}'
@@ -104,7 +114,7 @@ def manually_install_esp32_bsp(repo_info):
     # Assemble git url
     repo_url = "git clone -b {0} https://github.com/{1}/arduino-esp32.git esp32".format(repo_info.split("/")[1], repo_info.split("/")[0])
     # Locally clone repo (https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html#linux)
-    os.system("mkdir -p /home/runner/Arduino/hardware/espressif")
+    subprocess.run("mkdir -p /home/runner/Arduino/hardware/espressif", shell=True, check=True)
     print("Cloning %s"%repo_url)
     cmd = "cd /home/runner/Arduino/hardware/espressif && " + repo_url
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -135,10 +145,11 @@ def manually_install_esp32_bsp(repo_info):
 
 
 def install_platform(fqbn, full_platform_name=None):
+    print("Checking for drazzy.json (before moving)")
     if os.path.exists("/home/runner/.arduino15/package_drazzy.json"):
         print("Moving drazzy.json")
         shutil.move("/home/runner/.arduino15/package_drazzy.json", "/home/runner/.arduino15/package_drazzy.com_index.json")
-    print("Installing", fqbn, end=" ")
+    print("Installing", fqbn, " (", full_platform_name, ")", end=" ")
     if fqbn == "adafruit:avr":   # we have a platform dep
         install_platform("arduino:avr", full_platform_name)
     if full_platform_name[2] is not None:
@@ -147,7 +158,7 @@ def install_platform(fqbn, full_platform_name=None):
         return # bail out
     for retry in range(0, 3):
         print("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS)
-        if os.system("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS+" > /dev/null") == 0:
+        if subprocess.run("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS+" > /dev/null", shell=True, check=False).returncode == 0:
             break
         print("...retrying...", end=" ")
         time.sleep(10) # wait 10 seconds then try again?
@@ -157,14 +168,16 @@ def install_platform(fqbn, full_platform_name=None):
         exit(-1)
     ColorPrint.print_pass(CHECK)
     # print installed core version
-    print(os.popen('arduino-cli core list | grep {}'.format(fqbn)).read(), end='')
+    result = subprocess.Popen('arduino-cli core list | grep {}'.format(fqbn), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(result.stdout.read().decode(), end='')
+
 
 
 def run_or_die(cmd, error):
     print(cmd)
     attempt = 0
     while attempt < 3:
-        if os.system(cmd) == 0:
+        if subprocess.run(cmd, shell=True, check=False).returncode == 0:
             return
         attempt += 1
         print('attempt {} failed, {} retry left'.format(attempt, 3-attempt))
@@ -175,7 +188,7 @@ def run_or_die(cmd, error):
 
 def is_library_installed(lib_name):
     try:
-        installed_libs = subprocess.check_output(["arduino-cli", "lib", "list"]).decode("utf-8")
+        installed_libs = subprocess.check_output("arduino-cli lib list", shell=True).decode("utf-8")
         return not all(not item for item in [re.match('^'+lib_name+'\\s*\\d+\\.', line) for line in installed_libs.split('\n')])
     except subprocess.CalledProcessError as e:
         print("Error checking installed libraries:", e)
@@ -290,6 +303,7 @@ def generate_uf2(platform, fqbn, example_path):
         family_id = ALL_PLATFORMS[platform][1]
         cmd = ['python3', 'uf2conv.py', hex_input_file, '-c', '-f', family_id, '-o', output_file]
     else:
+        # ColorPrint.print_info(subprocess.check_output(["tree"]).decode("utf-8"))
         cli_build_path = "build/*.*." + fqbn.split(':')[2] + "/*.ino.bin"
         input_file = glob1(os.path.join(example_path, cli_build_path))
         output_file = os.path.splitext(input_file)[0] + ".uf2"
@@ -329,27 +343,101 @@ def group_output(title):
         sys.stdout.flush()
 
 
+def extract_dependencies(output):
+    print("Extracting libraries from output:", output)
+    print(f"{"############## Done #############":-^80}")
+
+    IS_LIBS_FOUND = False
+    IS_BSP_FOUND = False
+    libraries = []
+    platforms = []
+    COLS = []
+    for i,line in enumerate(output.split('\n')):
+        if line.strip() == '':
+            continue
+        if not IS_LIBS_FOUND:
+            if re.match(r'Used library', line):
+                IS_LIBS_FOUND = True
+                print("Found libraries token using regex")
+                print("find Version:", line.find('Version'))
+                print("find Path:", line.find('Path'))
+                COLS = [0,line.find('Version'), line.find('Path')]
+                continue
+            else:
+                if line.find("Used library") != -1:
+                    print("Found libraries token using find")
+                    IS_LIBS_FOUND = True
+                    print("non regex find Version:", line.find('Version'))
+                    print("find Path:", line.find('Path'))
+                    COLS = [0,line.find('Version'), line.find('Path')]
+        else:
+            if not IS_BSP_FOUND:
+                if re.match(r'Used platform', line):
+                    print("Found platform token using regex")
+                    IS_BSP_FOUND = True
+                    COLS = [0,line.find('Version'), line.find('Path')]
+                    continue
+                elif line.find("Used platform") != -1:
+                    print("Found platform token using find")
+                    IS_BSP_FOUND = True
+                    COLS = [0,line.find('Version'), line.find('Path')]
+                    continue
+                else:
+                    libraries.append([line[:COLS[1]].strip(),line[COLS[1]:COLS[2]].strip()])
+            else:
+                platforms.append([line[:COLS[1]].strip(),line[COLS[1]:COLS[2]].strip()])
+    
+    dependencies = {
+        'libraries': libraries,
+        'platforms': platforms
+    }
+    print("Extracted list of dependencies:", dependencies)
+    return dependencies
+
+def write_dependencies_to_header(dependencies, output_file):
+    # header file
+    with open(output_file, 'w') as f:
+        f.write('#ifndef PROJECT_DEPENDENCIES_H\n')
+        f.write('#define PROJECT_DEPENDENCIES_H\n\n')
+        f.write('#define PRINT_DEPENDENCIES 1\n')
+        f.write('extern const char* project_dependencies;\n\n')
+        f.write('#endif // PROJECT_DEPENDENCIES_H\n')
+    # cpp file
+    with open(re.sub(r'\.h$','.cpp', output_file), 'w') as f:
+        f.write('#include "print_dependencies.h"\n\n')
+        f.write('const char* project_dependencies = R"(\n')
+        
+        f.write('Libraries and Versions:\n')
+        for lib in dependencies['libraries']:
+            f.write(f'Library: {lib[0].strip()}, Version: {lib[1].strip()}\n')
+        
+        f.write('\nPlatforms and Versions:\n')
+        for plat in dependencies['platforms']:
+            f.write(f'Platform: {plat[0].strip()}, Version: {plat[1].strip()}\n')
+        
+        f.write(')";\n\n')
+
 def test_examples_in_folder(platform, folderpath):
-    global success
+    global success, BUILD_TIMEOUT, popen_timeout, BUILD_WALL, BUILD_WARN, PRINT_DEPENDENCIES_AS_HEADER, INCLUDE_PRINT_DEPENDENCIES_HEADER, IS_LEARNING_SYS, BUILD_DIR
     fqbn = ALL_PLATFORMS[platform][0]
     for example in sorted(os.listdir(folderpath)):
-        examplepath = folderpath+"/"+example
+        examplepath = folderpath + "/" + example
         if os.path.isdir(examplepath):
             test_examples_in_folder(platform, examplepath)
             continue
         if not examplepath.endswith(".ino"):
             continue
 
-        print('\t'+example, end=' ')
+        print('\t' + example, end=' ')
 
         # check if we should SKIP
-        skipfilename = folderpath+"/."+platform+".test.skip"
-        onlyfilename = folderpath+"/."+platform+".test.only"
+        skipfilename = folderpath + "/." + platform + ".test.skip"
+        onlyfilename = folderpath + "/." + platform + ".test.only"
         # check if we should GENERATE UF2
-        gen_file_name = folderpath+"/."+platform+".generate"
+        gen_file_name = folderpath + "/." + platform + ".generate"
 
         # .skip txt include all skipped platforms, one per line
-        skip_txt = folderpath+"/.skip.txt"
+        skip_txt = folderpath + "/.skip.txt"
 
         is_skip = False
         if os.path.exists(skipfilename):
@@ -365,10 +453,10 @@ def test_examples_in_folder(platform, folderpath):
             ColorPrint.print_warn("skipping")
             continue
 
-        if glob.glob(folderpath+"/.*.test.only"):
-            platformname = glob.glob(folderpath+"/.*.test.only")[0].split('.')[1]
-            if platformname != "none" and not platformname in ALL_PLATFORMS:
-                # uh oh, this isnt a valid testonly!
+        if glob.glob(folderpath + "/.*.test.only"):
+            platformname = glob.glob(folderpath + "/.*.test.only")[0].split('.')[1]
+            if platformname != "none" and platformname not in ALL_PLATFORMS:
+                # uh oh, this isn't a valid testonly!
                 ColorPrint.print_fail(CROSS)
                 ColorPrint.print_fail("This example does not have a valid .platform.test.only file")
                 success = 1
@@ -386,8 +474,16 @@ def test_examples_in_folder(platform, folderpath):
                 cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, folderpath]
         else:
             cmd = ['arduino-cli', 'compile', '--warnings', 'none', '--export-binaries', '--fqbn', fqbn, folderpath]
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
+
+        if PRINT_DEPENDENCIES_AS_HEADER:
+            cmd.append('--only-compilation-database')
+            cmd.append('--no-color')
+        elif INCLUDE_PRINT_DEPENDENCIES_HEADER:
+            cmd.append('--build-property')
+            cmd.append('"build.extra_flags=\'-DPRINT_DEPENDENCIES -I\"' + os.path.join(BUILD_DIR, "print_dependencies.cpp") + '\"\'"')
+            cmd.append('--verbose')
+
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         try:
             if BUILD_TIMEOUT:
                 out, err = proc.communicate(timeout=popen_timeout)
@@ -405,7 +501,11 @@ def test_examples_in_folder(platform, folderpath):
                 # also print out warning message
                 with group_output(f"{example} {fqbn} build output"):
                     ColorPrint.print_fail(err.decode("utf-8"))
-            if os.path.exists(gen_file_name):
+            if PRINT_DEPENDENCIES_AS_HEADER:
+                # Extract dependencies and write to header for the first successful example
+                dependencies = extract_dependencies(out.decode("utf-8") + err.decode("utf-8"))
+                write_dependencies_to_header(dependencies, PRINT_DEPENDENCIES_AS_HEADER_FILENAME)
+            elif os.path.exists(gen_file_name):
                 if ALL_PLATFORMS[platform][1] is None:
                     ColorPrint.print_info("Platform does not support UF2 files, skipping...")
                 else:
@@ -415,10 +515,10 @@ def test_examples_in_folder(platform, folderpath):
                         success = 1  # failure
                     if IS_LEARNING_SYS:
                         fqbnpath, uf2file = filename.split("/")[-2:]
-                        os.makedirs(BUILD_DIR+"/build", exist_ok=True)
-                        os.makedirs(BUILD_DIR+"/build/"+fqbnpath, exist_ok=True)
-                        shutil.copy(filename, BUILD_DIR+"/build/"+fqbnpath+"-"+uf2file)
-                        os.system("ls -lR "+BUILD_DIR+"/build")
+                        os.makedirs(BUILD_DIR + "/build", exist_ok=True)
+                        os.makedirs(BUILD_DIR + "/build/" + fqbnpath, exist_ok=True)
+                        shutil.copy(filename, BUILD_DIR + "/build/" + fqbnpath + "-" + uf2file)
+                        subprocess.run("ls -lR " + BUILD_DIR + "/build", shell=True, check=True)
         else:
             ColorPrint.print_fail(CROSS)
             with group_output(f"{example} {fqbn} built output"):
@@ -428,6 +528,7 @@ def test_examples_in_folder(platform, folderpath):
 
 
 def main():
+    global INCLUDE_PRINT_DEPENDENCIES_HEADER, PRINT_DEPENDENCIES_AS_HEADER
     # Test platforms
     platforms = []
 
@@ -449,14 +550,21 @@ def main():
     for platform in platforms:
         fqbn = ALL_PLATFORMS[platform][0]
         print('#'*80)
-        ColorPrint.print_info("SWITCHING TO "+fqbn)
+        ColorPrint.print_info("SWITCHING TO " + fqbn)
         install_platform(":".join(fqbn.split(':', 2)[0:2]), ALL_PLATFORMS[platform]) # take only first two elements
         print('#'*80)
         if not IS_LEARNING_SYS:
-            test_examples_in_folder(platform, BUILD_DIR+"/examples")
+            if INCLUDE_PRINT_DEPENDENCIES_HEADER:
+                PRINT_DEPENDENCIES_AS_HEADER = True
+                INCLUDE_PRINT_DEPENDENCIES_HEADER = False
+                test_examples_in_folder(platform, BUILD_DIR + "/examples")
+                PRINT_DEPENDENCIES_AS_HEADER = False
+                INCLUDE_PRINT_DEPENDENCIES_HEADER = True
+                test_examples_in_folder(platform, BUILD_DIR + "/examples")
+            else:
+                test_examples_in_folder(platform, BUILD_DIR + "/examples")
         else:
             test_examples_in_folder(platform, BUILD_DIR)
-
 
 if __name__ == "__main__":
     main()
