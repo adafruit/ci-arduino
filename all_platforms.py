@@ -46,6 +46,7 @@ ALL_PLATFORMS={
     "feather_esp32s3_reverse_tft" : ["espressif:esp32:adafruit_feather_esp32s3_reversetft", "0xc47e5767", "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
     "feather_esp32s3_reverse_tft_debug" : ["espressif:esp32:adafruit_feather_esp32s3_reversetft:DebugLevel=verbose", "0xc47e5767", "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
     "wippersnapper_feather_esp32s3_reverse_tft" : ["espressif:esp32:adafruit_feather_esp32s3_reversetft:PartitionScheme=tinyuf2_noota", "0xc47e5767", "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
+    "wippersnapper_feather_esp32s3_reverse_tft_debug" : ["espressif:esp32:adafruit_feather_esp32s3_reversetft:DebugLevel=verbose,PartitionScheme=tinyuf2_noota", "0xc47e5767", "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
     "matrixportal_s3" : ["esp32:esp32:adafruit_matrixportal_esp32s3", "0xc47e5767", None],
     "metro_esp32s3" : ["espressif:esp32:adafruit_metro_esp32s3", "0xc47e5767", "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
     "pycamera_s3" : ["esp32:esp32:adafruit_camera_esp32s3", "0xc47e5767", None],
