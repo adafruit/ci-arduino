@@ -35,11 +35,12 @@ INCLUDE_PRINT_DEPENDENCIES_HEADER = False
 PRINT_DEPENDENCIES_AS_HEADER_FILENAME = None
 if "--include_print_dependencies_header" in sys.argv:
     # check argument not null and folder path exists
-    PRINT_DEPENDENCIES_AS_HEADER_FILENAME = sys.argv[sys.argv.index("--include_print_dependencies_header") + 1] if len(sys.argv) > sys.argv.index("--include_print_dependencies_header") + 1 else None
+    header_index = sys.argv.index("--include_print_dependencies_header") + 1
+    PRINT_DEPENDENCIES_AS_HEADER_FILENAME = sys.argv[header_index] if len(sys.argv) > header_index else None
     if PRINT_DEPENDENCIES_AS_HEADER_FILENAME is None or not os.path.exists(PRINT_DEPENDENCIES_AS_HEADER_FILENAME):
-        raise AttributeError("Header file path not found or not provided to --include_print_dependencies_header argument")
+        raise ValueError("Header file path not found or not provided to --include_print_dependencies_header argument")
     INCLUDE_PRINT_DEPENDENCIES_HEADER = True
-    sys.argv.pop(sys.argv.index("--include_print_dependencies_header") + 1)
+    sys.argv.pop(header_index)
     sys.argv.remove("--include_print_dependencies_header")
 
 # add user bin to path!
