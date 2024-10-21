@@ -115,7 +115,13 @@ def manually_install_esp32_bsp(repo_info):
     # Assemble git url
     repo_url = "git clone -b {0} https://github.com/{1}/arduino-esp32.git esp32".format(repo_info.split("/")[1], repo_info.split("/")[0])
     # Locally clone repo (https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html#linux)
-    subprocess.run("mkdir -p /home/runner/Arduino/hardware/espressif", shell=True, check=True)
+    subprocess_result = subprocess.run("mkdir -p /home/runner/Arduino/hardware/espressif", shell=True, check=True)
+    if subprocess_result.returncode != 0:
+        ColorPrint.print_fail("Failed to create ESP32 Arduino BSP directory!\n" +
+                              "Maybe the runner work location changed?\n" +
+                              "Tried to create /home/runner/Arduino/hardware/espressif but failed: {}".format(subprocess_result.returncode))
+        ColorPrint.print_fail(subprocess_result.stderr)
+        exit(-1)
     print("Cloning %s"%repo_url)
     cmd = "cd /home/runner/Arduino/hardware/espressif && " + repo_url
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
