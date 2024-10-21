@@ -27,6 +27,7 @@ ALL_PLATFORMS={
     "funhouse" : ["espressif:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee", "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
     "funhouse_noota" : ["espressif:esp32:adafruit_funhouse_esp32s2:PartitionScheme=tinyuf2_noota", "0xbfdd4eee", "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
     "metroesp32s2" : ["espressif:esp32:adafruit_metro_esp32s2", "0xbfdd4eee", "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
+    "metroesp32s2_debug" : ["espressif:esp32:adafruit_metro_esp32s2:DebugLevel=verbose", "0xbfdd4eee", "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
     "qtpy_esp32s2" : ["espressif:esp32:adafruit_qtpy_esp32s2", "0xbfdd4eee", "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
     "feather_esp32s2" : ["espressif:esp32:adafruit_feather_esp32s2", "0xbfdd4eee", "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
     "feather_esp32s2_debug" : ["espressif:esp32:adafruit_feather_esp32s2:DebugLevel=verbose", "0xbfdd4eee", "adafruit/wipper-bsp-3.0.5-idf-5.1.4"],
