@@ -138,6 +138,8 @@ ALL_PLATFORMS={
     "qt_py_rp2040_tinyusb": ["rp2040:rp2040:adafruit_qtpy:flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "itsybitsy_rp2040" : ["rp2040:rp2040:adafruit_itsybitsy:freq=125,flash=8388608_524288", "0xe48bff56", None],
     "itsybitsy_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_itsybitsy:flash=8388608_524288,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "floppsy_rp2040" : ["rp2040:rp2040:adafruit_floppsy:freq=125,flash=16777216_14680064", "0xe48bff56", None],
+    "floppsy_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_floppsy:flash=16777216_14680064,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
 
     # Attiny8xy, 16xy, 32xy (SpenceKonde)
     "attiny3217" : ["megaTinyCore:megaavr:atxy7:chip=3217", None, None],
