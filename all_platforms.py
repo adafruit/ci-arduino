@@ -125,8 +125,14 @@ ALL_PLATFORMS={
     "pico_rp2040" : ["rp2040:rp2040:rpipico:freq=125,flash=2097152_0", "0xe48bff56", None],
     "pico_rp2040_tinyusb" : ["rp2040:rp2040:rpipico:flash=2097152_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "pico_rp2040_tinyusb_host" : ["rp2040:rp2040:rpipico:flash=2097152_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb_host", "0xe48bff56", None],
+    "pico_rp2350" : ["rp2040:rp2040:rpipico2:freq=125,flash=4194304_0", "0xe48bff56", None],
+    "pico_rp2350_tinyusb" : ["rp2040:rp2040:rpipico2:flash=4194304_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "pico_rp2350_tinyusb_host" : ["rp2040:rp2040:rpipico2:flash=4194304_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb_host", "0xe48bff56", None],
     "picow_rp2040" : ["rp2040:rp2040:rpipicow:flash=2097152_0,freq=125", "0xe48bff56", None],
     "picow_rp2040_tinyusb" : ["rp2040:rp2040:rpipicow:flash=2097152_131072,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "picow_rp2350" : ["rp2040:rp2040:rpipico2:freq=125,flash=4194304_0", "0xe48bff56", None],
+    "picow_rp2350_tinyusb" : ["rp2040:rp2040:rpipico2:flash=4194304_131072,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "picow_rp2350_tinyusb_host" : ["rp2040:rp2040:rpipico2:flash=4194304_131072,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb_host", "0xe48bff56", None],
     "feather_rp2040" : ["rp2040:rp2040:adafruit_feather:freq=125,flash=8388608_0", "0xe48bff56", None],
     "feather_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_feather:flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "feather_rp2040_adalogger" : ["rp2040:rp2040:adafruit_feather_adalogger:freq=125,flash=8388608_0", "0xe48bff56", None],
@@ -142,6 +148,8 @@ ALL_PLATFORMS={
     "qt_py_rp2040_tinyusb": ["rp2040:rp2040:adafruit_qtpy:flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "itsybitsy_rp2040" : ["rp2040:rp2040:adafruit_itsybitsy:freq=125,flash=8388608_524288", "0xe48bff56", None],
     "itsybitsy_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_itsybitsy:flash=8388608_524288,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "floppsy_rp2040" : ["rp2040:rp2040:adafruit_floppsy:freq=125,flash=16777216_14680064", "0xe48bff56", None],
+    "floppsy_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_floppsy:flash=16777216_14680064,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
 
     # Attiny8xy, 16xy, 32xy (SpenceKonde)
     "attiny3217" : ["megaTinyCore:megaavr:atxy7:chip=3217", None, None],
