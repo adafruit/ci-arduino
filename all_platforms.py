@@ -110,9 +110,6 @@ ALL_PLATFORMS={
     "X_m0" : ["adafruit:samd:adafruit_X_m0", "0x68ed2b88", None],
     "qtpy_m0" : ["adafruit:samd:adafruit_qtpy_m0", "0x68ed2b88", None],
     "qtpy_m0_tinyusb" : ["adafruit:samd:adafruit_qtpy_m0:usbstack=tinyusb", "0x68ed2b88", None],
-    # Arduino SAMD
-    "mkrwifi1010" : ["arduino:samd:mkrwifi1010", "0x8054", None],
-    "nano_33_iot" : ["arduino:samd:nano_33_iot", "0x8057", None],
     # Arduino nRF
     "microbit" : ["sandeepmistry:nRF5:BBCmicrobit:softdevice=s110", None, None],
     # Adafruit nRF
