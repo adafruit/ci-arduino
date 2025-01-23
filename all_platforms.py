@@ -16,8 +16,8 @@ ALL_PLATFORMS={
     "wippersnapper_feather_esp32" : ["espressif:esp32:featheresp32:FlashFreq=80,PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.1-idf-5.3.2"],
     "feather_esp32_v2" : ["espressif:esp32:adafruit_feather_esp32_v2", None, "adafruit/wipper-3.1.1-idf-5.3.2"],
     "qtpy_esp32" : ["espressif:esp32:adafruit_qtpy_esp32_pico", None, "adafruit/wipper-3.1.1-idf-5.3.2"],
-    "sparklemotion_esp32" : ["esp32:esp32:sparklemotion:PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.1-idf-5.3.2"],
-    "sparklemotionmini_esp32" : ["esp32:esp32:sparklemotionmini:PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.1-idf-5.3.2"],
+    "sparklemotion_esp32" : ["espressif:esp32:sparklemotion:PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.1-idf-5.3.2"],
+    "sparklemotionmini_esp32" : ["espressif:esp32:sparklemotionmini:PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.1-idf-5.3.2"],
     ## ESP32-C3/C6
     "feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:FlashMode=qio", None, "adafruit/wipper-3.1.1-idf-5.3.2"],
     "wippersnapper_feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.1-idf-5.3.2"],
