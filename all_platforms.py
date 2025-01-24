@@ -27,7 +27,7 @@ ALL_PLATFORMS={
     ## ESP32-S2
     "magtag" : ["espressif:esp32:adafruit_magtag29_esp32s2", "0xbfdd4eee", "adafruit/wipper-3.1.1-idf-5.3.2"],
     "funhouse" : ["espressif:esp32:adafruit_funhouse_esp32s2", "0xbfdd4eee", "adafruit/wipper-3.1.1-idf-5.3.2"],
-    "funhouse_noota" : ["espressif:esp32:adafruit_funhouse_esp32s2:PartitionScheme=tinyuf2_noota", "0xbfdd4eee", "adafruit/wipper-3.1.1-idf-5.3.2"],
+    "funhouse_noota" : ["espressif:esp32:adafruit_funhouse_esp32s2:PartitionScheme=tinyuf2_noota", "0xbfdd4eee", "adafruit/wipper-3.0.7-idf-5.1.4"],
     "metroesp32s2" : ["espressif:esp32:adafruit_metro_esp32s2", "0xbfdd4eee", "adafruit/wipper-3.1.1-idf-5.3.2"],
     "metroesp32s2_debug" : ["espressif:esp32:adafruit_metro_esp32s2:DebugLevel=verbose,PartitionScheme=tinyuf2_noota", "0xbfdd4eee", "adafruit/wipper-3.1.1-idf-5.3.2"],
     "qtpy_esp32s2" : ["espressif:esp32:adafruit_qtpy_esp32s2", "0xbfdd4eee", "adafruit/wipper-3.1.1-idf-5.3.2"],
