@@ -125,7 +125,7 @@ ALL_PLATFORMS={
     "pico_rp2040_tinyusb" : ["rp2040:rp2040:rpipico:flash=2097152_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "pico_rp2040_tinyusb_host" : ["rp2040:rp2040:rpipico:flash=2097152_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb_host", "0xe48bff56", None],
     "pico_rp2350" : ["rp2040:rp2040:rpipico2:freq=125,flash=4194304_0", "0xe48bff56", None],
-    "pico_rp2350_tinyusb" : ["rp2040:rp2040:rpipico2:flash=4194304_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "pico_rp2350_tinyusb" : ["rp2040:rp2040:rpipico2:flash=4194304_524288,usbstack=tinyusb", "0xe48bff56", None],
     "pico_rp2350_tinyusb_host" : ["rp2040:rp2040:rpipico2:flash=4194304_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb_host", "0xe48bff56", None],
     "picow_rp2040" : ["rp2040:rp2040:rpipicow:flash=2097152_0,freq=125", "0xe48bff56", None],
     "picow_rp2040_tinyusb" : ["rp2040:rp2040:rpipicow:flash=2097152_131072,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
