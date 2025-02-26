@@ -122,7 +122,7 @@ ALL_PLATFORMS={
     "ledglasses_nrf52840" : ["adafruit:nrf52:ledglasses_nrf52840:softdevice=s140v6,debug=l0", "0xada52840", None],
     # RP2040 (Philhower)
     "pico_rp2040" : ["rp2040:rp2040:rpipico:freq=125,flash=2097152_0", "0xe48bff56", None],
-    "pico_rp2040_tinyusb" : ["rp2040:rp2040:rpipico:flash=8388608_524288,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "pico_rp2040_tinyusb" : ["rp2040:rp2040:rpipico:flash=2097152_524288,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "pico_rp2040_tinyusb_host" : ["rp2040:rp2040:rpipico:flash=2097152_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb_host", "0xe48bff56", None],
     "pico_rp2350" : ["rp2040:rp2040:rpipico2:freq=125,flash=4194304_0", "0xe48bff56", None],
     "pico_rp2350_tinyusb" : ["rp2040:rp2040:rpipico2:flash=4194304_524288,usbstack=tinyusb", "0xe48bff56", None],
