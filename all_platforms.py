@@ -141,7 +141,11 @@ ALL_PLATFORMS={
     "feather_rp2040_dvi" : ["rp2040:rp2040:adafruit_feather_dvi:freq=125,flash=8388608_0", "0xe48bff56", None],
     "feather_rp2040_dvi_tinyusb" : ["rp2040:rp2040:adafruit_feather_dvi:flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "feather_rp2040_usbhost_tinyusb" : ["rp2040:rp2040:adafruit_feather_usb_host:flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
-    "qt2040_trinkey" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:freq=125,flash=8388608_0", "0xe48bff56", None],
+    "feather_rp2350" : ["rp2040:rp2040:adafruit_feather_rp2350_hstx:arch=arm,flash=8388608_0,freq=150,dbgport=Disabled,dbglvl=None,usbstack=picosdk", "0xe48bff56", None],
+    "feather_rp2350_tinyusb" : ["rp2040:rp2040:adafruit_feather_rp2350_hstx:arch=arm,flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "metro_rp2350" : ["rp2040:rp2040:adafruit_metro_rp2350:arch=arm,flash=16777216_0,freq=150,dbgport=Disabled,dbglvl=None,usbstack=picosdk", "0xe48bff56", None],
+    "metro_rp2350_tinyusb" : ["rp2040:rp2040:adafruit_metro_rp2350:arch=arm,flash=16777216_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "qt2040_trinkey" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:flash=8388608_0,freq=125","0xe48bff56", None],
     "qt2040_trinkey_tinyusb" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "qt_py_rp2040": ["rp2040:rp2040:adafruit_qtpy:freq=125,flash=8388608_0", "0xe48bff56", None],
     "qt_py_rp2040_tinyusb": ["rp2040:rp2040:adafruit_qtpy:flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
@@ -171,5 +175,5 @@ ALL_PLATFORMS={
     "arcada_platforms" : ("pybadge", "pygamer", "hallowing_m4",
                           "cpb", "cpx_ada"),
     "wippersnapper_platforms" : ("metro_m4_airliftlite_tinyusb", "pyportal_tinyusb"),
-    "rp2040_platforms" : ("pico_rp2040", "feather_rp2040")
+    "rp2040_platforms" : ("pico_rp2040", "feather_rp2040", "feather_rp2350")
 }
