@@ -68,7 +68,7 @@ BSP_URLS = (
     #"https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json," # esp32 beta release
     "https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json,"
     "https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json,"
-    "https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json,"
+    "https://github.com/earlephilhower/arduino-pico/releases/download/4.4.1/package_rp2040_index.json,"
     "https://drazzy.good-enough.cloud/package_drazzy.com_index.json,"
     "https://github.com/openwch/board_manager_files/raw/main/package_ch32v_index.json"
 )
