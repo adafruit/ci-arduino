@@ -209,7 +209,7 @@ def install_library_deps():
                     dep = dep.strip()
                     if not is_library_installed(dep):
                         print("Installing "+dep)
-                        run_or_die('arduino-cli lib install "'+dep+'" > /dev/null',
+                        run_or_die('arduino-cli lib install --no-deps "'+dep+'" > /dev/null',
                                    "FAILED to install dependency "+dep)
                     else:
                         print("Skipping already installed lib: "+dep)
