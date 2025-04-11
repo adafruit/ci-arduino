@@ -36,12 +36,6 @@ ALL_PLATFORMS={
     "feather_esp32s2_tft" : ["espressif:esp32:adafruit_feather_esp32s2_tft", "0xbfdd4eee", "adafruit/wipper-3.1.3-idf-5.3"],
     "feather_esp32s2_tft_debug" : ["espressif:esp32:adafruit_feather_esp32s2_tft:DebugLevel=verbose,PartitionScheme=tinyuf2_noota", "0xbfdd4eee", "adafruit/wipper-3.1.3-idf-5.3"],
     "feather_esp32s2_reverse_tft" : ["espressif:esp32:adafruit_feather_esp32s2_reversetft", "0xbfdd4eee", "adafruit/wipper-3.1.3-idf-5.3"],
-    "metroesp32s2_offline" : ["espressif:esp32:adafruit_metro_esp32s2:BUILD_OFFLINE_ONLY", "0xbfdd4eee", "adafruit/wipper-3.1.3-idf-5.3"],
-    "feather_esp32s2_offline" : ["espressif:esp32:adafruit_feather_esp32s2:BUILD_OFFLINE_ONLY", "0xbfdd4eee", "adafruit/wipper-3.1.3-idf-5.3"],
-    "feather_esp32s2_tft_offline" : ["espressif:esp32:adafruit_feather_esp32s2_tft:BUILD_OFFLINE_ONLY", "0xbfdd4eee", "adafruit/wipper-3.1.3-idf-5.3"],
-    "feather_esp32s2_reverse_tft_offline" : ["espressif:esp32:adafruit_feather_esp32s2_reversetft:BUILD_OFFLINE_ONLY", "0xbfdd4eee", "adafruit/wipper-3.1.3-idf-5.3"],
-    "qtpy_esp32s2_offline" : ["espressif:esp32:adafruit_qtpy_esp32s2:BUILD_OFFLINE_ONLY", "0xbfdd4eee", "adafruit/wipper-3.1.3-idf-5.3"],
-
     ## ESP32-S3
     "feather_esp32s3" : ["espressif:esp32:adafruit_feather_esp32s3_nopsram", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
     "wippersnapper_feather_esp32s3" : ["espressif:esp32:adafruit_feather_esp32s3_nopsram:PartitionScheme=tinyuf2_noota", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
@@ -63,13 +57,6 @@ ALL_PLATFORMS={
     "qualia_s3_rgb666" : ["esp32:esp32:adafruit_qualia_s3_rgb666", "0xc47e5767", None],
     "qtpy_esp32s3" : ["espressif:esp32:adafruit_qtpy_esp32s3_nopsram", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
     "qtpy_esp32s3_n4r2" : ["espressif:esp32:adafruit_qtpy_esp32s3_n4r2", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
-    "metro_esp32s3_offline" : ["espressif:esp32:adafruit_metro_esp32s3:BUILD_OFFLINE_ONLY", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
-    "feather_esp32s3_offline" : ["espressif:esp32:adafruit_feather_esp32s3_nopsram:BUILD_OFFLINE_ONLY", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
-    "feather_esp32s3_4mbflash_2mbpsram_offline" : ["espressif:esp32:adafruit_feather_esp32s3:BUILD_OFFLINE_ONLY", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
-    "feather_esp32s3_tft_offline" : ["espressif:esp32:adafruit_feather_esp32s3_tft:BUILD_OFFLINE_ONLY", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
-    "feather_esp32s3_reverse_tft_offline" : ["espressif:esp32:adafruit_feather_esp32s3_reversetft:BUILD_OFFLINE_ONLY", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
-    "qtpy_esp32s3_offline" : ["espressif:esp32:adafruit_qtpy_esp32s3_nopsram:BUILD_OFFLINE_ONLY", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
-    "qtpy_esp32s3_n4r2_offline" : ["espressif:esp32:adafruit_qtpy_esp32s3_n4r2:BUILD_OFFLINE_ONLY", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
     # Adafruit AVR
     "trinket_3v" : ["adafruit:avr:trinket3", None, None],
     "trinket_5v" : ["adafruit:avr:trinket5", None, None],
@@ -166,10 +153,7 @@ ALL_PLATFORMS={
     "itsybitsy_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_itsybitsy:flash=8388608_524288,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "floppsy_rp2040" : ["rp2040:rp2040:adafruit_floppsy:freq=125,flash=16777216_14680064", "0xe48bff56", None],
     "floppsy_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_floppsy:flash=16777216_14680064,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
-    "pico_rp2040_tinyusb_offline" : ["rp2040:rp2040:rpipico:flash=2097152_524288,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb,BUILD_OFFLINE_ONLY", "0xe48bff56", None],
-    "pico_rp2350_tinyusb_offline" : ["rp2040:rp2040:rpipico2:flash=4194304_524288,usbstack=tinyusb,BUILD_OFFLINE_ONLY", "0xe48bff56", None],
-    "feather_rp2040_adalogger_tinyusb_offline" : ["rp2040:rp2040:adafruit_feather_adalogger:flash=8388608_524288,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb,BUILD_OFFLINE_ONLY", "0xe48bff56", None],
-    "metro_rp2350_tinyusb_offline" : ["rp2040:rp2040:adafruit_metro_rp2350:arch=arm,flash=16777216_524288,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb,BUILD_OFFLINE_ONLY", "0xe48bff56", None],
+
     # Attiny8xy, 16xy, 32xy (SpenceKonde)
     "attiny3217" : ["megaTinyCore:megaavr:atxy7:chip=3217", None, None],
     "attiny3216" : ["megaTinyCore:megaavr:atxy6:chip=3216", None, None],
