@@ -251,7 +251,7 @@ def glob1(pattern):
 def download_uf2_utils():
     """Downloads uf2conv tools if we don't already have them
     """
-    cmd = "wget -nc --no-check-certificate http://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2conv.py"
+    cmd = "wget --retry-on-http-error=429,503 -nc --no-check-certificate http://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2conv.py"
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     r = proc.wait(timeout=60)
     out = proc.stdout.read()
