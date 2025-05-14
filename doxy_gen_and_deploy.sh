@@ -18,6 +18,7 @@ __AUTHOR__="Jeroen de Bruijn, modified by ladyada"
 # Optional global variables:
 # - DOXYFILE            : The Doxygen configuration file.
 # - PRETTYNAME          : A string name of the project (for the doxy headers)
+# - PRESERVE_FOLDERS    : Comma-separated list of folders to preserve during cleanup
 #
 # For information on how to encrypt variables for Travis CI please go to
 # https://docs.travis-ci.com/user/environment-variables/#Encrypted-Variables
@@ -84,6 +85,19 @@ git config --global push.default simple
 git config user.name "Doxygen CI"
 git config user.email "ci-arduino@invalid"
 
+# Check if PRESERVE_FOLDERS is set and back them up
+if [ -n "$PRESERVE_FOLDERS" ]; then
+  echo "Preserving folders: $PRESERVE_FOLDERS"
+  mkdir -p /tmp/preserved
+  # Move preserved folders to temp dir
+  for folder in ${PRESERVE_FOLDERS//,/ }; do
+    if [ -d "$folder" ]; then
+      echo "Backing up folder: $folder"
+      cp -r "$folder" /tmp/preserved/
+    fi
+  done
+fi
+
 # Remove everything currently in the gh-pages branch.
 # GitHub is smart enough to know which files have changed and which files have
 # stayed the same and will only update the changed files. So the gh-pages branch
@@ -97,6 +111,16 @@ if [ ! -f index.html ]; then
 else
     # Don't fail if there's no files in the directory, just keep going!
     rm -r -- !(index.html) || true
+fi
+
+# Restore preserved folders if they were backed up
+if [ -n "$PRESERVE_FOLDERS" ]; then
+  for folder in ${PRESERVE_FOLDERS//,/ }; do
+    if [ -d "/tmp/preserved/$folder" ]; then
+      echo "Restoring folder: $folder"
+      cp -r "/tmp/preserved/$folder" ./
+    fi
+  done
 fi
 
 # Need to create a .nojekyll file to allow filenames starting with an underscore
