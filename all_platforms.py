@@ -7,6 +7,8 @@ ALL_PLATFORMS={
     # Arduino SAMD
     "zero" : ["arduino:samd:arduino_zero_native", "0x68ed2b88", None, None],
     "cpx" : ["arduino:samd:adafruit_circuitplayground_m0", "0x68ed2b88", None],
+    # Arduino MBED GIGA
+    "giga" : ["arduino:mbed_giga:giga", None, None],
     # Espressif
     "esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", None, None],
     "esp32" : ["esp32:esp32:featheresp32:FlashFreq=80", None, None],
