@@ -38,7 +38,7 @@ ALL_PLATFORMS={
     "feather_esp32s2_tft_debug" : ["espressif:esp32:adafruit_feather_esp32s2_tft:DebugLevel=verbose,PartitionScheme=tinyuf2_noota", "0xbfdd4eee", "adafruit/wipper-3.1.3-idf-5.3"],
     "feather_esp32s2_reverse_tft" : ["espressif:esp32:adafruit_feather_esp32s2_reversetft", "0xbfdd4eee", "adafruit/wipper-3.1.3-idf-5.3"],
     ## ESP32_S3
-    "esp32s3_devkitc_1_n8" : ["espressif:esp32:esp32s3:FlashSize=8M,PartitionScheme=noota_ffat", "0xc47e5767", "adafruit/wipper_3.1.3-idf-5.3"],
+    "esp32s3_devkitc_1_n8" : ["espressif:esp32:esp32s3:FlashSize=8M,PartitionScheme=noota_ffat", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
     "esp32s3_devkitc_1_n8_debug" : ["espressif:esp32:esp32s3:FlashSize=8M,PartitionScheme=noota_ffat,DebugLevel=verbose", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
     "feather_esp32s3" : ["espressif:esp32:adafruit_feather_esp32s3_nopsram", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
     "wippersnapper_feather_esp32s3" : ["espressif:esp32:adafruit_feather_esp32s3_nopsram:PartitionScheme=tinyuf2_noota", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
