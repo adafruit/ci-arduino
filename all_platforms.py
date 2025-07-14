@@ -20,6 +20,7 @@ ALL_PLATFORMS={
     "sparklemotionmini_esp32" : ["espressif:esp32:sparklemotionmini:PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.3-idf-5.3"],
     "sparklemotionstick_esp32" : ["espressif:esp32:sparklemotionstick:PartitionScheme=min_spiffs", None, "adafruit/master"],
     ## ESP32-C3/C6
+    "dfrobot_beetle_esp32c3" : ["espressif:esp32:dfrobot_beetle_esp32c3:CDCOnBoot=cdc,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.3-idf-5.3"],
     "feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:FlashMode=qio", None, "adafruit/wipper-3.1.3-idf-5.3"],
     "wippersnapper_feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.3-idf-5.3"],
     "wippersnapper_feather_esp32c6_debug" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,DebugLevel=verbose,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.3-idf-5.3"],
