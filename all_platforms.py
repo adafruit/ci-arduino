@@ -60,7 +60,7 @@ ALL_PLATFORMS={
     "qualia_s3_rgb666" : ["esp32:esp32:adafruit_qualia_s3_rgb666", "0xc47e5767", None],
     "qtpy_esp32s3" : ["espressif:esp32:adafruit_qtpy_esp32s3_nopsram", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
     "qtpy_esp32s3_n4r2" : ["espressif:esp32:adafruit_qtpy_esp32s3_n4r2", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3"],
-    "xiao_esp32s3" : ["espressif:esp32:XIAO_ESP32S3:PartitionScheme=tinyuf2", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3-xiao-tinyuf2"],
+    "xiao_esp32s3" : ["espressif:esp32:XIAO_ESP32S3:PartitionScheme=tinyuf2,PSRAM=opi,FlashMode=qio,USBMode=default,DebugLevel=warn", "0xc47e5767", "adafruit/wipper-3.1.3-idf-5.3-xiao-tinyuf2"],
     # Adafruit AVR
     "trinket_3v" : ["adafruit:avr:trinket3", None, None],
     "trinket_5v" : ["adafruit:avr:trinket5", None, None],
