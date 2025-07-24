@@ -402,6 +402,16 @@ def test_examples_in_folder(platform, folderpath):
         if os.path.exists(gen_file_name):
             ColorPrint.print_info("generating")
 
+        # check if boards.local.txt should be copied
+        if COPY_BOARDS_LOCAL_TXT:
+            boards_local_txt = folderpath+"/."+platform+".boards.local.txt"
+            if os.path.exists(boards_local_txt):
+                ColorPrint.print_info("Copying boards.local.txt from "+boards_local_txt)
+                install_boards_local_txt(":".join(fqbn.split(':')[0:2]), boards_local_txt)
+            elif os.path.exists(folderpath+"/boards.local.txt"):
+                ColorPrint.print_info("Copying boards.local.txt from "+folderpath+"/boards.local.txt")
+                install_boards_local_txt(":".join(fqbn.split(':')[0:2]), folderpath+"/boards.local.txt")
+
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
                 cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, '-e', folderpath]
