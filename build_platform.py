@@ -479,19 +479,54 @@ def main():
         # Inject boards.local.txt if requested
         if COPY_BOARDS_LOCAL_TXT and boards_local_txt:
             try:
-                # Find platform path via `arduino-cli core list --format json`
+                # Get arduino-cli data directory
                 import json
-                output = subprocess.check_output(["arduino-cli", "core", "list", "--format", "json"]).decode()
-                core_list = json.loads(output)["platforms"]
-                for core in core_list:
-                    if core["id"] == core_fqbn:
-                        platform_path = core["install_dir"]
+                config_output = subprocess.check_output(["arduino-cli", "config", "dump", "--format", "json"]).decode()
+                config = json.loads(config_output)
+                ColorPrint.print_info(f"Using arduino-cli config: {config_output.strip()}")
+                
+                # Extract data directory, with fallback to default
+                data_dir = config.get("directories", {}).get("data", "")
+                if not data_dir:
+                    ColorPrint.print_warn("No data directory found in arduino-cli config, using fallback locations.")
+                    # Fallback to common default locations
+                    if os.name == 'nt':  # Windows
+                        data_dir = os.path.join(os.environ.get('LOCALAPPDATA', ''), 'Arduino15')
+                    else:  # Linux/macOS
+                        data_dir = os.path.join(os.environ.get('HOME', ''), '.arduino15')
+                ColorPrint.print_info(f"Using data directory: {data_dir}")
+
+                # Parse platform vendor and architecture from core_fqbn (e.g., "adafruit:samd")
+                parts = core_fqbn.split(':')
+                if len(parts) >= 2:
+                    vendor = parts[0]
+                    architecture = parts[1]
+                else:
+                    vendor = core_fqbn
+                    architecture = vendor
+
+                ColorPrint.print_info(f"Using vendor: {vendor}, architecture: {architecture}")
+
+                # Construct base platform path
+                platform_base = os.path.join(data_dir, "packages", vendor, "hardware", architecture)
+                
+                # Find the latest version directory
+                if os.path.exists(platform_base):
+                    versions = [d for d in os.listdir(platform_base) if os.path.isdir(os.path.join(platform_base, d))]
+                    ColorPrint.print_info(f"Found versions: {versions}")
+                    if versions:
+                        # Sort versions and take the latest (could be improved with proper version sorting)
+                        latest_version = sorted(versions)[-1]
+                        platform_path = os.path.join(platform_base, latest_version)
+                        
                         dest_path = os.path.join(platform_path, "boards.local.txt")
                         shutil.copyfile(boards_local_txt, dest_path)
                         ColorPrint.print_info(f"Copied boards.local.txt to {dest_path}")
-                        break
+                    else:
+                        ColorPrint.print_warn(f"No version directories found in {platform_base}")
                 else:
-                    ColorPrint.print_warn(f"Could not find platform path for {core_fqbn} - not copying boards.local.txt")
+                    ColorPrint.print_warn(f"Platform path {platform_base} does not exist")
+  
             except Exception as e:
                 ColorPrint.print_fail(f"Error injecting boards.local.txt for {core_fqbn}: {e}")
         print('#'*80)
