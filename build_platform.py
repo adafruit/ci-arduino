@@ -528,21 +528,25 @@ def main():
 
                 # Find the latest version directory
                 if os.path.exists(platform_base):
-                    versions = [d for d in os.listdir(platform_base) if os.path.isdir(os.path.join(platform_base, d))]
-                    ColorPrint.print_info(f"Found versions: {versions}")
-                    if versions:
-                        # Sort versions and take the latest (could be improved with proper version sorting)
-                        latest_version = sorted(versions)[-1]
-                        platform_path = os.path.join(platform_base, latest_version)
-                        
-                        dest_path = os.path.join(platform_path, "boards.local.txt")
-                        shutil.copyfile(boards_local_txt, dest_path)
-                        ColorPrint.print_info(f"Copied boards.local.txt to {dest_path}")
-                    elif os.path.exists(os.path.join(platform_base, "boards.txt")):
+                    if os.path.exists(os.path.join(platform_base, "boards.txt")):
                         shutil.copyfile(boards_local_txt, os.path.join(platform_base, "boards.local.txt"))
                         ColorPrint.print_info(f"Copied boards.local.txt to {os.path.join(platform_base, 'boards.local.txt')}")
                     else:
-                        ColorPrint.print_warn(f"No version directories found in {platform_base}")
+                        versions = [d for d in os.listdir(platform_base) if os.path.isdir(os.path.join(platform_base, d))]
+                        ColorPrint.print_info(f"Found versions: {versions}")
+                        # Filter out non-version directories (e.g., 'tools', 'libraries') while supporting 1.0-dev 1.0.0-offline-mode.102 etc
+                        versions = [v for v in versions if re.match(r'^(v)?\d+\.\d+(\.\d+(-\w+)?)?(\.\d+)?$', v)]
+                        if versions:
+                            # Sort versions and take the latest (could be improved with proper version sorting)
+                            latest_version = sorted(versions)[-1]
+                            platform_path = os.path.join(platform_base, latest_version)
+                            
+                            dest_path = os.path.join(platform_path, "boards.local.txt")
+                            shutil.copyfile(boards_local_txt, dest_path)
+                            ColorPrint.print_info(f"Copied boards.local.txt to {dest_path}")
+
+                        else:
+                            ColorPrint.print_warn(f"No version directories found in {platform_base}")
                 else:
                     ColorPrint.print_warn(f"Platform path {platform_base} does not exist")
   
