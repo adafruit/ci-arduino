@@ -482,7 +482,7 @@ def main():
                 # Find platform path via `arduino-cli core list --format json`
                 import json
                 output = subprocess.check_output(["arduino-cli", "core", "list", "--format", "json"]).decode()
-                core_list = json.loads(output)
+                core_list = json.loads(output)["platforms"]
                 for core in core_list:
                     if core["id"] == core_fqbn:
                         platform_path = core["install_dir"]
