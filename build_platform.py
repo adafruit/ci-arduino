@@ -459,9 +459,7 @@ def install_boards_local_txt(core_fqbn, boards_local_txt):
     try:
         local_app_data_dir = os.environ.get('HOME', '')
         data_dir = None
-        if os.path.exists(os.path.join(local_app_data_dir, 'Arduino')):
-            data_dir = os.path.join(local_app_data_dir, 'Arduino')
-        elif os.path.exists(os.path.join(local_app_data_dir, '.arduino15')):
+        if os.path.exists(os.path.join(local_app_data_dir, '.arduino15')):
             data_dir = os.path.join(local_app_data_dir, '.arduino15')
         elif os.path.exists(os.path.join(local_app_data_dir, '.arduino')):
             data_dir = os.path.join(local_app_data_dir, '.arduino')
@@ -476,10 +474,13 @@ def install_boards_local_txt(core_fqbn, boards_local_txt):
         ColorPrint.print_info(f"Using arduino-cli config: {config_output.strip()}")
         
         # Extract data directory, with fallback to default
-        data_dir = config.get("directories", {}).get("data", data_dir)
+        data_dir = config.get("directories", {}).get("data", "")
         if not data_dir:
-            ColorPrint.print_warn("No valid data directory found, cannot copy boards.local.txt")
-            return
+            if os.path.exists(os.path.join(local_app_data_dir, 'Arduino')):
+                data_dir = os.path.join(local_app_data_dir, 'Arduino')
+            else:
+                ColorPrint.print_warn("No valid data directory found, cannot copy boards.local.txt")
+                return
 
         ColorPrint.print_info(f"Using data directory: {data_dir}")
 
@@ -501,8 +502,7 @@ def install_boards_local_txt(core_fqbn, boards_local_txt):
             os.path.exists(os.path.join(data_dir, "packages", architecture, "hardware", architecture)) else \
             os.path.join(data_dir, "hardware", vendor, architecture) if \
             os.path.exists(os.path.join(data_dir, "hardware", vendor, architecture)) else \
-            os.path.join(data_dir, "hardware",
-                            architecture, architecture)
+            os.path.join(data_dir, "hardware", architecture, architecture)
 
         # Find the latest version directory
         if os.path.exists(platform_base):
@@ -511,9 +511,10 @@ def install_boards_local_txt(core_fqbn, boards_local_txt):
                 ColorPrint.print_info(f"Copied boards.local.txt to {os.path.join(platform_base, 'boards.local.txt')}")
             else:
                 versions = [d for d in os.listdir(platform_base) if os.path.isdir(os.path.join(platform_base, d))]
-                ColorPrint.print_info(f"Found versions: {versions}")
+                ColorPrint.print_info(f"Found subdirectories for {platform_base}:\n {versions}")
                 # Filter out non-version directories (e.g., 'tools', 'libraries') while supporting 1.0-dev 1.0.0-offline-mode.102 etc
                 versions = [v for v in versions if re.match(r'^(v)?\d+\.\d+(\.\d+(-\w+)?)?(\.\d+)?$', v)]
+                ColorPrint.print_info(f"Filtered versions: {versions}")
                 if versions:
                     # Sort versions and take the latest (could be improved with proper version sorting)
                     latest_version = sorted(versions)[-1]
