@@ -519,8 +519,13 @@ def main():
                 # Construct base platform path, fall back to architecture if vendor rebadged BSP.
                 platform_base = os.path.join(data_dir, "packages", vendor, "hardware", architecture) if \
                     os.path.exists(os.path.join(data_dir, "packages", vendor, "hardware", architecture)) else \
-                    os.path.join(data_dir, "packages", architecture, "hardware", architecture)
-                
+                    os.path.join(data_dir, "packages", architecture, "hardware", architecture) if \
+                    os.path.exists(os.path.join(data_dir, "packages", architecture, "hardware", architecture)) else \
+                    os.path.join(data_dir, "hardware", vendor, architecture) if \
+                    os.path.exists(os.path.join(data_dir, "hardware", vendor, architecture)) else \
+                    os.path.join(data_dir, "hardware",
+                                 architecture, architecture)
+
                 # Find the latest version directory
                 if os.path.exists(platform_base):
                     versions = [d for d in os.listdir(platform_base) if os.path.isdir(os.path.join(platform_base, d))]
@@ -533,6 +538,9 @@ def main():
                         dest_path = os.path.join(platform_path, "boards.local.txt")
                         shutil.copyfile(boards_local_txt, dest_path)
                         ColorPrint.print_info(f"Copied boards.local.txt to {dest_path}")
+                    elif os.path.exists(os.path.join(platform_base, "boards.txt")):
+                        shutil.copyfile(boards_local_txt, os.path.join(platform_base, "boards.local.txt"))
+                        ColorPrint.print_info(f"Copied boards.local.txt to {os.path.join(platform_base, 'boards.local.txt')}")
                     else:
                         ColorPrint.print_warn(f"No version directories found in {platform_base}")
                 else:
