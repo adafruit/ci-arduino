@@ -29,6 +29,28 @@ if "--build_timeout" in sys.argv:
     sys.argv.pop(sys.argv.index("--build_timeout") + 1)
     sys.argv.remove("--build_timeout")
 
+# optional --boards-local-txt option to copy boards.local.txt
+# to the appropriate package folder after installing the platform
+COPY_BOARDS_LOCAL_TXT = False
+boards_local_txt = None
+if "--boards-local-txt" in sys.argv:
+    COPY_BOARDS_LOCAL_TXT = True
+    if sys.argv.index("--boards-local-txt") + 1 >= len(sys.argv):
+        # check if in cwd
+        if os.path.exists("boards.local.txt"):
+            boards_local_txt = "boards.local.txt"
+        else:
+            sys.stderr.write("Error: --boards-local-txt option requires a path to boards.local.txt file\n")
+            sys.exit(1)
+    else:
+        # get the boards.local.txt file from the command line
+        if not os.path.exists(sys.argv[sys.argv.index("--boards-local-txt") + 1]):
+            sys.stderr.write("Error: boards.local.txt file does not exist\n")
+            sys.exit(1)
+        boards_local_txt = sys.argv[sys.argv.index("--boards-local-txt") + 1]
+        sys.argv.pop(sys.argv.index("--boards-local-txt") + 1)
+    sys.argv.remove("--boards-local-txt")
+
 # add user bin to path!
 BUILD_DIR = ''
 # add user bin to path!
