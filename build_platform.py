@@ -473,8 +473,30 @@ def main():
         fqbn = ALL_PLATFORMS[platform][0]
         print('#'*80)
         ColorPrint.print_info("SWITCHING TO "+fqbn)
-        install_platform(":".join(fqbn.split(':', 2)[0:2]), ALL_PLATFORMS[platform]) # take only first two elements
+        core_fqbn = ":".join(fqbn.split(':', 2)[0:2])
+        install_platform(core_fqbn, ALL_PLATFORMS[platform])  # take only first two elements
+
+        # Inject boards.local.txt if enabled
+        if COPY_BOARDS_LOCAL_TXT and boards_local_txt:
+            try:
+                # Find platform path via `arduino-cli core list --format json`
+                import json
+                output = subprocess.check_output(["arduino-cli", "core", "list", "--format", "json"]).decode()
+                core_list = json.loads(output)
+                for core in core_list:
+                    if core["id"] == core_fqbn:
+                        platform_path = core["install_dir"]
+                        dest_path = os.path.join(platform_path, "boards.local.txt")
+                        shutil.copyfile(boards_local_txt, dest_path)
+                        ColorPrint.print_info(f"Copied boards.local.txt to {dest_path}")
+                        break
+                else:
+                    ColorPrint.print_warn(f"Could not find platform path for {core_fqbn} - not copying boards.local.txt")
+            except Exception as e:
+                ColorPrint.print_fail(f"Error injecting boards.local.txt for {core_fqbn}: {e}")
         print('#'*80)
+        
+        # Test examples in the platform folder
         if not IS_LEARNING_SYS:
             test_examples_in_folder(platform, BUILD_DIR+"/examples")
         else:
