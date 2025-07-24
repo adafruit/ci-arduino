@@ -29,8 +29,8 @@ if "--build_timeout" in sys.argv:
     sys.argv.pop(sys.argv.index("--build_timeout") + 1)
     sys.argv.remove("--build_timeout")
 
-# optional --boards-local-txt option to copy boards.local.txt
-# to the appropriate package folder after installing the platform
+# optional --boards-local-txt argument to copy boards.local.txt
+# to the appropriate folder after installing the platform BSP.
 COPY_BOARDS_LOCAL_TXT = False
 boards_local_txt = None
 if "--boards-local-txt" in sys.argv:
@@ -473,10 +473,10 @@ def main():
         fqbn = ALL_PLATFORMS[platform][0]
         print('#'*80)
         ColorPrint.print_info("SWITCHING TO "+fqbn)
-        core_fqbn = ":".join(fqbn.split(':', 2)[0:2])
-        install_platform(core_fqbn, ALL_PLATFORMS[platform])  # take only first two elements
+        core_fqbn = ":".join(fqbn.split(':', 2)[0:2])  # take only first two elements
+        install_platform(core_fqbn, ALL_PLATFORMS[platform])
 
-        # Inject boards.local.txt if enabled
+        # Inject boards.local.txt if requested
         if COPY_BOARDS_LOCAL_TXT and boards_local_txt:
             try:
                 # Find platform path via `arduino-cli core list --format json`
