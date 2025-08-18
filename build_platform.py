@@ -418,6 +418,8 @@ def test_examples_in_folder(platform, folderpath):
             elif os.path.exists(folderpath+"/boards.local.txt"):
                 ColorPrint.print_info("Copying boards.local.txt from "+folderpath+"/boards.local.txt")
                 install_boards_local_txt(":".join(fqbn.split(':')[0:2]), folderpath+"/boards.local.txt")
+            else:
+                ColorPrint.print_info("No example-specific boards.local.txt found to copy, using root version")
 
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
