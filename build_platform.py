@@ -409,17 +409,23 @@ def test_examples_in_folder(platform, folderpath):
         if os.path.exists(gen_file_name):
             ColorPrint.print_info("generating")
 
-        # check if boards.local.txt should be copied
+
+        # check if root or example-specific boards.local.txt should be copied
         if COPY_BOARDS_LOCAL_TXT:
-            boards_local_txt = folderpath+"/."+platform+".boards.local.txt"
-            if os.path.exists(boards_local_txt):
-                ColorPrint.print_info("Copying boards.local.txt from "+boards_local_txt)
-                install_boards_local_txt(":".join(fqbn.split(':')[0:2]), boards_local_txt)
-            elif os.path.exists(folderpath+"/boards.local.txt"):
-                ColorPrint.print_info("Copying boards.local.txt from "+folderpath+"/boards.local.txt")
-                install_boards_local_txt(":".join(fqbn.split(':')[0:2]), folderpath+"/boards.local.txt")
-            else:
+            root_boards_local_txt = boards_local_txt
+            example_boards_local_txt = folderpath+"/boards.local.txt"
+            board_specific_example_boards_local_txt = folderpath+"/."+platform+".boards.local.txt"
+
+            if os.path.exists(board_specific_example_boards_local_txt):
+                ColorPrint.print_info("Copying boards.local.txt from "+board_specific_example_boards_local_txt)
+                install_boards_local_txt(":".join(fqbn.split(':')[0:2]), board_specific_example_boards_local_txt)
+            elif os.path.exists(example_boards_local_txt):
+                ColorPrint.print_info("Copying boards.local.txt from "+example_boards_local_txt)
+                install_boards_local_txt(":".join(fqbn.split(':')[0:2]), example_boards_local_txt)
+            else: # effectively does the revert if subsequent example doesn't have a specific boards.local.txt
                 ColorPrint.print_info("No example-specific boards.local.txt found to copy, using root version")
+                install_boards_local_txt(":".join(fqbn.split(':')[0:2]), root_boards_local_txt)
+
 
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
@@ -475,9 +481,9 @@ def install_boards_local_txt(core_fqbn, boards_local_txt):
       name, vendor:architecture (e.g., "adafruit:samd").
     :param str boards_local_txt: The path to the boards.local.txt file.
     """
+    local_app_data_dir = os.environ.get('HOME', '')
+    data_dir = None
     try:
-        local_app_data_dir = os.environ.get('HOME', '')
-        data_dir = None
         if os.path.exists(os.path.join(local_app_data_dir, '.arduino15')):
             data_dir = os.path.join(local_app_data_dir, '.arduino15')
         elif os.path.exists(os.path.join(local_app_data_dir, '.arduino')):
