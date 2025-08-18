@@ -35,7 +35,7 @@ COPY_BOARDS_LOCAL_TXT = False
 boards_local_txt = None
 if "--boards-local-txt" in sys.argv:
     COPY_BOARDS_LOCAL_TXT = True
-    if sys.argv.index("--boards-local-txt") + 1 >= len(sys.argv):
+    if sys.argv.index("--boards-local-txt") + 1 == len(sys.argv):
         # check if in cwd
         if os.path.exists("boards.local.txt"):
             boards_local_txt = "boards.local.txt"
@@ -43,7 +43,14 @@ if "--boards-local-txt" in sys.argv:
             sys.stderr.write("Error: --boards-local-txt option requires a path to boards.local.txt file or to be present in current directory\n")
             sys.exit(1)
     else:
-        # get the boards.local.txt file from the command line
+        # check second arg is file or another flag:
+        if sys.argv[sys.argv.index("--boards-local-txt") + 1].startswith("--"):
+            if os.path.exists("boards.local.txt"):
+                boards_local_txt = "boards.local.txt"
+            else:
+                sys.stderr.write("Error: --boards-local-txt option requires a path to boards.local.txt file (or to be present in current directory)\n")
+                sys.exit(1)
+        # get the boards.local.txt file from the command line (index exists checked earlier)
         if not os.path.exists(sys.argv[sys.argv.index("--boards-local-txt") + 1]):
             sys.stderr.write("Error: boards.local.txt file does not exist\n")
             sys.exit(1)
@@ -482,7 +489,7 @@ def install_boards_local_txt(core_fqbn, boards_local_txt):
             config_output = subprocess.check_output(["arduino-cli", "config", "dump", "--format", "json"]).decode()
         config = json.loads(config_output)
         ColorPrint.print_info(f"Using arduino-cli config: {config_output.strip()}")
-        
+
         # Extract data directory, with fallback to default
         data_dir = config.get("directories", {}).get("data", "")
         if not data_dir:
@@ -529,7 +536,7 @@ def install_boards_local_txt(core_fqbn, boards_local_txt):
                     # Sort versions and take the latest (could be improved with proper version sorting)
                     latest_version = sorted(versions)[-1]
                     platform_path = os.path.join(platform_base, latest_version)
-                    
+
                     dest_path = os.path.join(platform_path, "boards.local.txt")
                     shutil.copyfile(boards_local_txt, dest_path)
                     ColorPrint.print_info(f"Copied boards.local.txt to {dest_path}")
@@ -573,7 +580,7 @@ def main():
         if COPY_BOARDS_LOCAL_TXT and boards_local_txt:
             install_boards_local_txt(core_fqbn, boards_local_txt)
         print('#'*80)
-        
+
         # Test examples in the platform folder
         if not IS_LEARNING_SYS:
             test_examples_in_folder(platform, BUILD_DIR+"/examples")
