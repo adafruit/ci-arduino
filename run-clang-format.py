@@ -107,6 +107,23 @@ def run_clang_format_diff(args, file):
         raise DiffError(str(exc))
     invocation = [args.clang_format_executable, file]
 
+    # Add debug output for clang-format configuration
+    if hasattr(args, 'show_config') and args.show_config:
+        config_invocation = [args.clang_format_executable, '--dump-config', file]
+        try:
+            config_proc = subprocess.Popen(
+                config_invocation,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True)
+            config_stdout, config_stderr = config_proc.communicate()
+            if config_proc.returncode == 0:
+                print("Clang-format configuration for {}:".format(file))
+                print(config_stdout)
+                print("=" * 50)
+        except Exception as e:
+            print("Could not dump config: {}".format(e))
+
     # Use of utf-8 to decode the process output.
     #
     # Hopefully, this is the correct thing to do.
@@ -244,6 +261,10 @@ def main():
         default=[],
         help='exclude paths matching the given glob-like pattern(s)'
         ' from recursive search')
+    parser.add_argument(
+        '--show-config',
+        action='store_true',
+        help='dump the clang-format configuration being used')
 
     args = parser.parse_args()
 
