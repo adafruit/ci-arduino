@@ -19,8 +19,10 @@ ALL_PLATFORMS={
     "sparklemotion_esp32" : ["espressif:esp32:sparklemotion:PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.3-idf-5.3"],
     "sparklemotionmini_esp32" : ["espressif:esp32:sparklemotionmini:PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.3-idf-5.3"],
     "sparklemotionstick_esp32" : ["espressif:esp32:sparklemotionstick:PartitionScheme=min_spiffs", None, "adafruit/master"],
-    ## ESP32-C3/C6
+    ## ESP32-C3/C5/C6
     "dfrobot_beetle_esp32c3" : ["espressif:esp32:dfrobot_beetle_esp32c3:CDCOnBoot=cdc,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.3-idf-5.3"],
+    "espressif_esp32c5_devkitc_1_n8r4" : ["espressif:esp32:esp32c5:FlashMode=qio,FlashSize=8M,CDCOnBoot=cdc,CPUFreq=240,PSRAM=enabled,PartitionScheme=min_spiffs,DebugLevel=none", None, None],
+    "espressif_esp32c5_devkitc_1_n8r4_debug" : ["espressif:esp32:esp32c5:FlashMode=qio,FlashSize=8M,CDCOnBoot=cdc,CPUFreq=240,PSRAM=enabled,PartitionScheme=min_spiffs,DebugLevel=verbose", None, None],
     "feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:FlashMode=qio", None, "adafruit/wipper-3.1.3-idf-5.3"],
     "wippersnapper_feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.3-idf-5.3"],
     "wippersnapper_feather_esp32c6_debug" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,DebugLevel=verbose,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/wipper-3.1.3-idf-5.3"],
