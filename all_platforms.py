@@ -24,7 +24,7 @@ ALL_PLATFORMS={
     "espressif_esp32c5_devkitc_1_n8r4" : ["espressif:esp32:esp32c5:FlashMode=qio,FlashSize=8M,CDCOnBoot=cdc,CPUFreq=240,PSRAM=enabled,PartitionScheme=min_spiffs,DebugLevel=none", None, "adafruit/wipper-esp3.3.3"],
     "espressif_esp32c5_devkitc_1_n8r4_debug" : ["espressif:esp32:esp32c5:FlashMode=qio,FlashSize=8M,CDCOnBoot=cdc,CPUFreq=240,PSRAM=enabled,PartitionScheme=min_spiffs,DebugLevel=verbose", None, "adafruit/wipper-esp3.3.3"],
     "feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:FlashMode=qio", None, "adafruit/wipper-esp3.3.3"],
-    "arduino_nesso_n1" : ["espressif:esp32:arduino_nesso_n1:PartitionScheme=huge_app", None, "adafruit/wipper-esp3.3.3"],
+    "arduino_nesso_n1" : ["espressif:esp32:arduino_nesso_n1:PartitionScheme=huge_app", None, "adafruit/wipper-esp3.3.5-pre-c0395df"],
     "wippersnapper_feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/wipper-esp3.3.3"],
     "wippersnapper_feather_esp32c6_debug" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,DebugLevel=verbose,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/wipper-esp3.3.3"],
     "qtpy_esp32c3" : ["espressif:esp32:adafruit_qtpy_esp32c3:FlashMode=qio", None, "adafruit/wipper-esp3.3.3"],
