@@ -11,7 +11,7 @@ ALL_PLATFORMS={
     "esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", None, None],
     "esp32" : ["espressif:esp32:featheresp32:FlashFreq=80", None, "adafruit/wipper-esp3.3.3"],
     "itsybitsy_esp32" : ["espressif:esp32:adafruit_itsybitsy_esp32:FlashFreq=80", None, "adafruit/wipper-esp3.3.3"],
-    "feather_esp8266" : ["esp8266:esp8266:huzzah:xtal=80,vt=flash,exception=disabled,stacksmash=disabled,ssl=all,mmu=3232,non32xfer=fast,eesz=4M2M,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200", None, None],
+    "feather_esp8266" : ["esp8266:esp8266:huzzah:xtal=80,vt=flash,exception=disabled,stacksmash=disabled,ssl=all,mmu=4816,non32xfer=fast,eesz=4M2M,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200", None, None],
     "feather_esp32" : ["espressif:esp32:featheresp32:FlashFreq=80", None, "adafruit/wipper-esp3.3.3"],
     "wippersnapper_feather_esp32" : ["espressif:esp32:featheresp32:FlashFreq=80,PartitionScheme=min_spiffs", None, "adafruit/wipper-esp3.3.3"],
     "feather_esp32_v2" : ["espressif:esp32:adafruit_feather_esp32_v2", None, "adafruit/wipper-esp3.3.3"],
