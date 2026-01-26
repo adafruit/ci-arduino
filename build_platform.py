@@ -151,7 +151,7 @@ def install_platform(fqbn, full_platform_name=None):
         if os.system("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS+" > /dev/null") == 0:
             break
         print("...retrying...", end=" ")
-        time.sleep(10) # wait 10 seconds then try again?
+        time.sleep(30 * (retry + 1)) # wait 30-90 seconds then try again?
     else:
         # tried 3 times to no avail
         ColorPrint.print_fail("FAILED to install "+fqbn)
