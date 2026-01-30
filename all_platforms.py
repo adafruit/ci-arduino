@@ -67,6 +67,7 @@ ALL_PLATFORMS={
     "xiao_esp32s3" : ["espressif:esp32:XIAO_ESP32S3:PartitionScheme=tinyuf2,PSRAM=opi,FlashMode=qio,USBMode=default,DebugLevel=warn", "0xc47e5767", "adafruit/wipper-esp3.3.3"],
     ## ESP32_P4
     "waveshare_p4_wifi6": ["espressif:esp32:esp32p4:FlashSize=32M,PartitionScheme=app5M_little24M_32MB,FlashMode=qio,DebugLevel=verbose", "0xc47e5767", "adafruit/wipper-esp3.3.6-idf5.5.2"],
+    "esp32p4": ["espressif:esp32:esp32p4:FlashSize=32M,PartitionScheme=app5M_little24M_32MB,FlashMode=qio,DebugLevel=verbose", "0xc47e5767", "adafruit/wipper-esp3.3.6-idf5.5.2"],
     # Adafruit AVR
     "trinket_3v" : ["adafruit:avr:trinket3", None, None],
     "trinket_5v" : ["adafruit:avr:trinket5", None, None],
