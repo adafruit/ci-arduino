@@ -146,12 +146,14 @@ def install_platform(fqbn, full_platform_name=None):
         install_platform("arduino:avr", full_platform_name)
     if full_platform_name[2] is not None:
         manually_install_esp32_bsp(full_platform_name[2]) # build esp32 bsp from desired source and branch
+        print(os.popen('arduino-cli core list | grep {}'.format(fqbn)).read(), end='')
+        return # bail out
     for retry in range(0, 3):
         print("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS)
         if os.system("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS+" > /dev/null") == 0:
             break
         print("...retrying...", end=" ")
-        time.sleep(10) # wait 10 seconds then try again?
+        time.sleep(30 * (retry + 1)) # wait 30-90 seconds then try again?
     else:
         # tried 3 times to no avail
         ColorPrint.print_fail("FAILED to install "+fqbn)
@@ -251,7 +253,7 @@ def glob1(pattern):
 def download_uf2_utils():
     """Downloads uf2conv tools if we don't already have them
     """
-    cmd = "wget -nc --no-check-certificate http://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2conv.py"
+    cmd = "wget --retry-on-http-error=429,503 -nc --no-check-certificate http://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2families.json https://raw.githubusercontent.com/microsoft/uf2/master/utils/uf2conv.py"
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     r = proc.wait(timeout=60)
     out = proc.stdout.read()
@@ -284,7 +286,7 @@ def generate_uf2(platform, fqbn, example_path):
         return output_file
 
     # Generate using a hex file for all platforms except for ESP32-S2, ESP32-S3 (exports as .bin files)
-    if not any (x in fqbn for x in ["esp32s2", "esp32s3"]):
+    if not any (x in fqbn.lower() for x in ["esp32s2", "esp32s3"]):
         cli_build_hex_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
         hex_input_file = glob1(os.path.join(example_path, cli_build_hex_path))
         output_file = os.path.splitext(hex_input_file)[0] + ".uf2"
