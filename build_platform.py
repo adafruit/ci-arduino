@@ -20,6 +20,16 @@ if "--no_warn" in sys.argv:
     BUILD_WARN = False
     sys.argv.remove("--no_warn")
 
+# optional flag to skip the lib uninstall step
+SKIP_UNINSTALL = False
+if "--skip-uninstall" in sys.argv or "--skip_uninstall" in sys.argv:
+    SKIP_UNINSTALL = True
+    # Remove all occurrences of both spellings for consistency
+    while "--skip-uninstall" in sys.argv:
+        sys.argv.remove("--skip-uninstall")
+    while "--skip_uninstall" in sys.argv:
+        sys.argv.remove("--skip_uninstall")
+
 # optional timeout argument to extend build time
 # for larger sketches or firmware builds
 BUILD_TIMEOUT = False
@@ -217,7 +227,9 @@ def install_library_deps():
 
     # Delete the existing library if we somehow downloaded
     # due to dependencies
-    if our_name:
+    # Skipped when --skip-uninstall is passed (e.g. when called multiple times
+    # in one CI job to avoid deleting the symlinked checkout dir)
+    if our_name and not SKIP_UNINSTALL:
         run_or_die("arduino-cli lib uninstall \""+our_name+"\"", "Could not uninstall")
 
     print("Libraries installed: ", glob.glob(os.environ['HOME']+'/Arduino/libraries/*'))
