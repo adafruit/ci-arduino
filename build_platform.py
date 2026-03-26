@@ -22,9 +22,13 @@ if "--no_warn" in sys.argv:
 
 # optional flag to skip the lib uninstall step
 SKIP_UNINSTALL = False
-if "--skip-uninstall" in sys.argv:
+if "--skip-uninstall" in sys.argv or "--skip_uninstall" in sys.argv:
     SKIP_UNINSTALL = True
-    sys.argv.remove("--skip-uninstall")
+    # Remove all occurrences of both spellings for consistency
+    while "--skip-uninstall" in sys.argv:
+        sys.argv.remove("--skip-uninstall")
+    while "--skip_uninstall" in sys.argv:
+        sys.argv.remove("--skip_uninstall")
 
 # optional timeout argument to extend build time
 # for larger sketches or firmware builds
