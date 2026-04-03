@@ -107,7 +107,7 @@ fi
 shopt -s extglob
 if [ ! -f index.html ]; then
     rm -rf *
-    curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_index.html > index.html
+    curl -SLs https://raw.githubusercontent.com/adafruit/ci-arduino/master/doxy_index.html > index.html
 else
     # Don't fail if there's no files in the directory, just keep going!
     rm -r -- !(index.html) || true
@@ -138,7 +138,7 @@ export DOXYFILE=${BUILD_DIR}/Doxyfile
 if [ ! -f ${DOXYFILE} ]; then
     echo "Grabbing default Doxyfile"
 
-    curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/Doxyfile.default > ${DOXYFILE}
+    curl -SLs https://raw.githubusercontent.com/adafruit/ci-arduino/master/Doxyfile.default > ${DOXYFILE}
     #sed -i "s/^INPUT .*/INPUT = ..\/../"  ${DOXYFILE}
 
     # If we can, fix up the name
