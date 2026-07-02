@@ -46,7 +46,16 @@ ALL_PLATFORMS={
     "esp32s3_devkitc_1_n8_debug" : ["espressif:esp32:esp32s3:FlashSize=8M,PartitionScheme=noota_ffat,FlashMode=qio,PSRAM=disabled,DebugLevel=verbose,USBMode=default,CDCOnBoot=cdc,LoopCore=1,EventsCore=1", "0xc47e5767", "adafruit/bsp-3-3-10"],
     "feather_esp32s3" : ["espressif:esp32:adafruit_feather_esp32s3_nopsram", "0xc47e5767", "adafruit/bsp-3-3-10"],
     "wippersnapper_feather_esp32s3" : ["espressif:esp32:adafruit_feather_esp32s3_nopsram:PartitionScheme=tinyuf2_noota", "0xc47e5767", "adafruit/bsp-3-3-10"],
-    "lilygo_t_display_s3" : ["espressif:esp32:lilygo_t_display_s3:PartitionScheme=tinyuf2_noota", "0xc47e5767", "adafruit/bsp-3-3-10"],
+    # LilyGo T-Display-S3: the upstream espressif board entry has no tinyuf2
+    # PartitionScheme and defaults to USBMode=hwcdc (usb_mode=1). Force USB-OTG
+    # (TinyUSB, usb_mode=0) to match the WipperSnapper platformio env
+    # (ARDUINO_USB_MODE=0 + USE_TINYUSB — the WIPPER MSC provisioning drive).
+    # Partitions stay the board default (app3M_fat9M_16MB) for the compile
+    # check; the release/HIL combined image takes its real partition table from
+    # the official tinyuf2 bootloader at merge time. TODO: add a tinyuf2 16MB
+    # scheme for this board to the Adafruit BSP so CI can size-check against
+    # the true 2MB ota_0 slot.
+    "lilygo_t_display_s3" : ["espressif:esp32:lilygo_t_display_s3:USBMode=default", "0xc47e5767", "adafruit/bsp-3-3-10"],
     "feather_esp32s3_debug" : ["espressif:esp32:adafruit_feather_esp32s3_nopsram:DebugLevel=verbose,PartitionScheme=tinyuf2_noota", "0xc47e5767", "adafruit/bsp-3-3-10"],
     "wippersnapper_feather_esp32s3_4mbflash_2mbpsram" : ["espressif:esp32:adafruit_feather_esp32s3:PartitionScheme=tinyuf2_noota", "0xc47e5767", "adafruit/bsp-3-3-10"],
     "feather_esp32s3_4mbflash_2mbpsram" : ["espressif:esp32:adafruit_feather_esp32s3:PartitionScheme=tinyuf2_noota", "0xc47e5767", "adafruit/bsp-3-3-10"],
