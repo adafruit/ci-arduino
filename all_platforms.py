@@ -29,7 +29,7 @@ ALL_PLATFORMS={
     "arduino_nesso_n1" : ["espressif:esp32:arduino_nesso_n1:PartitionScheme=huge_app", None, "adafruit/wipper-esp3.3.5-pre-c0395df"],
     "feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:FlashMode=qio", None, "adafruit/bsp-3-3-11"],
     "wippersnapper_feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/bsp-3-3-11"],
-    "wippersnapper_feather_esp32c6_debug" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,DebugLevel=verbose,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/bsp-3-3-11"],
+    "wippersnapper_feather_esp32c6_debug" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,DebugLevel=verbose,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=huge_app", None, "adafruit/bsp-3-3-11"],
     ## ESP32-S2
     "magtag" : ["espressif:esp32:adafruit_magtag29_esp32s2:PartitionScheme=tinyuf2_noota", "0xbfdd4eee", "adafruit/bsp-3-3-11"],
     "funhouse" : ["espressif:esp32:adafruit_funhouse_esp32s2:PartitionScheme=tinyuf2_noota", "0xbfdd4eee", "adafruit/bsp-3-3-11"],
