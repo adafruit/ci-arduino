@@ -7,6 +7,8 @@ ALL_PLATFORMS={
     # Arduino SAMD
     "zero" : ["arduino:samd:arduino_zero_native", "0x68ed2b88", None, None],
     "cpx" : ["arduino:samd:adafruit_circuitplayground_m0", "0x68ed2b88", None],
+    # Arduino MBED GIGA
+    "giga" : ["arduino:mbed_giga:giga", None, None],
     # Espressif
     "esp8266" : ["esp8266:esp8266:huzzah:eesz=4M3M,xtal=80", None, None],
     "esp32" : ["espressif:esp32:featheresp32:FlashFreq=80", None, "adafruit/bsp-3-3-11"],
@@ -135,7 +137,7 @@ ALL_PLATFORMS={
     "cpb" : ["adafruit:nrf52:cplaynrf52840:softdevice=s140v6,debug=l0", "0xada52840", None],
     "clue" : ["adafruit:nrf52:cluenrf52840:softdevice=s140v6,debug=l0", "0xada52840", None],
     "ledglasses_nrf52840" : ["adafruit:nrf52:ledglasses_nrf52840:softdevice=s140v6,debug=l0", "0xada52840", None],
-    # RP2040 (Philhower)
+    # RP2040 & RP2350 (Philhower)
     "pico_rp2040" : ["rp2040:rp2040:rpipico:freq=125,flash=2097152_0", "0xe48bff56", None],
     "pico_rp2040_tinyusb" : ["rp2040:rp2040:rpipico:flash=2097152_524288,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "pico_rp2040_tinyusb_host" : ["rp2040:rp2040:rpipico:flash=2097152_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb_host", "0xe48bff56", None],
@@ -158,6 +160,8 @@ ALL_PLATFORMS={
     "feather_rp2040_usbhost_tinyusb" : ["rp2040:rp2040:adafruit_feather_usb_host:flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "feather_rp2350" : ["rp2040:rp2040:adafruit_feather_rp2350_hstx:arch=arm,flash=8388608_0,freq=150,dbgport=Disabled,dbglvl=None,usbstack=picosdk", "0xe48bff56", None],
     "feather_rp2350_tinyusb" : ["rp2040:rp2040:adafruit_feather_rp2350_hstx:arch=arm,flash=8388608_0,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
+    "metro_rp2040" : ["rp2040:rp2040:adafruit_metro:flash=16777216_0,freq=200,dbgport=Disabled,dbglvl=None,usbstack=picosdk", "0xe48bff56", None],
+    "metro_rp2040_tinyusb" : ["rp2040:rp2040:adafruit_metro:flash=16777216_0,freq=200,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "metro_rp2350" : ["rp2040:rp2040:adafruit_metro_rp2350:arch=arm,flash=16777216_0,freq=150,dbgport=Disabled,dbglvl=None,usbstack=picosdk", "0xe48bff56", None],
     "metro_rp2350_tinyusb" : ["rp2040:rp2040:adafruit_metro_rp2350:arch=arm,flash=16777216_524288,freq=120,dbgport=Disabled,dbglvl=None,usbstack=tinyusb", "0xe48bff56", None],
     "qt2040_trinkey" : ["rp2040:rp2040:adafruit_trinkeyrp2040qt:flash=8388608_0,freq=125","0xe48bff56", None],

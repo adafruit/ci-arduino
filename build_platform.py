@@ -113,12 +113,14 @@ class ColorPrint:
 
 def manually_install_esp32_bsp(repo_info):
     print("Manually installing latest ESP32 BSP...")
-    # Assemble git url
-    repo_url = "git clone -b {0} https://github.com/{1}/arduino-esp32.git esp32".format(repo_info.split("/")[1], repo_info.split("/")[0])
+    # Assemble gh cli clone command
+    owner = repo_info.split("/")[0]
+    branch = repo_info.split("/")[1]
+    clone_cmd = "gh repo clone {0}/arduino-esp32 esp32 -- --depth 1 -b {1}".format(owner, branch)
     # Locally clone repo (https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html#linux)
     os.system("mkdir -p /home/runner/Arduino/hardware/espressif")
-    print("Cloning %s"%repo_url)
-    cmd = "cd /home/runner/Arduino/hardware/espressif && " + repo_url
+    print("Cloning %s"%clone_cmd)
+    cmd = "cd /home/runner/Arduino/hardware/espressif && " + clone_cmd
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     r = proc.wait(timeout=1000)
     out = proc.stdout.read()
