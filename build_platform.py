@@ -30,34 +30,26 @@ if "--build_timeout" in sys.argv:
     sys.argv.pop(sys.argv.index("--build_timeout") + 1)
     sys.argv.remove("--build_timeout")
 
-# optional --boards-local-txt argument to copy boards.local.txt
-# to the appropriate folder after installing the platform BSP.
-COPY_BOARDS_LOCAL_TXT = False
-boards_local_txt = None
+# optional --boards-local-txt [path]: install a boards.local.txt next to the
+# platform's boards.txt before each example is built, so boards that reuse a
+# generic BSP definition can get a unique define. Precedence per example:
+#   <example>/.<platform>.boards.local.txt > <example>/boards.local.txt
+#   > <path> (or ./boards.local.txt when no path given) > none (file removed)
+BOARDS_LOCAL_TXT_ENABLED = False
+BOARDS_LOCAL_TXT_ROOT = None
 if "--boards-local-txt" in sys.argv:
-    COPY_BOARDS_LOCAL_TXT = True
-    if sys.argv.index("--boards-local-txt") + 1 == len(sys.argv):
-        # check if in cwd
-        if os.path.exists("boards.local.txt"):
-            boards_local_txt = "boards.local.txt"
-        else:
-            sys.stderr.write("Error: --boards-local-txt option requires a path to boards.local.txt file or to be present in current directory\n")
+    BOARDS_LOCAL_TXT_ENABLED = True
+    idx = sys.argv.index("--boards-local-txt")
+    nxt = sys.argv[idx + 1] if idx + 1 < len(sys.argv) else None
+    if nxt is not None and not nxt.startswith("--") and nxt not in ALL_PLATFORMS:
+        if not os.path.isfile(nxt):
+            sys.stderr.write("Error: --boards-local-txt file not found: %s\n" % nxt)
             sys.exit(1)
-    else:
-        # check second arg is file or another flag:
-        if sys.argv[sys.argv.index("--boards-local-txt") + 1].startswith("--"):
-            if os.path.exists("boards.local.txt"):
-                boards_local_txt = "boards.local.txt"
-            else:
-                sys.stderr.write("Error: --boards-local-txt option requires a path to boards.local.txt file (or to be present in current directory)\n")
-                sys.exit(1)
-        # get the boards.local.txt file from the command line (index exists checked earlier)
-        if not os.path.exists(sys.argv[sys.argv.index("--boards-local-txt") + 1]):
-            sys.stderr.write("Error: boards.local.txt file does not exist\n")
-            sys.exit(1)
-        boards_local_txt = sys.argv[sys.argv.index("--boards-local-txt") + 1]
-        sys.argv.pop(sys.argv.index("--boards-local-txt") + 1)
-    sys.argv.remove("--boards-local-txt")
+        BOARDS_LOCAL_TXT_ROOT = os.path.abspath(nxt)
+        sys.argv.pop(idx + 1)
+    elif os.path.isfile("boards.local.txt"):
+        BOARDS_LOCAL_TXT_ROOT = os.path.abspath("boards.local.txt")
+    sys.argv.pop(idx)
 
 # add user bin to path!
 BUILD_DIR = ''
@@ -431,23 +423,7 @@ def test_examples_in_folder(platform, folderpath):
         if os.path.exists(gen_file_name):
             ColorPrint.print_info("generating")
 
-
-        # check if root or example-specific boards.local.txt should be copied
-        if COPY_BOARDS_LOCAL_TXT:
-            root_boards_local_txt = boards_local_txt
-            example_boards_local_txt = folderpath+"/boards.local.txt"
-            board_specific_example_boards_local_txt = folderpath+"/."+platform+".boards.local.txt"
-
-            if os.path.exists(board_specific_example_boards_local_txt):
-                ColorPrint.print_info("Copying boards.local.txt from "+board_specific_example_boards_local_txt)
-                install_boards_local_txt(":".join(fqbn.split(':')[0:2]), board_specific_example_boards_local_txt)
-            elif os.path.exists(example_boards_local_txt):
-                ColorPrint.print_info("Copying boards.local.txt from "+example_boards_local_txt)
-                install_boards_local_txt(":".join(fqbn.split(':')[0:2]), example_boards_local_txt)
-            else: # effectively does the revert if subsequent example doesn't have a specific boards.local.txt
-                ColorPrint.print_info("No example-specific boards.local.txt found to copy, using root version")
-                install_boards_local_txt(":".join(fqbn.split(':')[0:2]), root_boards_local_txt)
-
+        apply_boards_local_txt(platform, fqbn, folderpath)
 
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
@@ -497,87 +473,114 @@ def test_examples_in_folder(platform, folderpath):
             success = 1
 
 
-def install_boards_local_txt(core_fqbn, boards_local_txt):
-    """Copies boards.local.txt to the appropriate folder for the given core_fqbn.
-    :param str core_fqbn: The first two segments of fully qualified board
-      name, vendor:architecture (e.g., "adafruit:samd").
-    :param str boards_local_txt: The path to the boards.local.txt file.
+_platform_dir_cache = {}
+
+
+def get_platform_dir(fqbn):
+    """Directory containing boards.txt for the platform that provides fqbn.
+    Asks arduino-cli (works for Board Manager installs and for cores cloned
+    into the sketchbook hardware/ folder); falls back to scanning the data and
+    user directories.
     """
-    local_app_data_dir = os.environ.get('HOME', '')
-    data_dir = None
+    core_fqbn = ":".join(fqbn.split(':')[0:2])
+    if core_fqbn in _platform_dir_cache:
+        return _platform_dir_cache[core_fqbn]
+
+    platform_dir = None
     try:
-        if os.path.exists(os.path.join(local_app_data_dir, '.arduino15')):
-            data_dir = os.path.join(local_app_data_dir, '.arduino15')
-        elif os.path.exists(os.path.join(local_app_data_dir, '.arduino')):
-            data_dir = os.path.join(local_app_data_dir, '.arduino')
-
-        # Get arduino-cli data directory
-        import json
-        if data_dir:
-            config_output = subprocess.check_output(["arduino-cli", "config", "dump", "--format", "json", "--config-dir", data_dir]).decode()
-        else:
-            config_output = subprocess.check_output(["arduino-cli", "config", "dump", "--format", "json"]).decode()
-        config = json.loads(config_output)
-        ColorPrint.print_info(f"Using arduino-cli config: {config_output.strip()}")
-
-        # Extract data directory, with fallback to default
-        data_dir = config.get("directories", {}).get("data", "")
-        if not data_dir:
-            if os.path.exists(os.path.join(local_app_data_dir, 'Arduino')):
-                data_dir = os.path.join(local_app_data_dir, 'Arduino')
-            else:
-                ColorPrint.print_warn("No valid data directory found, cannot copy boards.local.txt")
-                return
-
-        ColorPrint.print_info(f"Using data directory: {data_dir}")
-
-        # Parse platform vendor and architecture from core_fqbn (e.g., "adafruit:samd")
-        parts = core_fqbn.split(':')
-        if len(parts) >= 2:
-            vendor = parts[0]
-            architecture = parts[1]
-        else:
-            vendor = core_fqbn
-            architecture = vendor
-
-        ColorPrint.print_info(f"Using vendor: {vendor}, architecture: {architecture}")
-
-        # Construct base platform path, fall back to architecture if vendor rebadged BSP.
-        platform_base = os.path.join(data_dir, "packages", vendor, "hardware", architecture) if \
-            os.path.exists(os.path.join(data_dir, "packages", vendor, "hardware", architecture)) else \
-            os.path.join(data_dir, "packages", architecture, "hardware", architecture) if \
-            os.path.exists(os.path.join(data_dir, "packages", architecture, "hardware", architecture)) else \
-            os.path.join(data_dir, "hardware", vendor, architecture) if \
-            os.path.exists(os.path.join(data_dir, "hardware", vendor, architecture)) else \
-            os.path.join(data_dir, "hardware", architecture, architecture)
-
-        # Find the latest version directory
-        if os.path.exists(platform_base):
-            if os.path.exists(os.path.join(platform_base, "boards.txt")):
-                shutil.copyfile(boards_local_txt, os.path.join(platform_base, "boards.local.txt"))
-                ColorPrint.print_info(f"Copied boards.local.txt to {os.path.join(platform_base, 'boards.local.txt')}")
-            else:
-                versions = [d for d in os.listdir(platform_base) if os.path.isdir(os.path.join(platform_base, d))]
-                ColorPrint.print_info(f"Found subdirectories for {platform_base}:\n {versions}")
-                # Filter out non-version directories (e.g., 'tools', 'libraries') while supporting 1.0-dev 1.0.0-offline-mode.102 etc
-                versions = [v for v in versions if re.match(r'^(v)?\d+\.\d+(\.\d+(-\w+)?)?(\.\d+)?$', v)]
-                ColorPrint.print_info(f"Filtered versions: {versions}")
-                if versions:
-                    # Sort versions and take the latest (could be improved with proper version sorting)
-                    latest_version = sorted(versions)[-1]
-                    platform_path = os.path.join(platform_base, latest_version)
-
-                    dest_path = os.path.join(platform_path, "boards.local.txt")
-                    shutil.copyfile(boards_local_txt, dest_path)
-                    ColorPrint.print_info(f"Copied boards.local.txt to {dest_path}")
-
-                else:
-                    ColorPrint.print_warn(f"No version directories found in {platform_base}")
-        else:
-            ColorPrint.print_warn(f"Platform path {platform_base} does not exist")
-
+        out = subprocess.check_output(
+            ["arduino-cli", "board", "details", "-b", fqbn, "--format", "json"]).decode()
+        props = json.loads(out).get("build_properties", [])
+        for key in ("build.board.platform.path", "runtime.platform.path", "build.core.platform.path"):
+            for prop in props:
+                if prop.startswith(key + "="):
+                    platform_dir = prop.split("=", 1)[1]
+                    break
+            if platform_dir:
+                break
     except Exception as e:
-        ColorPrint.print_fail(f"Error injecting boards.local.txt for {core_fqbn}: {e}")
+        ColorPrint.print_warn("arduino-cli board details failed for %s: %s" % (fqbn, e))
+
+    if not platform_dir or not os.path.isfile(os.path.join(platform_dir, "boards.txt")):
+        platform_dir = None
+        vendor, arch = core_fqbn.split(':')
+        search_dirs = []
+        for key in ("directories.data", "directories.user"):
+            try:
+                d = subprocess.check_output(["arduino-cli", "config", "get", key]).decode().strip()
+                if d:
+                    search_dirs.append(d)
+            except Exception:
+                pass
+        home = os.path.expanduser("~")
+        search_dirs += [os.path.join(home, ".arduino15"), os.path.join(home, "Arduino")]
+        candidates = []
+        for d in search_dirs:
+            candidates += sorted(glob.glob(os.path.join(d, "packages", vendor, "hardware", arch, "*")), reverse=True)
+            candidates.append(os.path.join(d, "hardware", vendor, arch))
+        for c in candidates:
+            if os.path.isfile(os.path.join(c, "boards.txt")):
+                platform_dir = c
+                break
+
+    _platform_dir_cache[core_fqbn] = platform_dir
+    return platform_dir
+
+
+def print_boards_local_txt_effect(fqbn, source):
+    """Log the effective value of each property overridden by source."""
+    try:
+        keys = set()
+        with open(source) as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#') or '=' not in line:
+                    continue
+                key = line.split('=', 1)[0]
+                keys.add(key.split('.', 1)[1] if '.' in key else key)
+        out = subprocess.check_output(
+            ["arduino-cli", "board", "details", "-b", fqbn, "--format", "json"]).decode()
+        for prop in json.loads(out).get("build_properties", []):
+            if prop.split('=', 1)[0] in keys:
+                ColorPrint.print_info("  effective " + prop)
+    except Exception as e:
+        ColorPrint.print_warn("could not read back board properties: %s" % e)
+
+
+def install_boards_local_txt(fqbn, source):
+    """Copy source to <platform dir>/boards.local.txt, or remove that file when
+    source is None. Returns True on success.
+    """
+    platform_dir = get_platform_dir(fqbn)
+    if not platform_dir:
+        ColorPrint.print_fail("boards.local.txt: could not locate platform directory for " + fqbn)
+        return False
+    dest = os.path.join(platform_dir, "boards.local.txt")
+    if source is None:
+        if os.path.exists(dest):
+            os.remove(dest)
+            ColorPrint.print_info("Removed " + dest)
+        return True
+    shutil.copyfile(source, dest)
+    ColorPrint.print_info("Installed boards.local.txt: %s -> %s" % (source, dest))
+    print_boards_local_txt_effect(fqbn, source)
+    return True
+
+
+def apply_boards_local_txt(platform, fqbn, folderpath):
+    """Install the most specific boards.local.txt for this example, or remove
+    any previously installed one when the example has none."""
+    if not BOARDS_LOCAL_TXT_ENABLED:
+        return
+    candidates = [
+        os.path.join(folderpath, "." + platform + ".boards.local.txt"),
+        os.path.join(folderpath, "boards.local.txt"),
+        BOARDS_LOCAL_TXT_ROOT,
+    ]
+    source = next((c for c in candidates if c and os.path.isfile(c)), None)
+    if source is None:
+        ColorPrint.print_info("No boards.local.txt for this example")
+    install_boards_local_txt(fqbn, source)
 
 
 def main():
@@ -606,9 +609,8 @@ def main():
         core_fqbn = ":".join(fqbn.split(':', 2)[0:2])  # take only first two elements
         install_platform(core_fqbn, ALL_PLATFORMS[platform])
 
-        # Inject boards.local.txt if requested
-        if COPY_BOARDS_LOCAL_TXT and boards_local_txt:
-            install_boards_local_txt(core_fqbn, boards_local_txt)
+        if BOARDS_LOCAL_TXT_ENABLED:
+            install_boards_local_txt(fqbn, BOARDS_LOCAL_TXT_ROOT)
         print('#'*80)
 
         # Test examples in the platform folder
@@ -616,6 +618,9 @@ def main():
             test_examples_in_folder(platform, BUILD_DIR+"/examples")
         else:
             test_examples_in_folder(platform, BUILD_DIR)
+
+        if BOARDS_LOCAL_TXT_ENABLED:
+            install_boards_local_txt(fqbn, None)
 
 
 if __name__ == "__main__":
