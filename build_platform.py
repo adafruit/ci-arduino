@@ -537,7 +537,9 @@ def print_boards_local_txt_effect(fqbn, source):
                 if not line or line.startswith('#') or '=' not in line:
                     continue
                 key = line.split('=', 1)[0]
-                keys.add(key.split('.', 1)[1] if '.' in key else key)
+                key = key.split('.', 1)[1] if '.' in key else key  # drop board id
+                key = re.sub(r'^menu\.[^.]+\.[^.]+\.', '', key)   # drop menu.<id>.<opt>
+                keys.add(key)
         out = subprocess.check_output(
             ["arduino-cli", "board", "details", "-b", fqbn, "--format", "json"]).decode()
         for prop in json.loads(out).get("build_properties", []):
