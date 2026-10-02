@@ -70,7 +70,7 @@ ALL_PLATFORMS={
     # races the HW CDC driver on ESP32-P4 ES silicon -> Store access fault; see
     # https://github.com/espressif/arduino-esp32/issues/12966
     "waveshare_p4_wifi6": ["espressif:esp32:esp32p4:FlashSize=32M,PartitionScheme=app5M_little24M_32MB,FlashMode=qio,USBMode=hwcdc,CDCOnBoot=cdc,DebugLevel=none", "0xc47e5767", "adafruit/wipper-3.3.12-idf5.5.5"],
-    "dfrobot_firebeetle2_esp32p4": ["espressif:esp32:dfrobot_firebeetle2_esp32p4:PartitionScheme=huge_app,DebugLevel=none", "0xc47e5767", "adafruit/wipper-3.3.12-idf5.5.5"],
+    "dfrobot_firebeetle2_esp32p4": ["espressif:esp32:dfrobot_firebeetle2_esp32p4:PartitionScheme=huge_app,DebugLevel=verbose", "0xc47e5767", "adafruit/wipper-3.3.12-idf5.5.5"], # console on USB-OTG TinyUSB CDC via boards.local.txt (usb_mode=0): no HWCDC race, so core logs can stay on
     "esp32p4": ["espressif:esp32:esp32p4:FlashSize=32M,PartitionScheme=app5M_little24M_32MB,FlashMode=qio,DebugLevel=none", "0xc47e5767", "adafruit/wipper-3.3.12-idf5.5.5"],
     "adafruit_metro_esp32p4": ["espressif:esp32:esp32p4:FlashSize=32M,PartitionScheme=app5M_little24M_32MB,FlashMode=qio,USBMode=hwcdc,CDCOnBoot=cdc,DebugLevel=none", "0xc47e5767", "adafruit/wipper-3.3.12-idf5.5.5"], # Metro ESP32-P4 builds as the generic P4 dev module until hardware release
     # Adafruit AVR
