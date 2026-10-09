@@ -40,6 +40,27 @@ if "--build_timeout" in sys.argv:
     sys.argv.pop(sys.argv.index("--build_timeout") + 1)
     sys.argv.remove("--build_timeout")
 
+# optional --boards-local-txt [path]: install a boards.local.txt next to the
+# platform's boards.txt before each example is built, so boards that reuse a
+# generic BSP definition can get a unique define. Precedence per example:
+#   <example>/.<platform>.boards.local.txt > <example>/boards.local.txt
+#   > <path> (or ./boards.local.txt when no path given) > none (file removed)
+BOARDS_LOCAL_TXT_ENABLED = False
+BOARDS_LOCAL_TXT_ROOT = None
+if "--boards-local-txt" in sys.argv:
+    BOARDS_LOCAL_TXT_ENABLED = True
+    idx = sys.argv.index("--boards-local-txt")
+    nxt = sys.argv[idx + 1] if idx + 1 < len(sys.argv) else None
+    if nxt is not None and not nxt.startswith("--") and nxt not in ALL_PLATFORMS:
+        if not os.path.isfile(nxt):
+            sys.stderr.write("Error: --boards-local-txt file not found: %s\n" % nxt)
+            sys.exit(1)
+        BOARDS_LOCAL_TXT_ROOT = os.path.abspath(nxt)
+        sys.argv.pop(idx + 1)
+    elif os.path.isfile("boards.local.txt"):
+        BOARDS_LOCAL_TXT_ROOT = os.path.abspath("boards.local.txt")
+    sys.argv.pop(idx)
+
 # add user bin to path!
 BUILD_DIR = ''
 # add user bin to path!
@@ -414,6 +435,8 @@ def test_examples_in_folder(platform, folderpath):
         if os.path.exists(gen_file_name):
             ColorPrint.print_info("generating")
 
+        apply_boards_local_txt(platform, fqbn, folderpath)
+
         if BUILD_WARN:
             if os.path.exists(gen_file_name):
                 cmd = ['arduino-cli', 'compile', '--warnings', 'all', '--fqbn', fqbn, '-e', folderpath]
@@ -462,6 +485,118 @@ def test_examples_in_folder(platform, folderpath):
             success = 1
 
 
+_platform_dir_cache = {}
+
+
+def get_platform_dir(fqbn):
+    """Directory containing boards.txt for the platform that provides fqbn.
+    Asks arduino-cli (works for Board Manager installs and for cores cloned
+    into the sketchbook hardware/ folder); falls back to scanning the data and
+    user directories.
+    """
+    core_fqbn = ":".join(fqbn.split(':')[0:2])
+    if core_fqbn in _platform_dir_cache:
+        return _platform_dir_cache[core_fqbn]
+
+    platform_dir = None
+    try:
+        out = subprocess.check_output(
+            ["arduino-cli", "board", "details", "-b", fqbn, "--format", "json"]).decode()
+        props = json.loads(out).get("build_properties", [])
+        for key in ("build.board.platform.path", "runtime.platform.path", "build.core.platform.path"):
+            for prop in props:
+                if prop.startswith(key + "="):
+                    platform_dir = prop.split("=", 1)[1]
+                    break
+            if platform_dir:
+                break
+    except Exception as e:
+        ColorPrint.print_warn("arduino-cli board details failed for %s: %s" % (fqbn, e))
+
+    if not platform_dir or not os.path.isfile(os.path.join(platform_dir, "boards.txt")):
+        platform_dir = None
+        vendor, arch = core_fqbn.split(':')
+        search_dirs = []
+        for key in ("directories.data", "directories.user"):
+            try:
+                d = subprocess.check_output(["arduino-cli", "config", "get", key]).decode().strip()
+                if d:
+                    search_dirs.append(d)
+            except Exception:
+                pass
+        home = os.path.expanduser("~")
+        search_dirs += [os.path.join(home, ".arduino15"), os.path.join(home, "Arduino")]
+        candidates = []
+        for d in search_dirs:
+            candidates += sorted(glob.glob(os.path.join(d, "packages", vendor, "hardware", arch, "*")), reverse=True)
+            candidates.append(os.path.join(d, "hardware", vendor, arch))
+        for c in candidates:
+            if os.path.isfile(os.path.join(c, "boards.txt")):
+                platform_dir = c
+                break
+
+    _platform_dir_cache[core_fqbn] = platform_dir
+    return platform_dir
+
+
+def print_boards_local_txt_effect(fqbn, source):
+    """Log the effective value of each property overridden by source."""
+    try:
+        keys = set()
+        with open(source) as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#') or '=' not in line:
+                    continue
+                key = line.split('=', 1)[0]
+                key = key.split('.', 1)[1] if '.' in key else key  # drop board id
+                key = re.sub(r'^menu\.[^.]+\.[^.]+\.', '', key)   # drop menu.<id>.<opt>
+                keys.add(key)
+        out = subprocess.check_output(
+            ["arduino-cli", "board", "details", "-b", fqbn, "--format", "json"]).decode()
+        for prop in json.loads(out).get("build_properties", []):
+            if prop.split('=', 1)[0] in keys:
+                ColorPrint.print_info("  effective " + prop)
+    except Exception as e:
+        ColorPrint.print_warn("could not read back board properties: %s" % e)
+
+
+def install_boards_local_txt(fqbn, source):
+    """Copy source to <platform dir>/boards.local.txt, or remove that file when
+    source is None. Returns True on success.
+    """
+    platform_dir = get_platform_dir(fqbn)
+    if not platform_dir:
+        ColorPrint.print_fail("boards.local.txt: could not locate platform directory for " + fqbn)
+        return False
+    dest = os.path.join(platform_dir, "boards.local.txt")
+    if source is None:
+        if os.path.exists(dest):
+            os.remove(dest)
+            ColorPrint.print_info("Removed " + dest)
+        return True
+    shutil.copyfile(source, dest)
+    ColorPrint.print_info("Installed boards.local.txt: %s -> %s" % (source, dest))
+    print_boards_local_txt_effect(fqbn, source)
+    return True
+
+
+def apply_boards_local_txt(platform, fqbn, folderpath):
+    """Install the most specific boards.local.txt for this example, or remove
+    any previously installed one when the example has none."""
+    if not BOARDS_LOCAL_TXT_ENABLED:
+        return
+    candidates = [
+        os.path.join(folderpath, "." + platform + ".boards.local.txt"),
+        os.path.join(folderpath, "boards.local.txt"),
+        BOARDS_LOCAL_TXT_ROOT,
+    ]
+    source = next((c for c in candidates if c and os.path.isfile(c)), None)
+    if source is None:
+        ColorPrint.print_info("No boards.local.txt for this example")
+    install_boards_local_txt(fqbn, source)
+
+
 def main():
     # Test platforms
     platforms = []
@@ -485,12 +620,21 @@ def main():
         fqbn = ALL_PLATFORMS[platform][0]
         print('#'*80)
         ColorPrint.print_info("SWITCHING TO "+fqbn)
-        install_platform(":".join(fqbn.split(':', 2)[0:2]), ALL_PLATFORMS[platform]) # take only first two elements
+        core_fqbn = ":".join(fqbn.split(':', 2)[0:2])  # take only first two elements
+        install_platform(core_fqbn, ALL_PLATFORMS[platform])
+
+        if BOARDS_LOCAL_TXT_ENABLED:
+            install_boards_local_txt(fqbn, BOARDS_LOCAL_TXT_ROOT)
         print('#'*80)
+
+        # Test examples in the platform folder
         if not IS_LEARNING_SYS:
             test_examples_in_folder(platform, BUILD_DIR+"/examples")
         else:
             test_examples_in_folder(platform, BUILD_DIR)
+
+        if BOARDS_LOCAL_TXT_ENABLED:
+            install_boards_local_txt(fqbn, None)
 
 
 if __name__ == "__main__":
