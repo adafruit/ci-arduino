@@ -53,6 +53,8 @@ ALL_PLATFORMS={
     "qtpy_esp32s3" : ["esp32:esp32:adafruit_qtpy_esp32s3_nopsram", "0xc47e5767", None],
     "qtpy_esp32s3_n4r2" : ["esp32:esp32:adafruit_qtpy_esp32s3_n4r2", "0xc47e5767", None],
     # ESP32-P4
+    # Temporary source core until the Metro P4 board definition is released.
+    "metro_esp32p4" : ["espressif:esp32:adafruit_metro_esp32p4", "0x3d308e94", "adafruit/adafruit-metro-esp32p4"],
     "esp32p4" : ["esp32:esp32:esp32p4:JTAGAdapter=default,PSRAM=disabled,USBMode=default,CDCOnBoot=cdc,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,DebugLevel=none,EraseFlash=none", "0x3d308e94", None],
     # Adafruit AVR
     "trinket_3v" : ["adafruit:avr:trinket3", None, None],
