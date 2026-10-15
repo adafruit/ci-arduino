@@ -135,6 +135,7 @@ echo 'Generating Doxygen code documentation...'
 # Redirect both stderr and stdout to the log file AND the console.
 
 export DOXYFILE=${BUILD_DIR}/Doxyfile
+DOXY_INPUT=$1
 if [ ! -f ${DOXYFILE} ]; then
     echo "Grabbing default Doxyfile"
 
@@ -145,15 +146,20 @@ if [ ! -f ${DOXYFILE} ]; then
     if [ ! -z "$PRETTYNAME" ]; then
     sed -i "s/^PROJECT_NAME.*/PROJECT_NAME = \"${PRETTYNAME}\"/"  ${DOXYFILE}
     fi
+
+    # Default Doxyfile scans the repo root; use src/ instead if the library has one
+    if [ -z "$DOXY_INPUT" ] && [ -d "${BUILD_DIR}/src" ]; then
+        DOXY_INPUT=src
+    fi
 fi
 
 sed -i "s;^HTML_OUTPUT .*;HTML_OUTPUT = code_docs/${REPO_NAME}/html;"  ${DOXYFILE}
 cd $BUILD_DIR
 
-if [ ! -z $1 ]
+if [ ! -z "$DOXY_INPUT" ]
 then
     # Print out doxygen warnings in red, use specified path (for when everything is in src)
-    ( cat $DOXYFILE; echo "INPUT=${BUILD_DIR}/$1" ) | ${BUILD_DIR}/doxygen - 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
+    ( cat $DOXYFILE; echo "INPUT=${BUILD_DIR}/${DOXY_INPUT}" ) | ${BUILD_DIR}/doxygen - 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
 else
     # Print out doxygen warnings in red, use default path
     ${BUILD_DIR}/doxygen $DOXYFILE 2>&1 | tee foo.txt > >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done)
