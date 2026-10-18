@@ -168,6 +168,9 @@ ALL_PLATFORMS={
     "attiny807" : ["megaTinyCore:megaavr:atxy7:chip=807", None, None],
     "attiny806" : ["megaTinyCore:megaavr:atxy6:chip=806", None, None],
 
+    # STM32 (STMicroelectronics)
+    "stm32c011" : ["STMicroelectronics:stm32:GenC0:pnum=GENERIC_C011F6UX,xserial=generic,usb=none,opt=oslto,dbg=none,rtlib=nano", None, None],
+
     # CH32v2 (openwch)
     "CH32V20x_EVT": ["WCH:ch32v:CH32V20x_EVT", None, None],
     # CH32V20x (ch32-community)

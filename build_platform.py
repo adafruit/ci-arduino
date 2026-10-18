@@ -72,7 +72,8 @@ BSP_URLS = (
     "https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json,"
     "https://drazzy.good-enough.cloud/package_drazzy.com_index.json,"
     "https://github.com/openwch/board_manager_files/raw/main/package_ch32v_index.json,"
-    "https://github.com/ch32-community/board_manager_files/raw/main/package_ch32v_index.json"
+    "https://github.com/ch32-community/board_manager_files/raw/main/package_ch32v_index.json,"
+    "https://raw.githubusercontent.com/stm32duino/BoardManagerFiles/main/package_stmicroelectronics_index.json"
 )
 
 # global exit code
