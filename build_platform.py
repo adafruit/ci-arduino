@@ -160,8 +160,48 @@ def install_platform(fqbn, full_platform_name=None):
         ColorPrint.print_fail("FAILED to install "+fqbn)
         exit(-1)
     ColorPrint.print_pass(CHECK)
+    if fqbn == "STMicroelectronics:stm32":
+        install_stm32_variant_entries()
     # print installed core version
     print(os.popen('arduino-cli core list | grep {}'.format(fqbn)).read(), end='')
+
+
+def install_stm32_variant_entries():
+    """Expose the C031/C051 G-package variants supplied by STM32duino 3.0.0."""
+    data_dir = subprocess.check_output(
+        ["arduino-cli", "config", "get", "directories.data"], text=True).strip()
+    cores = json.loads(subprocess.check_output(
+        ["arduino-cli", "core", "list", "--format", "json"], text=True))
+    version = next(core["installed_version"] for core in cores["platforms"]
+                   if core["id"] == "STMicroelectronics:stm32")
+    core_dir = os.path.join(data_dir, "packages", "STMicroelectronics",
+                            "hardware", "stm32", version)
+    local_file = os.path.join(core_dir, "boards.local.txt")
+    with open(os.path.join(core_dir, "boards.txt"), encoding="utf-8") as source:
+        existing = source.read()
+    if os.path.exists(local_file):
+        with open(local_file, encoding="utf-8") as source:
+            existing += "\n" + source.read()
+    variants = (
+        ("GENERIC_C031G6UX", "C031G(4-6)U", "C031C(4-6)(T-U)"),
+        ("GENERIC_C051G8UX", "C051G(6-8)U", "C051C(6-8)(T-U)"),
+    )
+    for board, variant, linker_variant in variants:
+        prefix = "GenC0.menu.pnum." + board
+        if any(line.startswith(prefix + "=") for line in existing.splitlines()):
+            continue  # Preserve local entries and prefer future core support.
+        variant_dir = os.path.join(core_dir, "variants", "STM32C0xx", variant)
+        with open(os.path.join(variant_dir, "boards_entry.txt"),
+                  encoding="utf-8") as source:
+            entries = [line.rstrip() for line in source
+                       if line.startswith((prefix + "=", prefix + "."))]
+        linker = "../" + linker_variant + "/ldscript.ld"
+        if not entries or not os.path.isfile(os.path.join(variant_dir, linker)):
+            raise RuntimeError("Missing STM32 variant or linker script: " + board)
+        entries.append(prefix + ".build.ldscript=" + linker)
+        with open(local_file, "a", encoding="utf-8") as destination:
+            destination.write("\n# ci-arduino: supplied STM32 G-package variant\n")
+            destination.write("\n".join(entries) + "\n")
 
 
 def run_or_die(cmd, error):
