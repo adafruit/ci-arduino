@@ -170,6 +170,9 @@ ALL_PLATFORMS={
 
     # STM32 (STMicroelectronics)
     "stm32c011" : ["STMicroelectronics:stm32:GenC0:pnum=GENERIC_C011F6UX,xserial=generic,usb=none,opt=oslto,dbg=none,rtlib=nano", None, None],
+    "stm32c031" : ["STMicroelectronics:stm32:GenC0:pnum=GENERIC_C031G6UX,xserial=generic,usb=none,opt=oslto,dbg=none,rtlib=nano", None, None],
+    "stm32c051" : ["STMicroelectronics:stm32:GenC0:pnum=GENERIC_C051G8UX,xserial=generic,usb=none,opt=oslto,dbg=none,rtlib=nano", None, None],
+    "stm32g071" : ["STMicroelectronics:stm32:GenG0:pnum=GENERIC_G071GBUX,xserial=generic,usb=none,opt=oslto,dbg=none,rtlib=nano", None, None],
 
     # CH32v2 (openwch)
     "CH32V20x_EVT": ["WCH:ch32v:CH32V20x_EVT", None, None],
