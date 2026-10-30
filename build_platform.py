@@ -134,23 +134,34 @@ class ColorPrint:
 
 def manually_install_esp32_bsp(repo_info):
     print("Manually installing latest ESP32 BSP...")
-    # Assemble git url
-    repo_url = "git clone -b {0} https://github.com/{1}/arduino-esp32.git esp32".format(repo_info.split("/")[1], repo_info.split("/")[0])
-    # Locally clone repo (https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html#linux)
-    os.system("mkdir -p /home/runner/Arduino/hardware/espressif")
-    print("Cloning %s"%repo_url)
-    cmd = "cd /home/runner/Arduino/hardware/espressif && " + repo_url
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    r = proc.wait(timeout=1000)
-    out = proc.stdout.read()
-    err = proc.stderr.read()
-    if r != 0:
-        ColorPrint.print_fail("Failed to download ESP32 Arduino BSP!")
-        ColorPrint.print_fail(out.decode("utf-8"))
-        ColorPrint.print_fail(err.decode("utf-8"))
-        exit(-1)
-    print(out)
-    print("Cloned repository!")
+    owner, branch = repo_info.split("/")[0], repo_info.split("/")[1]
+    bsp_path = "/home/runner/Arduino/hardware/espressif/esp32"
+    # Reuse a checkout already in place (e.g. restored from an actions/cache by the workflow)
+    existing_branch = os.popen("git -C {0} rev-parse --abbrev-ref HEAD 2>/dev/null".format(bsp_path)).read().strip()
+    existing_url = os.popen("git -C {0} config --get remote.origin.url 2>/dev/null".format(bsp_path)).read().strip()
+    if existing_branch == branch and "/{0}/arduino-esp32".format(owner) in existing_url:
+        print("Using existing BSP checkout of {0} at {1}".format(repo_info, bsp_path))
+    else:
+        if os.path.exists(bsp_path):
+            print("Removing mismatched BSP checkout ({0} @ {1})".format(existing_url, existing_branch))
+            shutil.rmtree(bsp_path)
+        # Assemble git url, shallow as only the branch tip is built
+        repo_url = "git clone --depth 1 --single-branch -b {0} https://github.com/{1}/arduino-esp32.git esp32".format(branch, owner)
+        # Locally clone repo (https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html#linux)
+        os.system("mkdir -p /home/runner/Arduino/hardware/espressif")
+        print("Cloning %s"%repo_url)
+        cmd = "cd /home/runner/Arduino/hardware/espressif && " + repo_url
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        r = proc.wait(timeout=1000)
+        out = proc.stdout.read()
+        err = proc.stderr.read()
+        if r != 0:
+            ColorPrint.print_fail("Failed to download ESP32 Arduino BSP!")
+            ColorPrint.print_fail(out.decode("utf-8"))
+            ColorPrint.print_fail(err.decode("utf-8"))
+            exit(-1)
+        print(out)
+        print("Cloned repository!")
 
     print("Installing ESP32 Arduino BSP...")
     cmd = "cd /home/runner/Arduino/hardware/espressif/esp32/tools && python3 get.py"
