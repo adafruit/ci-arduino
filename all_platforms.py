@@ -82,6 +82,10 @@ ALL_PLATFORMS={
     "dfrobot_firebeetle2_esp32p4": ["espressif:esp32:dfrobot_firebeetle2_esp32p4:PartitionScheme=huge_app,DebugLevel=verbose", "0x3d308e94", "adafruit/wipper-3.3.12-idf5.5.5"], # console on USB-OTG TinyUSB CDC via boards.local.txt (usb_mode=0): no HWCDC race, so core logs can stay on
     "esp32p4": ["espressif:esp32:esp32p4:FlashSize=32M,PartitionScheme=app5M_little24M_32MB,FlashMode=qio,DebugLevel=none", "0x3d308e94", "adafruit/wipper-3.3.12-idf5.5.5"],
     "adafruit_metro_esp32p4": ["espressif:esp32:adafruit_metro_esp32p4:PartitionScheme=tinyuf2,USBMode=tinyusb_fs,CDCOnBoot=cdc,DebugLevel=none", "0x3d308e94", "adafruit/master"],
+    ## ESP32_S31 (arduino-esp32 4.x)
+    # Espressif ESP32-S31-Function-CoreBoard-1 builds with the generic esp32s31 board; the
+    # WipperSnapper example's per-target boards.local.txt adds its define and 16MB partitions.
+    "espressif_esp32s31_coreboard_1": ["espressif:esp32:esp32s31:FlashSize=16M,PartitionScheme=default,DebugLevel=none", None, "adafruit/4.0.0-RC1"],
     # Adafruit AVR
     "trinket_3v" : ["adafruit:avr:trinket3", None, None],
     "trinket_5v" : ["adafruit:avr:trinket5", None, None],
