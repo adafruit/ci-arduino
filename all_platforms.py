@@ -24,7 +24,7 @@ ALL_PLATFORMS={
     "qtpy_esp32c3" : ["espressif:esp32:adafruit_qtpy_esp32c3:FlashMode=qio", None, "adafruit/bsp-3-3-11"],
     "wippersnapper_qtpy_esp32c3" : ["espressif:esp32:adafruit_qtpy_esp32c3:FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/bsp-3-3-11"],
     "espressif_esp32c5_devkitc_1_n8r4" : ["espressif:esp32:esp32c5:FlashMode=qio,FlashSize=8M,CDCOnBoot=cdc,CPUFreq=240,PSRAM=enabled,PartitionScheme=min_spiffs,DebugLevel=none", None, "adafruit/bsp-3-3-11"],
-    "espressif_esp32c5_devkitc_1_n8r4_debug" : ["espressif:esp32:esp32c5:FlashMode=qio,FlashSize=8M,CDCOnBoot=cdc,CPUFreq=240,PSRAM=enabled,PartitionScheme=min_spiffs,DebugLevel=verbose", None, "adafruit/bsp-3-3-11"],
+    "espressif_esp32c5_devkitc_1_n8r4_debug" : ["espressif:esp32:esp32c5:FlashMode=qio,FlashSize=8M,CDCOnBoot=cdc,CPUFreq=240,PSRAM=enabled,PartitionScheme=default_8MB,DebugLevel=verbose", None, "adafruit/bsp-3-3-11"],
     "dfrobot_firebeetle2_esp32c5" : ["espressif:esp32:dfrobot_firebeetle2_esp32c5:CDCOnBoot=cdc,CPUFreq=240,FlashMode=qio,PartitionScheme=default,DebugLevel=none", None, "adafruit/bsp-3-3-11"],
     "lilygo_t_dongle_c5" : ["espressif:esp32:esp32c5:FlashMode=qio,FlashSize=16M,CDCOnBoot=cdc,CPUFreq=240,PSRAM=enabled,PartitionScheme=default_8MB,DebugLevel=none", None, "adafruit/bsp-3-3-11"],
     "lilygo_t_dongle_c5_debug" : ["espressif:esp32:esp32c5:FlashMode=qio,FlashSize=16M,CDCOnBoot=cdc,CPUFreq=240,PSRAM=enabled,PartitionScheme=default_8MB,DebugLevel=verbose", None, "adafruit/bsp-3-3-11"],
