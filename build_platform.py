@@ -132,15 +132,71 @@ class ColorPrint:
         sys.stdout.write('\x1b[1;37m' + message.strip() + '\x1b[0m' + end)
 
 
+def git_repo_id(url):
+    """Normalize a git remote URL to 'host/owner/repo' (lowercase, no .git).
+
+    Accepts https://, ssh:// and scp-style (git@host:owner/repo) URLs, so
+    equivalent HTTPS and SSH origins compare equal. Returns None otherwise.
+    """
+    m = re.match(r'^(?:[a-z+]+://)?(?:[^@/]+@)?([^/:]+)(?::\d+)?[:/](.+?)(?:\.git)?/*$', url.strip(), re.I)
+    return "{0}/{1}".format(m.group(1), m.group(2)).lower() if m else None
+
+
+def remote_ref_sha(path, name):
+    """Commit that `git clone -b <name>` would check out from origin: the branch,
+    else the tag (peeled if annotated). None if it can't be determined."""
+    try:
+        # The peeled "^{}" line is only listed when asked for explicitly
+        r = subprocess.run(["git", "-C", path, "ls-remote", "origin", name, name + "^{}"],
+                           capture_output=True, text=True, timeout=120)
+    except subprocess.TimeoutExpired:
+        return None
+    if r.returncode != 0:
+        return None
+    found = dict(reversed(line.split("\t", 1)) for line in r.stdout.splitlines() if "\t" in line)
+    for ref in ("refs/heads/" + name, "refs/tags/{0}^{{}}".format(name), "refs/tags/" + name):
+        if ref in found:
+            return found[ref]
+    return None
+
+
+def update_bsp_checkout(bsp_path, branch):
+    """Bring a reused checkout to the current tip of `branch`.
+
+    If the tip can't be checked or fetched (e.g. a network outage), the existing
+    checkout is kept with a warning, because a slightly stale BSP beats a failed build.
+    """
+    head = os.popen("git -C {0} rev-parse HEAD 2>/dev/null".format(bsp_path)).read().strip()
+    tip = remote_ref_sha(bsp_path, branch)
+    if tip is None:
+        ColorPrint.print_warn("Could not check {0} on origin; building the existing checkout at {1}".format(branch, head[:8]))
+        return
+    if tip == head:
+        print("BSP checkout is up to date at {0}".format(head[:8]))
+        return
+    print("Updating BSP checkout from {0} to {1}".format(head[:8], tip[:8]))
+    try:
+        ok = (subprocess.run(["git", "-C", bsp_path, "fetch", "-q", "--depth", "1", "origin", tip], timeout=600).returncode == 0
+              # -f: a CI checkout has no local changes worth keeping. Untracked files (tools/dist) stay.
+              and subprocess.run(["git", "-C", bsp_path, "checkout", "-q", "-f", "-B", branch, "FETCH_HEAD"], timeout=600).returncode == 0)
+    except subprocess.TimeoutExpired:
+        ok = False
+    if not ok:
+        ColorPrint.print_warn("Could not update the BSP checkout; building the existing one at {0}".format(head[:8]))
+
+
 def manually_install_esp32_bsp(repo_info):
     print("Manually installing latest ESP32 BSP...")
     owner, branch = repo_info.split("/")[0], repo_info.split("/")[1]
     bsp_path = "/home/runner/Arduino/hardware/espressif/esp32"
-    # Reuse a checkout already in place (e.g. restored from an actions/cache by the workflow)
+    # Reuse a checkout already in place (e.g. restored from an actions/cache by the workflow),
+    # but only if it is the exact repository and branch requested
     existing_branch = os.popen("git -C {0} rev-parse --abbrev-ref HEAD 2>/dev/null".format(bsp_path)).read().strip()
     existing_url = os.popen("git -C {0} config --get remote.origin.url 2>/dev/null".format(bsp_path)).read().strip()
-    if existing_branch == branch and "/{0}/arduino-esp32".format(owner) in existing_url:
+    wanted_repo = "github.com/{0}/arduino-esp32".format(owner).lower()
+    if existing_branch == branch and git_repo_id(existing_url) == wanted_repo:
         print("Using existing BSP checkout of {0} at {1}".format(repo_info, bsp_path))
+        update_bsp_checkout(bsp_path, branch)
     else:
         if os.path.exists(bsp_path):
             print("Removing mismatched BSP checkout ({0} @ {1})".format(existing_url, existing_branch))
