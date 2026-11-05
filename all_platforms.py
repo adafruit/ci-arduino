@@ -175,7 +175,7 @@ ALL_PLATFORMS={
     "stm32g071" : ["STMicroelectronics:stm32:GenG0:pnum=GENERIC_G071GBUX,xserial=generic,usb=none,opt=oslto,dbg=none,rtlib=nano", None, None],
 
     # CH32v2 (openwch)
-    "CH32V20x_EVT": ["WCH:ch32v:CH32V20x_EVT", None, None],
+    "CH32V20x_EVT": ["WCH:ch32v:CH32V20x_EVT:usb=tinyusb_usbd", None, None],
     # CH32V20x (ch32-community)
     "ch32_community_ch32v20x": ["ch32-community:ch32v:CH32V20x_EVT", None, None],
 
