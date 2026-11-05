@@ -76,3 +76,18 @@ The `doxy_gen_and_deploy.sh` script uses [Doxygen](https://www.doxygen.nl/) to g
 for the library. Any issues, like missing documentation, will cause the CI to fail.
 See the [guide](https://learn.adafruit.com/the-well-automated-arduino-library/doxygen) for details on installing and running Doxygen locally. The guide also has some
 [tips](https://learn.adafruit.com/the-well-automated-arduino-library/doxygen-tips) on basic usage of Doxygen markup within your code.
+
+### Preserving Folders in Documentation Branch
+
+By default, the documentation deployment script cleans the gh-pages branch before adding new documentation. If you need to preserve certain folders (like custom web interfaces), you can set the `PRESERVE_FOLDERS` environment variable in your workflow:
+
+```yaml
+- name: doxygen
+  env:
+    GH_REPO_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
+    PRETTYNAME : "My Arduino Library"
+    PRESERVE_FOLDERS: "webserial,assets"
+  run: bash ci/doxy_gen_and_deploy.sh
+```
+
+This will preserve the listed folders (comma-separated) during the documentation generation process.
