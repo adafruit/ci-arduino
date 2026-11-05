@@ -4,10 +4,12 @@ import json
 import time
 import os
 import re
+import shlex
 import shutil
 import subprocess
 import collections
 from contextlib import contextmanager
+from pathlib import Path
 from all_platforms import ALL_PLATFORMS
 
 # optional wall option cause build failed if has warnings
@@ -77,7 +79,7 @@ BSP_URLS = (
     "https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json,"
     "https://drazzy.good-enough.cloud/package_drazzy.com_index.json,"
     "https://github.com/openwch/board_manager_files/raw/main/package_ch32v_index.json,"
-    "file://" + CH32_COMMUNITY_INDEX + ","
+    + Path(CH32_COMMUNITY_INDEX).as_uri() + ","
     "https://raw.githubusercontent.com/stm32duino/BoardManagerFiles/main/package_stmicroelectronics_index.json"
 )
 
@@ -237,7 +239,7 @@ def install_library_deps():
     print("INSTALLING ARDUINO LIBRARIES")
     ColorPrint.print_info('#'*40)
 
-    run_or_die("curl -fsSL --create-dirs -o "+CH32_COMMUNITY_INDEX+" "+CH32_COMMUNITY_INDEX_URL,
+    run_or_die("curl -fsSL --create-dirs -o "+shlex.quote(CH32_COMMUNITY_INDEX)+" "+CH32_COMMUNITY_INDEX_URL,
                "FAILED to download the ch32-community index")
     run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
                " > /dev/null", "FAILED to update core indices")
