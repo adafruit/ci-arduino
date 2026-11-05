@@ -65,8 +65,7 @@ elif "METROX-Examples-and-Project-Sketches" in BUILD_DIR:
 CROSS = u'\N{cross mark}'
 CHECK = u'\N{check mark}'
 
-# openwch and ch32-community both name their index package_ch32v_index.json and arduino-cli stores a downloaded index
-# under that name, so one would replace the other: ch32-community's is fetched to its own file and loaded as file://
+# arduino-cli stores an index under its file name, and openwch's and ch32-community's are both package_ch32v_index.json
 CH32_COMMUNITY_INDEX_URL = "https://github.com/ch32-community/board_manager_files/raw/main/package_ch32v_index.json"
 CH32_COMMUNITY_INDEX = os.path.expanduser("~/.arduino15/package_ch32-community_index.json")
 
@@ -79,7 +78,7 @@ BSP_URLS = (
     "https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json,"
     "https://drazzy.good-enough.cloud/package_drazzy.com_index.json,"
     "https://github.com/openwch/board_manager_files/raw/main/package_ch32v_index.json,"
-    + Path(CH32_COMMUNITY_INDEX).as_uri() + ","
+    f"{Path(CH32_COMMUNITY_INDEX).as_uri()},"
     "https://raw.githubusercontent.com/stm32duino/BoardManagerFiles/main/package_stmicroelectronics_index.json"
 )
 
