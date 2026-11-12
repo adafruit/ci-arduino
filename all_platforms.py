@@ -178,6 +178,7 @@ ALL_PLATFORMS={
     "CH32V20x_EVT": ["WCH:ch32v:CH32V20x_EVT:usb=tinyusb_usbd", None, None],
     # CH32V20x (ch32-community)
     "ch32_community_ch32v20x": ["ch32-community:ch32v:CH32V20x_EVT", None, None],
+    "ch32_community_ch32v20x_tinyusb_usbd": ["ch32-community:ch32v:CH32V20x_EVT:usb=tinyusb_usbd", None, None],
 
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero", "qtpy_m0",
