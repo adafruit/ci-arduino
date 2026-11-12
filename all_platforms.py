@@ -88,7 +88,7 @@ ALL_PLATFORMS={
     ## ESP32_S31 (arduino-esp32 4.x)
     # Espressif ESP32-S31-Function-CoreBoard-1 builds with the generic esp32s31 board; the
     # WipperSnapper example's per-target boards.local.txt adds its define and 16MB partitions.
-    "espressif_esp32s31_coreboard_1": ["espressif:esp32:esp32s31:FlashSize=16M,PartitionScheme=default,DebugLevel=none", None, "adafruit/4.0.0-RC1"],
+    "espressif_esp32s31_coreboard_1": ["espressif:esp32:esp32s31:FlashSize=16M,PartitionScheme=default,DebugLevel=none", None, "adafruit/4.0.0-RC1-wipper"],
     # Espressif ESP32-S31-Korvo-1 (audio dev board, same module) also uses the generic esp32s31 board.
     "espressif_esp32s31_korvo_1": ["espressif:esp32:esp32s31:FlashSize=16M,PartitionScheme=default,DebugLevel=none", None, "adafruit/4.0.0-RC1-wipper"],
     # Adafruit AVR
