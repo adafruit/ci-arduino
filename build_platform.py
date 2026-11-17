@@ -234,8 +234,6 @@ def install_library_deps():
     print("INSTALLING ARDUINO LIBRARIES")
     ColorPrint.print_info('#'*40)
 
-    run_or_die("curl -fsSL --create-dirs -o "+shlex.quote(CH32_COMMUNITY_INDEX)+" "+CH32_COMMUNITY_INDEX_URL,
-               "FAILED to download the ch32-community index")
     run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
                " > /dev/null", "FAILED to update core indices")
     print()
