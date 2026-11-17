@@ -65,11 +65,6 @@ elif "METROX-Examples-and-Project-Sketches" in BUILD_DIR:
 CROSS = u'\N{cross mark}'
 CHECK = u'\N{check mark}'
 
-# arduino-cli stores an index under its file name. ch32-community's used to be package_ch32v_index.json, same as openwch's.
-# It was renamed upstream on 2026-11-09; the triple "m" is in the real file name.
-CH32_COMMUNITY_INDEX_URL = "https://github.com/ch32-community/board_manager_files/raw/main/package_ch32-commmunity_index.json"
-CH32_COMMUNITY_INDEX = os.path.expanduser("~/.arduino15/package_ch32-community_index.json")
-
 BSP_URLS = (
     "https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,"
     "http://arduino.esp8266.com/stable/package_esp8266com_index.json,"
@@ -79,7 +74,7 @@ BSP_URLS = (
     "https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json,"
     "https://drazzy.good-enough.cloud/package_drazzy.com_index.json,"
     "https://github.com/openwch/board_manager_files/raw/main/package_ch32v_index.json,"
-    f"{Path(CH32_COMMUNITY_INDEX).as_uri()},"
+    "https://github.com/ch32-community/board_manager_files/raw/main/package_ch32-community_index.json,"
     "https://raw.githubusercontent.com/stm32duino/BoardManagerFiles/main/package_stmicroelectronics_index.json"
 )
 
@@ -239,8 +234,6 @@ def install_library_deps():
     print("INSTALLING ARDUINO LIBRARIES")
     ColorPrint.print_info('#'*40)
 
-    run_or_die("curl -fsSL --create-dirs -o "+shlex.quote(CH32_COMMUNITY_INDEX)+" "+CH32_COMMUNITY_INDEX_URL,
-               "FAILED to download the ch32-community index")
     run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
                " > /dev/null", "FAILED to update core indices")
     print()

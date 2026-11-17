@@ -176,9 +176,16 @@ ALL_PLATFORMS={
 
     # CH32v2 (openwch)
     "CH32V20x_EVT": ["WCH:ch32v:CH32V20x_EVT:usb=tinyusb_usbd", None, None],
-    # CH32V20x (ch32-community)
+    # WCH MCU's (ch32-community core)
+    "ch32_community_ch32l10x": ["ch32-community:ch32v:CH32L10x_EVT", None, None],
+    "ch32_community_ch32v00x": ["ch32-community:ch32v:CH32V00x_EVT", None, None],
+    "ch32_community_ch32v10x": ["ch32-community:ch32v:CH32V10x_EVT", None, None],
     "ch32_community_ch32v20x": ["ch32-community:ch32v:CH32V20x_EVT", None, None],
     "ch32_community_ch32v20x_tinyusb_usbd": ["ch32-community:ch32v:CH32V20x_EVT:usb=tinyusb_usbd", None, None],
+    "ch32_community_ch32v30x": ["ch32-community:ch32v:CH32V30x_EVT", None, None],
+    "ch32_community_ch32v30x_tinyusb_usbhs" : ["ch32-community:ch32v:CH32V30x_EVT:usb=tinyusb_usbhs", None, None],
+    "ch32_community_ch32vm00X": ["ch32-community:ch32v:CH32VM00X_EVT", None, None],
+    "ch32_community_ch32x035": ["ch32-community:ch32v:CH32X035_EVT", None, None],
 
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero", "qtpy_m0",
