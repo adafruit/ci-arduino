@@ -53,6 +53,8 @@ ALL_PLATFORMS={
     "qtpy_esp32s3" : ["esp32:esp32:adafruit_qtpy_esp32s3_nopsram", "0xc47e5767", None],
     "qtpy_esp32s3_n4r2" : ["esp32:esp32:adafruit_qtpy_esp32s3_n4r2", "0xc47e5767", None],
     # ESP32-P4
+    # Temporary source core until the Metro P4 board definition is released.
+    "metro_esp32p4" : ["espressif:esp32:adafruit_metro_esp32p4", "0x3d308e94", "adafruit/adafruit-metro-esp32p4"],
     "esp32p4" : ["esp32:esp32:esp32p4:JTAGAdapter=default,PSRAM=disabled,USBMode=default,CDCOnBoot=cdc,MSCOnBoot=default,DFUOnBoot=default,UploadMode=default,PartitionScheme=default,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,DebugLevel=none,EraseFlash=none", "0x3d308e94", None],
     # Adafruit AVR
     "trinket_3v" : ["adafruit:avr:trinket3", None, None],
@@ -166,16 +168,24 @@ ALL_PLATFORMS={
     "attiny807" : ["megaTinyCore:megaavr:atxy7:chip=807", None, None],
     "attiny806" : ["megaTinyCore:megaavr:atxy6:chip=806", None, None],
 
+    # STM32 (STMicroelectronics)
+    "stm32c011" : ["STMicroelectronics:stm32:GenC0:pnum=GENERIC_C011F6UX,xserial=generic,usb=none,opt=oslto,dbg=none,rtlib=nano", None, None],
+    "stm32c031" : ["STMicroelectronics:stm32:GenC0:pnum=GENERIC_C031G6UX,xserial=generic,usb=none,opt=oslto,dbg=none,rtlib=nano", None, None],
+    "stm32c051" : ["STMicroelectronics:stm32:GenC0:pnum=GENERIC_C051G8UX,xserial=generic,usb=none,opt=oslto,dbg=none,rtlib=nano", None, None],
+    "stm32g071" : ["STMicroelectronics:stm32:GenG0:pnum=GENERIC_G071GBUX,xserial=generic,usb=none,opt=oslto,dbg=none,rtlib=nano", None, None],
+
     # CH32v2 (openwch)
-    "CH32V20x_EVT": ["WCH:ch32v:CH32V20x_EVT", None, None],
-    # CH32V20x (ch32-community)
-    "ch32_community_ch32l10x" : ["ch32-community:ch32v:CH32L10x_EVT", None, None],
-    "ch32_community_ch32v00x" : ["ch32-community:ch32v:CH32V00x_EVT", None, None],
-    "ch32_community_ch32v10x" : ["ch32-community:ch32v:CH32V10x_EVT", None, None],
-    "ch32_community_ch32v20x" : ["ch32-community:ch32v:CH32V20x_EVT", None, None],
-    "ch32_community_ch32v30x" : ["ch32-community:ch32v:CH32V30x_EVT", None, None],
-    "ch32_community_ch32vm00X" : ["ch32-community:ch32v:CH32VM00X_EVT", None, None],
-    "ch32_community_ch32x035" : ["ch32-community:ch32v:CH32X035_EVT", None, None],
+    "CH32V20x_EVT": ["WCH:ch32v:CH32V20x_EVT:usb=tinyusb_usbd", None, None],
+    # WCH MCU's (ch32-community core)
+    "ch32_community_ch32l10x": ["ch32-community:ch32v:CH32L10x_EVT", None, None],
+    "ch32_community_ch32v00x": ["ch32-community:ch32v:CH32V00x_EVT", None, None],
+    "ch32_community_ch32v10x": ["ch32-community:ch32v:CH32V10x_EVT", None, None],
+    "ch32_community_ch32v20x": ["ch32-community:ch32v:CH32V20x_EVT", None, None],
+    "ch32_community_ch32v20x_tinyusb_usbd": ["ch32-community:ch32v:CH32V20x_EVT:usb=tinyusb_usbd", None, None],
+    "ch32_community_ch32v30x": ["ch32-community:ch32v:CH32V30x_EVT", None, None],
+    "ch32_community_ch32v30x_tinyusb_usbhs" : ["ch32-community:ch32v:CH32V30x_EVT:usb=tinyusb_usbhs", None, None],
+    "ch32_community_ch32vm00X": ["ch32-community:ch32v:CH32VM00X_EVT", None, None],
+    "ch32_community_ch32x035": ["ch32-community:ch32v:CH32X035_EVT", None, None],
 
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero", "qtpy_m0",

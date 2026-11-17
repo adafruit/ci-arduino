@@ -45,6 +45,16 @@ You can use several `.PLATFORM_ID.test.skip` or `.PLATFORM_ID.test.only` to excl
 * To skip all and test **nothing**, add a file named `.none.test.only`
 * To generate UF2s for PyPortal, add a file named `.pyportal.generate`
 
+### STM32 breakout targets
+
+`stm32c011`, `stm32c031`, `stm32c051`, and `stm32g071` select the generic
+C011F6Ux, C031G6Ux, C051G8Ux, and G071GBUx boards with size optimization and
+LTO. For C031/C051, STM32duino 3.0.0 includes the variant sources but omits the
+board-menu entries and G-package linker scripts. Installation adds the core's
+supplied entries to `boards.local.txt` only when absent and selects the matching
+C-package linker script. Existing local entries and future native core entries
+are preserved.
+
 ### Dependencies
 
 Any library dependencies included in the [`library.properties`](https://arduino.github.io/arduino-cli/0.19/library-specification/#libraryproperties-file-format) are automatically installed before the tests are started. To install additional dependencies (e.g., those required for some examples but not the library itself) using [`arduino-cli`](https://arduino.github.io/arduino-cli/0.19/commands/arduino-cli_lib_install/), you could add additional steps to the `githubci.yml` file. For example:

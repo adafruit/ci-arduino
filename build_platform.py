@@ -1,12 +1,15 @@
 import sys
 import glob
+import json
 import time
 import os
 import re
+import shlex
 import shutil
 import subprocess
 import collections
 from contextlib import contextmanager
+from pathlib import Path
 from all_platforms import ALL_PLATFORMS
 
 # optional wall option cause build failed if has warnings
@@ -71,7 +74,8 @@ BSP_URLS = (
     "https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json,"
     "https://drazzy.good-enough.cloud/package_drazzy.com_index.json,"
     "https://github.com/openwch/board_manager_files/raw/main/package_ch32v_index.json,"
-    "https://github.com/ch32-community/board_manager_files/raw/main/package_ch32-community_index.json"
+    "https://github.com/ch32-community/board_manager_files/raw/main/package_ch32-community_index.json,"
+    "https://raw.githubusercontent.com/stm32duino/BoardManagerFiles/main/package_stmicroelectronics_index.json"
 )
 
 # global exit code
@@ -145,6 +149,8 @@ def install_platform(fqbn, full_platform_name=None):
         install_platform("arduino:avr", full_platform_name)
     if full_platform_name[2] is not None:
         manually_install_esp32_bsp(full_platform_name[2]) # build esp32 bsp from desired source and branch
+        # Source cores live under hardware/espressif, not a Board Manager package.
+        return
     for retry in range(0, 3):
         print("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS)
         if os.system("arduino-cli core install "+fqbn+" --additional-urls "+BSP_URLS+" > /dev/null") == 0:
@@ -156,8 +162,48 @@ def install_platform(fqbn, full_platform_name=None):
         ColorPrint.print_fail("FAILED to install "+fqbn)
         exit(-1)
     ColorPrint.print_pass(CHECK)
+    if fqbn == "STMicroelectronics:stm32":
+        install_stm32_variant_entries()
     # print installed core version
     print(os.popen('arduino-cli core list | grep {}'.format(fqbn)).read(), end='')
+
+
+def install_stm32_variant_entries():
+    """Expose the C031/C051 G-package variants supplied by STM32duino 3.0.0."""
+    data_dir = subprocess.check_output(
+        ["arduino-cli", "config", "get", "directories.data"], text=True).strip()
+    cores = json.loads(subprocess.check_output(
+        ["arduino-cli", "core", "list", "--format", "json"], text=True))
+    version = next(core["installed_version"] for core in cores["platforms"]
+                   if core["id"] == "STMicroelectronics:stm32")
+    core_dir = os.path.join(data_dir, "packages", "STMicroelectronics",
+                            "hardware", "stm32", version)
+    local_file = os.path.join(core_dir, "boards.local.txt")
+    with open(os.path.join(core_dir, "boards.txt"), encoding="utf-8") as source:
+        existing = source.read()
+    if os.path.exists(local_file):
+        with open(local_file, encoding="utf-8") as source:
+            existing += "\n" + source.read()
+    variants = (
+        ("GENERIC_C031G6UX", "C031G(4-6)U", "C031C(4-6)(T-U)"),
+        ("GENERIC_C051G8UX", "C051G(6-8)U", "C051C(6-8)(T-U)"),
+    )
+    for board, variant, linker_variant in variants:
+        prefix = "GenC0.menu.pnum." + board
+        if any(line.startswith(prefix + "=") for line in existing.splitlines()):
+            continue  # Preserve local entries and prefer future core support.
+        variant_dir = os.path.join(core_dir, "variants", "STM32C0xx", variant)
+        with open(os.path.join(variant_dir, "boards_entry.txt"),
+                  encoding="utf-8") as source:
+            entries = [line.rstrip() for line in source
+                       if line.startswith((prefix + "=", prefix + "."))]
+        linker = "../" + linker_variant + "/ldscript.ld"
+        if not entries or not os.path.isfile(os.path.join(variant_dir, linker)):
+            raise RuntimeError("Missing STM32 variant or linker script: " + board)
+        entries.append(prefix + ".build.ldscript=" + linker)
+        with open(local_file, "a", encoding="utf-8") as destination:
+            destination.write("\n# ci-arduino: supplied STM32 G-package variant\n")
+            destination.write("\n".join(entries) + "\n")
 
 
 def run_or_die(cmd, error):
@@ -188,6 +234,8 @@ def install_library_deps():
     print("INSTALLING ARDUINO LIBRARIES")
     ColorPrint.print_info('#'*40)
 
+    run_or_die("curl -fsSL --create-dirs -o "+shlex.quote(CH32_COMMUNITY_INDEX)+" "+CH32_COMMUNITY_INDEX_URL,
+               "FAILED to download the ch32-community index")
     run_or_die("arduino-cli core update-index --additional-urls "+BSP_URLS+
                " > /dev/null", "FAILED to update core indices")
     print()
@@ -263,6 +311,24 @@ def download_uf2_utils():
     return True
 
 
+def is_espressif_family(family_id):
+    """Returns True if a UF2 family id belongs to an Espressif chip, per the
+    uf2families.json downloaded by download_uf2_utils().
+    :param str family_id: The UF2 family id, e.g. "0xc47e5767".
+    """
+    if not family_id:
+        return False
+    try:
+        with open("uf2families.json") as f:
+            families = json.load(f)
+    except (OSError, ValueError):
+        return False
+    for family in families:
+        if family["id"].lower() == family_id.lower():
+            return family["short_name"].upper().startswith("ESP32")
+    return False
+
+
 def generate_uf2(platform, fqbn, example_path):
     """Generates a .uf2 file from a .bin or .hex file.
     :param str platform: The platform name.
@@ -282,18 +348,21 @@ def generate_uf2(platform, fqbn, example_path):
         ColorPrint.print_info("Used uf2 generated by arduino-cli")
         return output_file
 
-    # Generate using a hex file for all platforms except for ESP32-S2, ESP32-S3 (exports as .bin files)
-    if not any (x in fqbn for x in ["esp32s2", "esp32s3"]):
+    # Espressif cores export .bin (not .hex). Detect them by UF2 family id,
+    # OR'd with the FQBN substring test as a fallback for platform entries
+    # missing a family id (and vice versa: the id catches boards whose FQBN
+    # lacks the chip name, e.g. lilygo_t_display_s3).
+    family_id = ALL_PLATFORMS[platform][1]
+    is_espressif = is_espressif_family(family_id) or any(x in fqbn.lower() for x in ["esp32s2", "esp32s3", "esp32s31", "esp32p4"])
+    if not is_espressif:
         cli_build_hex_path = "build/*.*." + fqbn.split(':')[2] + "/*.hex"
         hex_input_file = glob1(os.path.join(example_path, cli_build_hex_path))
         output_file = os.path.splitext(hex_input_file)[0] + ".uf2"
-        family_id = ALL_PLATFORMS[platform][1]
         cmd = ['python3', 'uf2conv.py', hex_input_file, '-c', '-f', family_id, '-o', output_file]
     else:
         cli_build_path = "build/*.*." + fqbn.split(':')[2] + "/*.ino.bin"
         input_file = glob1(os.path.join(example_path, cli_build_path))
         output_file = os.path.splitext(input_file)[0] + ".uf2"
-        family_id = ALL_PLATFORMS[platform][1]
         cmd = ['python3', 'uf2conv.py', input_file, '-c', '-f', family_id, '-b', "0x0000", '-o', output_file]
 
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
