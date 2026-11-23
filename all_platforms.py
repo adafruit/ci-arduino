@@ -180,8 +180,8 @@ ALL_PLATFORMS={
     "ch32_community_ch32v20x": ["ch32-community:ch32v:CH32V20x_EVT", None, None],
     "ch32_community_ch32v20x_tinyusb_usbd": ["ch32-community:ch32v:CH32V20x_EVT:usb=tinyusb_usbd", None, None],
     # Metro CH32V4x7 (ch32-community)
-    "ch32_community_metro_ch32v407": ["ch32-community:ch32v:CH32V4x7_BOARDS:pnum=ADAFRUIT_METRO_CH32V407", None, None],
-    "ch32_community_metro_ch32v467": ["ch32-community:ch32v:CH32V4x7_BOARDS:pnum=ADAFRUIT_METRO_CH32V467", None, None],
+    "ch32_community_metro_ch32v407": ["ch32-community:ch32v:CH32V4x7_BOARDS:pnum=ADAFRUIT_METRO_CH32V407", "0x7b8c32a7", None],
+    "ch32_community_metro_ch32v467": ["ch32-community:ch32v:CH32V4x7_BOARDS:pnum=ADAFRUIT_METRO_CH32V467", "0x7b8c32a7", None],
 
     # groupings
     "main_platforms" : ("uno", "leonardo", "mega2560", "zero", "qtpy_m0",
