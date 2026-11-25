@@ -73,7 +73,7 @@ ALL_PLATFORMS={
     "metro_esp32s3" : ["espressif:esp32:adafruit_metro_esp32s3", "0xc47e5767", "adafruit/bsp-3-3-13"],
     "metro_esp32s3_debug" : ["espressif:esp32:adafruit_metro_esp32s3:DebugLevel=verbose,PartitionScheme=tinyuf2_noota", "0xc47e5767", "adafruit/bsp-3-3-13"],
     "pycamera_s3" : ["esp32:esp32:adafruit_camera_esp32s3", "0xc47e5767", "adafruit/bsp-3-3-13"],
-    "qualia_s3_rgb666" : ["esp32:esp32:adafruit_qualia_s3_rgb666", "0xc47e5767", "adafruit/bsp-3-3-13"],
+    "qualia_s3_rgb666" : ["espressif:esp32:adafruit_qualia_s3_rgb666", "0xc47e5767", "adafruit/bsp-3-3-13"],
     "qtpy_esp32s3" : ["espressif:esp32:adafruit_qtpy_esp32s3_nopsram", "0xc47e5767", "adafruit/bsp-3-3-13"],
     "qtpy_esp32s3_n4r2" : ["espressif:esp32:adafruit_qtpy_esp32s3_n4r2:PartitionScheme=tinyuf2_noota", "0xc47e5767", "adafruit/bsp-3-3-13"],
     "xiao_esp32s3" : ["espressif:esp32:XIAO_ESP32S3:PartitionScheme=tinyuf2,PSRAM=opi,FlashMode=qio,USBMode=default,DebugLevel=warn", "0xc47e5767", "adafruit/bsp-3-3-13"],
