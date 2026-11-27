@@ -33,7 +33,7 @@ ALL_PLATFORMS={
     "lilygo_t_dongle_c5_debug" : ["espressif:esp32:esp32c5:FlashMode=qio,FlashSize=16M,CDCOnBoot=cdc,CPUFreq=240,PSRAM=enabled,PartitionScheme=default_8MB,DebugLevel=verbose", None, "adafruit/bsp-3-3-13"],
     "arduino_nesso_n1" : ["espressif:esp32:arduino_nesso_n1:PartitionScheme=huge_app", None, "adafruit/bsp-3-3-13"],
     "feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/bsp-3-3-13"],
-    "wippersnapper_feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=min_spiffs", None, "adafruit/bsp-3-3-13"],
+    "wippersnapper_feather_esp32c6" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=huge_app", None, "adafruit/bsp-3-3-13"],
     "wippersnapper_feather_esp32c6_debug" : ["espressif:esp32:adafruit_feather_esp32c6:CDCOnBoot=cdc,DebugLevel=verbose,CPUFreq=160,FlashFreq=80,FlashMode=qio,PartitionScheme=huge_app", None, "adafruit/bsp-3-3-13"],
     ## ESP32-S2
     "magtag" : ["espressif:esp32:adafruit_magtag29_esp32s2:PartitionScheme=tinyuf2_noota", "0xbfdd4eee", "adafruit/bsp-3-3-13"],
